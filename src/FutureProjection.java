@@ -20,11 +20,15 @@ public class FutureProjection {
 	private int retirementAge;
 	private double inflation;
 	
-	
 	/**
-	 * Build a new projection based on userInputs and investment portfolio
-	 * @param ui UserInputs
-	 * @param portfolio InvestmentPortfolio
+	 * Build a new simulated retirement projection using portfolio volatility
+	 * @param principal 
+	 * @param yrdeposits
+	 * @param withdrawals
+	 * @param age
+	 * @param retirementAge
+	 * @param inflation
+	 * @param portfolio
 	 */
 	public FutureProjection(double principal, double yrdeposits, double withdrawals, int age, 
 			int retirementAge, double inflation, InvestmentPortfolio portfolio) {
