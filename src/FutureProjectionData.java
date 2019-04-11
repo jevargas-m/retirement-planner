@@ -1,4 +1,8 @@
-
+/**
+ * Auxiliary class with amortization table data, immutable object only getters
+ * @author Enrique Vargas
+ *
+ */
 public class FutureProjectionData {
 	private int age;
 	private double realRate;
