@@ -19,6 +19,7 @@ public class FutureProjection {
 	private int currentAge;
 	private int retirementAge;
 	private double inflation;
+	private InvestmentPortfolio portfolio;
 	
 	/**
 	 * Build a new simulated retirement projection using portfolio volatility
@@ -38,10 +39,11 @@ public class FutureProjection {
 		this.currentAge = age;
 		this.retirementAge = retirementAge;
 		this.inflation = inflation;
+		this.portfolio = portfolio;
 		
 		this.r =new Random();
 		this.data = new ArrayList<>();
-		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
+		this.nd = new NormalDistribution(this.portfolio.getAverageReturns(), this.portfolio.getStdDevReturns());
 		buildProjectionData();
 	}
 	
@@ -74,6 +76,21 @@ public class FutureProjection {
 		}
 		
 		ageBroke = age;
+	}
+	
+	/**
+	 * Perform MonteCarloSimulation building several random FutureProjections
+	 * @param iterations int
+	 * @return FutureProjection[iterations]
+	 */
+	public FutureProjection[] monteCarloSimulation(int iterations) {
+		FutureProjection[] results = new FutureProjection[iterations];
+		for (int i=0; i < iterations; i++) {
+			FutureProjection projection = new FutureProjection(initialPrincipal, yrdeposits, withdrawals, 
+					currentAge, retirementAge, inflation, portfolio);
+			results[i] = projection;
+		}
+		return results;
 	}
 	
 	/**
