@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 import org.apache.commons.math3.distribution.*;
 
@@ -75,14 +76,35 @@ public class FutureProjection {
 	}
 	
 	public void printAmortizationTable () {
-		System.out.println("Age     P          r         f         CashFlow");
-		
-		for (int i = 0; i < data.size(); i++) {
-			FutureProjectionData fpd = data.get(i);
-			System.out.printf("%3d  %8.0f   %8.4f   %8.4f   %8.0f", fpd.getAge(), fpd.getPrincipal(), 
-					fpd.getRealRate(), fpd.getInflation(), fpd.getPmt());
-			System.out.println();
+		FileWriter fw;
+		try {
+			fw = new FileWriter("data.csv");
+			PrintWriter pw = new PrintWriter(fw);
+			System.out.println("Age     P          r         f         CashFlow");
+			pw.println("Age,P,r,f,CashFlow");
+			for (int i = 0; i < data.size(); i++) {
+				FutureProjectionData fpd = data.get(i);
+				System.out.printf("%3d  %8.0f   %8.4f   %8.4f   %8.0f", fpd.getAge(), fpd.getPrincipal(), 
+						fpd.getRealRate(), fpd.getInflation(), fpd.getPmt());
+				System.out.println();
+				
+				pw.println(fpd.getAge() + "," + fpd.getPrincipal() + "," +  
+						fpd.getRealRate() + "," + fpd.getInflation() + "," + fpd.getPmt());
+			}
+			pw.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("File error: Make sure data.csv is closed");
+			e.printStackTrace();
 		}
+		
+		
+		
+
+		
+		
+
 	}
 	
 	
