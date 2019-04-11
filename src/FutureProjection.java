@@ -13,17 +13,30 @@ public class FutureProjection {
 	ArrayList<FutureProjectionData> data;
 	private NormalDistribution nd;
 	private Random r;
-	private UserInputs ui;
+	private double initialPrincipal;
+	private double yrdeposits;
+	private double withdrawals;
+	private int currentAge;
+	private int retirementAge;
+	private double inflation;
+	
 	
 	/**
 	 * Build a new projection based on userInputs and investment portfolio
 	 * @param ui UserInputs
 	 * @param portfolio InvestmentPortfolio
 	 */
-	public FutureProjection(UserInputs ui, InvestmentPortfolio portfolio) {
-		this.ui = ui;
+	public FutureProjection(double principal, double yrdeposits, double withdrawals, int age, 
+			int retirementAge, double inflation, InvestmentPortfolio portfolio) {
+		this.initialPrincipal = principal;
+		this.yrdeposits = yrdeposits;
+		this.withdrawals = withdrawals;
+		this.currentAge = age;
+		this.retirementAge = retirementAge;
+		this.inflation = inflation;
+		
 		this.r =new Random();
-		data = new ArrayList<>();
+		this.data = new ArrayList<>();
 		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
 		buildProjectionData();
 	}
@@ -32,22 +45,21 @@ public class FutureProjection {
 	 * Build amortization table, used on constructor
 	 */
 	private void buildProjectionData() {
-		double principal = ui.getPrincipal();
+		double principal = initialPrincipal;
 		boolean savingPeriod = true;
 		
 		// Saving period
-		int age = ui.getCurrentAge();
-		while ( savingPeriod || principal >= ui.getTargetRetirement() ) {
+		int age = currentAge;
+		while ( savingPeriod || principal >= retirementAge ) {
 			double nominalRate = nd.inverseCumulativeProbability(r.nextDouble());
 			double realRate = realRate(nominalRate);
-			double inflation = ui.getInflation();
 			double cashflow = 0;
 		
-			if (age <= ui.getTargetRetirementAge()) {
-				cashflow = ui.getYearlyDeposits();
+			if (age <= retirementAge) {
+				cashflow = yrdeposits;
 			} else {
 				savingPeriod = false;
-				cashflow = -1 * ui.getTargetRetirement();
+				cashflow = -1 * withdrawals;
 			}
 			
 			FutureProjectionData fpd = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
@@ -61,12 +73,12 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Calculate real interest rate based on nominalRate and user provided inflation
+	 * Calculate real interest rate based on nominalRate and provided inflation
 	 * @param nominalRate
 	 * @return double
 	 */
 	private double realRate(double nominalRate) {
-		return (nominalRate - ui.getInflation()) / (1 + ui.getInflation());
+		return (nominalRate - inflation) / (1 + inflation);
 	}
 	
 	/**
@@ -76,9 +88,9 @@ public class FutureProjection {
 	 * @throws IllegalArgumentException
 	 */
 	public FutureProjectionData getProjectedData(int age) throws IllegalArgumentException {
-		int i = age - ui.getCurrentAge();
+		int i = age - currentAge;
 		
-		if (i < ui.getCurrentAge()) {
+		if (i < currentAge) {
 			throw new IllegalArgumentException("Age before present day");
 		}
 		
@@ -139,7 +151,9 @@ public class FutureProjection {
 	public static void main(String[] args) {
 		UserInputs ui = new UserInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(100.0);
-		FutureProjection fp = new FutureProjection(ui, ip);
+		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
+				ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
+		
 		fp.printAmortizationTable();
 	}
 
