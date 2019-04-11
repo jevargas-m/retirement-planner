@@ -12,7 +12,7 @@ public class InvestmentPortfolio {
 	}
 	
 	public double getStdDevReturns() {
-		return 0.02;
+		return 0.03;
 	}
 	
 }

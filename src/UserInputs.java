@@ -2,7 +2,7 @@
 public class UserInputs {
 	private int currentAge;
 	private double inflation;
-	private double monthlyDeposits;
+	private double yearlyDeposits;
 	private boolean adjustDepositsByInflation;
 	private double targetRetirement;
 	private int targetRetirementAge;
@@ -12,11 +12,11 @@ public class UserInputs {
 	public UserInputs() {
 		// Default values only for testing 
 		
-		this.currentAge = 41;
-		this.inflation = 0.02;
-		this.monthlyDeposits = 500;
+		this.currentAge = 30;
+		this.inflation = 0.03;
+		this.yearlyDeposits = 500 * 12.0;
 		this.adjustDepositsByInflation = true;
-		this.targetRetirement = 3000 * 12;
+		this.targetRetirement = 2000 * 12;
 		this.targetRetirementAge = 60;
 		this.equityPercentage = 50;
 		this.principal = 100000;
@@ -35,11 +35,11 @@ public class UserInputs {
 	public void setInflation(double inflation) {
 		this.inflation = inflation;
 	}
-	public double getMonthlyDeposits() {
-		return monthlyDeposits;
+	public double getYearlyDeposits() {
+		return yearlyDeposits;
 	}
-	public void setMonthlyDeposits(double monthlyDeposits) {
-		this.monthlyDeposits = monthlyDeposits;
+	public void setYearlyDeposits(double yearlyDeposits) {
+		this.yearlyDeposits = yearlyDeposits;
 	}
 	public boolean isAdjustDepositsByInflation() {
 		return adjustDepositsByInflation;

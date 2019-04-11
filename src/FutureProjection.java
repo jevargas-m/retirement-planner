@@ -1,80 +1,96 @@
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import org.apache.commons.math3.distribution.*;
 
 public class FutureProjection {
 	private InvestmentPortfolio portfolio;
-	private int depositYears;
-	private int retirementYears;
-	private double[] yearlyDeposits;
-	private ArrayList<Double> principal;
+	private int ageBroke;
+	
+	ArrayList<FutureProjectionData> data;
+
 	private NormalDistribution nd;
 	private Random r;
 	private UserInputs ui;
 		
 	public FutureProjection(UserInputs ui) {
 		this.ui = ui;
+		this.r =new Random();
+
+		data = new ArrayList<>();
 		portfolio = new InvestmentPortfolio(ui.getEquityPercentage());
 		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
-		this.r =new Random();
-		
-		this.depositYears = this.ui.getTargetRetirementAge() - this.ui.getCurrentAge();
-		
-		yearlyDeposits = new double[depositYears];
-		principal = new ArrayList<>();
-				
-		calcYearlyDeposits();
-		calcPrincipal();
+	
+		buildProjectionData();
 	}
 	
-	private void calcYearlyDeposits() {
-		for (int i = 0; i < depositYears; i++) {
-			yearlyDeposits[i] = ui.getMonthlyDeposits() * 12;
+	private void buildProjectionData() {
+		double principal = ui.getPrincipal();
+		boolean savingPeriod = true;
+		
+		// Saving period
+		int age = ui.getCurrentAge();
+		while ( savingPeriod || principal >= ui.getTargetRetirement() ) {
+			double nominalRate = nd.inverseCumulativeProbability(r.nextDouble());
+			double realRate = realRate(nominalRate);
+			double inflation = ui.getInflation();
+			double cashflow = 0;
+		
+			if (age <= ui.getTargetRetirementAge()) {
+				cashflow = ui.getYearlyDeposits();
+			} else {
+				savingPeriod = false;
+				cashflow = -1 * ui.getTargetRetirement();
+			}
+			
+			FutureProjectionData fpd = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
+			data.add(fpd);
+			
+			principal += principal * realRate + cashflow;
+			age++;
 		}
+		
+		ageBroke = age;
 	}
 	
 	private double realRate(double nominalRate) {
 		return (nominalRate - ui.getInflation()) / (1 + ui.getInflation());
 	}
 	
-	
-	private void calcPrincipal() {
-		// Saving period
-		principal.add(ui.getPrincipal());
-		for (int i = 1; i < depositYears; i++) {
-			double nominalInterestRate = nd.inverseCumulativeProbability(r.nextDouble());
-			double interestEarned = principal.get(i - 1) * realRate(nominalInterestRate);
-			principal.add(principal.get(i - 1) + interestEarned + yearlyDeposits[i]);			
+	public FutureProjectionData getProjectedData(int age) throws IllegalArgumentException {
+		int i = age - ui.getCurrentAge();
+		
+		if (i < ui.getCurrentAge()) {
+			throw new IllegalArgumentException("Age before present day");
 		}
 		
-		// Retirement period
-		int retirementYear = depositYears;
-		while (principal.get(retirementYear - 1) > 0) {
-			double nominalInterestRate = nd.inverseCumulativeProbability(r.nextDouble());
-			double realRate = (nominalInterestRate - ui.getInflation()) / (1 + ui.getInflation());
-			principal.add(principal.get(retirementYear - 1) * (1 + realRate) - ui.getTargetRetirement());
-			retirementYear++;
+		if (i < data.size() ) {
+			// You are broke
+			return null;
 		}
 		
-		retirementYears = retirementYear - ui.getTargetRetirementAge();
+		return data.get(i);
 	}
 	
-	public double getProjectedPrincipal(int yearAfterStart) {
-		return principal.get(yearAfterStart);
+	public int getAgeBroke() {
+		return ageBroke;
 	}
 	
-	public int getTotalYears() {
-		return principal.size();
+	public void printAmortizationTable () {
+		System.out.println("Age     P          r         f         CashFlow");
+		
+		for (int i = 0; i < data.size(); i++) {
+			FutureProjectionData fpd = data.get(i);
+			System.out.printf("%3d  %8.0f   %8.4f   %8.4f   %8.0f", fpd.getAge(), fpd.getPrincipal(), 
+					fpd.getRealRate(), fpd.getInflation(), fpd.getPmt());
+			System.out.println();
+		}
 	}
+	
 	
 	// For testing only
 	public static void main(String[] args) {
 		UserInputs ui = new UserInputs();
 		FutureProjection fp = new FutureProjection(ui);
-		System.out.println("total years = " + fp.getTotalYears());
-	
-		for (int i = 0; i < fp.getTotalYears(); i++) {
-			System.out.println(i + "  $" + Math.round(fp.getProjectedPrincipal(i)));
-		}
+		fp.printAmortizationTable();
 	}
+
 }
