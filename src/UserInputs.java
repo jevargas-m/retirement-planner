@@ -5,10 +5,10 @@ public class UserInputs {
 	private double monthlyDeposits;
 	private boolean adjustDepositsByInflation;
 	private double targetRetirement;
-	private double targetRetirementAge;
+	private int targetRetirementAge;
 	private double equityPercentage;
 	private double principal;
-	
+		
 	public UserInputs() {
 		// Default values only for testing 
 		
@@ -53,10 +53,10 @@ public class UserInputs {
 	public void setTargetRetirement(double targetRetirement) {
 		this.targetRetirement = targetRetirement;
 	}
-	public double getTargetRetirementAge() {
+	public int getTargetRetirementAge() {
 		return targetRetirementAge;
 	}
-	public void setTargetRetirementAge(double targetRetirementAge) {
+	public void setTargetRetirementAge(int targetRetirementAge) {
 		this.targetRetirementAge = targetRetirementAge;
 	}
 	public double getEquityPercentage() {
