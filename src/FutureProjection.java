@@ -93,6 +93,10 @@ public class FutureProjection {
 		return results;
 	}
 	
+	public int getCurrentAge() {
+		return currentAge;
+	}
+
 	/**
 	 * Calculate real interest rate based on nominalRate and provided inflation
 	 * @param nominalRate
