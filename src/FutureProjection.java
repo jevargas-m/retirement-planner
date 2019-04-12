@@ -147,9 +147,9 @@ public class FutureProjection {
 	 * Used for debugging, print amortization table in console and data.csv file
 	 */
 	public void printAmortizationTable () {
-		FileWriter fw;
+
 		try {
-			fw = new FileWriter("data.csv");
+			FileWriter fw = new FileWriter("data.csv");
 			PrintWriter pw = new PrintWriter(fw);
 			System.out.println("Age     P          r         f         CashFlow");
 			pw.println("Age,P,r,f,CashFlow");

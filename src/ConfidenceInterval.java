@@ -2,12 +2,10 @@ import org.apache.commons.math3.stat.descriptive.*;
 
 /**
  * Provide confidence interval for a given population
- * 95% confidence interval
- * check calculation details in: https://en.wikipedia.org/wiki/Confidence_interval
+ * 2 sigma  confidence interval
  * @author Enrique Vargas;
  */
 public class ConfidenceInterval {
-	private final double ZETA = 1.96; // Value for 95% conf interval
 	private DescriptiveStatistics population;
 	
 
@@ -16,15 +14,23 @@ public class ConfidenceInterval {
 	}
 	
 	public double delta() {
-		return ZETA * population.getStandardDeviation() / Math.sqrt(population.getN());
+		return 2 * population.getStandardDeviation() ;
 	}
 	
 	public double getMinConfInterval() {
-		return population.getMean() - delta();
+		double min = population.getMean() - delta();
+		if (min == Double.NaN) {
+			return 0;
+		}
+		return min;
 	}
 	
 	public double getMaxConfInterval() {
-		return population.getMean() + delta();
+		double max = population.getMean() + delta();
+		if (max == Double.NaN) {
+			return 0;
+		}
+		return max;
 	}
 	
 	public double getAverage() {
@@ -33,6 +39,10 @@ public class ConfidenceInterval {
 	
 	public void addValue(double v) {
 		population.addValue(v);
+	}
+	
+	public long getN() {
+		return population.getN();
 	}
 	
 }
