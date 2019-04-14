@@ -75,7 +75,7 @@ public class FutureProjection {
 			age++;
 		}
 		
-		ageBroke = age;
+		ageBroke = age - 1;
 	}
 	
 	/**
@@ -175,11 +175,12 @@ public class FutureProjection {
 	// For testing only
 	public static void main(String[] args) {
 		UserInputs ui = new UserInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(30);
+		InvestmentPortfolio ip = new InvestmentPortfolio(0.05,0.00001);
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		
 		fp.printAmortizationTable();
+		System.out.println("Broke at age = " + fp.getAgeBroke());
 	}
 
 }

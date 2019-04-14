@@ -16,13 +16,7 @@ public class InvestmentPortfolio {
 		this.stdev = stdev;
 		this.equity = 0.0;
 	}
-	
-	public InvestmentPortfolio () {
-		this.mean = 0.05;
-		this.stdev = 0;
-		this.equity = 0.0;
-	}
-	
+
 	public double getAverageReturns() {
 		return mean; 
 	}
