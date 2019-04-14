@@ -53,10 +53,10 @@ public class SimulationAnalyzer {
 			PrintWriter pw = new PrintWriter(fw);
 			
 			UserInputs ui = new UserInputs();
-			InvestmentPortfolio ip = new InvestmentPortfolio(100.0);
+			InvestmentPortfolio ip = new InvestmentPortfolio(30);
 			FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 					ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
-			SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(30000));
+			SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
 			ConfidenceInterval[] ci = sa.getConfinterval();
 			
 			

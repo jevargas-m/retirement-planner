@@ -1,18 +1,34 @@
 
 public class InvestmentPortfolio {
-	double equityPercentage;
-	
+	private double equity;
+	private double mean;
+	private double stdev;
 	
 	public InvestmentPortfolio (double equityPercentage) {
-		this.equityPercentage = equityPercentage;
+		this.equity = equityPercentage / 100.0;
+		ReturnCalc build = new ReturnCalc("portfoliodata.csv");
+		mean = build.averageAnnualReturn(build.returnsPortfolio(build.monthlyReturnStocksBonds, this.equity));
+		stdev = build.annualStandardDeviation(build.returnsPortfolio(build.monthlyReturnStocksBonds, this.equity));
+	}
+	
+	public InvestmentPortfolio (double mean, double stdev) {
+		this.mean = mean;
+		this.stdev = stdev;
+		this.equity = 0.0;
+	}
+	
+	public InvestmentPortfolio () {
+		this.mean = 0.05;
+		this.stdev = 0;
+		this.equity = 0.0;
 	}
 	
 	public double getAverageReturns() {
-		return 0.05; //Dummy value for testing
+		return mean; 
 	}
 	
 	public double getStdDevReturns() {
-		return 0.03;
+		return stdev;
 	}
 	
 }

@@ -73,7 +73,7 @@ public class ReturnCalc {
 		
 		Double avgMonthlyReturn = sum/portReturns.size();
 		annualizedReturn = Math.pow(1+avgMonthlyReturn, 12)-1;
-		System.out.println(annualizedReturn);
+		// System.out.println(annualizedReturn);
 		return annualizedReturn;
 	} // end of method averageAnnualReturn
 	
@@ -103,7 +103,7 @@ public class ReturnCalc {
 		annualizedStDev = monthlyStanDev * Math.sqrt(12);
 		
 		
-		System.out.println(annualizedStDev);
+		// System.out.println(annualizedStDev);
 		return annualizedStDev;
 	} // end of method averageAnnualStandardDeviation
 	

@@ -14,12 +14,12 @@ public class UserInputs {
 		
 		this.currentAge = 30;
 		this.inflation = 0.03;
-		this.yearlyDeposits = 500 * 12.0;
+		this.yearlyDeposits =10000;
 		this.adjustDepositsByInflation = true;
 		this.targetRetirement = 2000 * 12;
 		this.targetRetirementAge = 60;
 		this.equityPercentage = 50;
-		this.principal = 100000;
+		this.principal = 0;
 	}
 	
 	

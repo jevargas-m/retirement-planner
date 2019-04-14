@@ -175,7 +175,7 @@ public class FutureProjection {
 	// For testing only
 	public static void main(String[] args) {
 		UserInputs ui = new UserInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(100.0);
+		InvestmentPortfolio ip = new InvestmentPortfolio(30);
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		
