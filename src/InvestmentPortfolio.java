@@ -1,9 +1,18 @@
-
+/**
+ * Build a user portfolio
+ * TODO: This class could be merged with ReturnCalc for cohesion
+ * @author Enrique Vargas
+ *
+ */
 public class InvestmentPortfolio {
 	private double equity;
 	private double mean;
 	private double stdev;
 	
+	/**
+	 * Build a portfolio according to 
+	 * @param equityPercentage
+	 */
 	public InvestmentPortfolio (double equityPercentage) {
 		this.equity = equityPercentage / 100.0;
 		ReturnCalc build = new ReturnCalc("portfoliodata.csv");
