@@ -1,5 +1,7 @@
 /**
- * Auxiliary class with amortization table data, immutable object only getters
+ * Auxiliary class with amortization table data, each object is a row in the
+ * amortization table 
+ * immutable object only getters
  * @author Enrique Vargas
  *
  */

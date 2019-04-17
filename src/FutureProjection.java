@@ -4,7 +4,8 @@ import org.apache.commons.math3.distribution.*;
 
 /**
  * Build a simulated retirement projection using portfolio variability using 
- * NormalDistribution for return estimation
+ * NormalDistribution for return estimation, all cashflows are assumed real
+ * (Today's money)
  * @author Enrique Vargas
  *
  */
@@ -51,16 +52,19 @@ public class FutureProjection {
 	 * Build amortization table, used on constructor
 	 */
 	private void buildProjectionData() {
-		double principal = initialPrincipal;
+		double principal = initialPrincipal;  // Money in your account
 		boolean savingPeriod = true;
 		
 		// Saving period
 		int age = currentAge;
 		while ( savingPeriod || principal >= retirementAge ) {
+			// Append a row in the amortization table as long as you are saving and not broke
+			
+			//Get a randomly generated interest rate from probability distribution
 			double nominalRate = nd.inverseCumulativeProbability(r.nextDouble());
 			double realRate = realRate(nominalRate);
-			double cashflow = 0;
-		
+			
+			double cashflow = 0;					
 			if (age <= retirementAge) {
 				cashflow = yrdeposits;
 			} else {
@@ -80,12 +84,15 @@ public class FutureProjection {
 	
 	/**
 	 * Perform MonteCarloSimulation building several random FutureProjections
+	 * with parameters used when object is instanciated
+	 * Each iteration item in the array is a complete randomized projection 
+	 * of cashflows until broke (i.e. each iteration is a complete amortization table)
 	 * @param iterations int
 	 * @return FutureProjection[iterations]
 	 */
 	public FutureProjection[] monteCarloSimulation(int iterations) {
 		FutureProjection[] results = new FutureProjection[iterations];
-		for (int i=0; i < iterations; i++) {
+		for (int i = 0; i < iterations; i++) {
 			FutureProjection projection = new FutureProjection(initialPrincipal, yrdeposits, withdrawals, 
 					currentAge, retirementAge, inflation, portfolio);
 			results[i] = projection;
@@ -93,12 +100,18 @@ public class FutureProjection {
 		return results;
 	}
 	
+	/**
+	 * Your age Today
+	 * @return int
+	 */
 	public int getCurrentAge() {
 		return currentAge;
 	}
 
 	/**
 	 * Calculate real interest rate based on nominalRate and provided inflation
+	 * based on Fisher Equation
+	 * https://en.wikipedia.org/wiki/Real_interest_rate
 	 * @param nominalRate
 	 * @return double
 	 */
@@ -128,7 +141,7 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Get amortization table for simulated retirement
+	 * Get a single randomized amortization table for simulated retirement
 	 * @return ArrayList<FutureProjectionData>
 	 */
 	public ArrayList<FutureProjectionData> getData() {
@@ -175,7 +188,7 @@ public class FutureProjection {
 	// For testing only
 	public static void main(String[] args) {
 		UserInputs ui = new UserInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(0.05,0.00001);
+		InvestmentPortfolio ip = new InvestmentPortfolio(30);
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		
