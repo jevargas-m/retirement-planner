@@ -13,6 +13,7 @@ public class SimulationAnalyzer {
 	private int maxAgeToAnalyze = 110;
 	private int initialAge;
 
+	
 	public SimulationAnalyzer(FutureProjection[] simulationData) {
 		this.simulationData = simulationData;
 		this.confinterval = new ConfidenceInterval[maxAgeToAnalyze];

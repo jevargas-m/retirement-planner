@@ -1,4 +1,8 @@
-
+/**
+ * Class intended to consolidate user provided inputs
+ * @author Enrique Vargas
+ *
+ */
 public class UserInputs {
 	private int currentAge;
 	private double inflation;
