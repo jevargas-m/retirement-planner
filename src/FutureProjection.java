@@ -5,7 +5,7 @@ import org.apache.commons.math3.distribution.*;
 /**
  * Build a simulated retirement projection using portfolio variability using 
  * NormalDistribution for return estimation, all cashflows are assumed real
- * (Today's money)
+ * (real = Today's money)
  * @author Enrique Vargas
  *
  */
