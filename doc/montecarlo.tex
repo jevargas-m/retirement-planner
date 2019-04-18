@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[8pt]{article}
 \usepackage[letterpaper,margin=1in]{geometry}
 \usepackage{amsmath,amssymb,graphicx}
 \usepackage[parfill]{parskip}
@@ -110,6 +110,20 @@ Where $b$ is the age in which the person is broke in each $j$'th iteration.
 How much money can safely withdraw if retiring Today?
 
 Assume you make annual withdraws $a_i$ from the present day all the way to $y$, such that with that amount there is a certain probability $Pr[B_y]$ greater that certain confidence level.
+
+Algorithm idea:
+\begin{itemize}
+\item Estimate a starting point for $a_i$ assuming no randomized $R_i$.  This is a simple annuity calculation:
+
+\[ a_i=P \cdot \frac{R \cdot (1+R)^y}{(1+R)^y-1}\]
+
+Where $P$ is Today's Principal, $R$ is the constant expected return and $y$ the number of years.
+
+\item Perform a Monte Carlo simulation $M$.
+\item Store pair $(a_i, Pr[B_y])$
+\item Change $a_i$ and repeat process.
+\item Graph or build a distribution.
+\end{itemize}
 
 
 
