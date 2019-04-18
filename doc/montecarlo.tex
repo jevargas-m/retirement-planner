@@ -52,7 +52,7 @@ A retirement scenario $S$ is a projected amortization table per the above parame
 
 \end{itemize}
 
-For simulation purposes $a_i=0$ for those years $r>b$.
+For simulation purposes when $P_i$ becomes negative after year $s$, the person is broke at year $b=i$.
 
 
 As this is a projection into the future there are several sources of uncertainty:
@@ -80,9 +80,11 @@ Noting that $R_i$ would be a random sample from $R_i$ assumed distribution.
 The Monte Carlo simulation will consist on generating a set $M$ of $|M|=n$ randomized iterations of projection scenarios.  
 
 \begin{align*}
-M & = \{ S_j \mid S_j ~ \forall j \in [1..n] \} \\
-S_j & = \{(i,P_i) \mid  P_{i} = P_{i-1} + I_{i-1} + a_{i-1}, ~ \forall i \in [1..y] \}
+M & = \{ S_j \mid j \in [1..n] \} \\
+S_j & = \{(1,P_1)\} \cup \{(i,P_i) \mid  P_{i} = P_{i-1} + I_{i-1} + a_{i-1}, ~ \forall i \in [2..y] \}
 \end{align*}
+
+Note $P_1$, the initial money at present day is fixed in all scenarios.
 
 \section{Analysis of results}
 
@@ -90,12 +92,10 @@ S_j & = \{(i,P_i) \mid  P_{i} = P_{i-1} + I_{i-1} + a_{i-1}, ~ \forall i \in [1.
 After the simulation is performed the set $M$ can be used to perform the following analysis:
 
 \begin{itemize}
-\item Probability of being broke before certain year $y$, denoted as the event $B_y$.
+\item Probability of being broke before certain year $y$, denoted as the event $B_y$.  Basically consists in counting in how many scenarios $S_j\in M$ the person became broke before year $y$ and dividing by the total number of iterations.
 
-\begin{align*}
-B & = \{b \in S_j\mid b < y, ~ \forall j \in [1..n] \} \\
-Pr[B_y] & = \frac{|B|}{n}
-\end{align*}
+\[ Pr[B_y] = \frac{|B|}{n} \]
+\[B  = \{S_j \in M\mid b < y \} \]
 
 Where $b$ is the age in which the person is broke in each $j$'th iteration.
 
@@ -107,7 +107,7 @@ Where $b$ is the age in which the person is broke in each $j$'th iteration.
 
 \section{Further analysis}
 
-How much money can safely withdraw if retiring Today?
+How much money can a person safely withdraw per year if retiring Today?
 
 Assume you make annual withdraws $a_i$ from the present day all the way to $y$, such that with that amount there is a certain probability $Pr[B_y]$ greater that certain confidence level.
 
