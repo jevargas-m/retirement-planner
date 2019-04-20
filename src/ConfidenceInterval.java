@@ -7,7 +7,6 @@ import org.apache.commons.math3.stat.descriptive.*;
  */
 public class ConfidenceInterval {
 	private DescriptiveStatistics population;
-	
 
 	public ConfidenceInterval() {
 		population = new DescriptiveStatistics();
