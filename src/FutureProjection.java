@@ -124,18 +124,10 @@ public class FutureProjection {
 	 * @throws IllegalArgumentException
 	 */
 	public FutureProjectionData getProjectedData(int age) throws IllegalArgumentException {
-		int i = age - currentAge;
-		
 		if (age < currentAge || age > maxAge) {
 			throw new IllegalArgumentException("Age out of bounds");
 		}
-		
-		if (getAgeBroke() < maxAge ) {
-			// You are broke
-			return null;
-		}
-		
-		return data[i];
+		return data[age - currentAge];
 	}
 	
 	/**

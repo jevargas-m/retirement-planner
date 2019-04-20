@@ -6,6 +6,7 @@ class FutureProjectionTest {
 
 	@Test
 	void testGetAgeBroke1() {
+		// Test Case #1
 		UserInputs ui = new UserInputs();
 		ui.setCurrentAge(30);
 		ui.setAdjustDepositsByInflation(true);
@@ -26,6 +27,7 @@ class FutureProjectionTest {
 	
 	@Test
 	void testGetAgeBroke2() {
+		// Test Case #2
 		UserInputs ui = new UserInputs();
 		ui.setCurrentAge(30);
 		ui.setAdjustDepositsByInflation(true);
@@ -46,6 +48,7 @@ class FutureProjectionTest {
 	
 	@Test
 	void testGetAgeBroke3() {
+		// Test Case #3
 		UserInputs ui = new UserInputs();
 		ui.setCurrentAge(30);
 		ui.setAdjustDepositsByInflation(true);
@@ -62,6 +65,37 @@ class FutureProjectionTest {
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		
 		assertEquals(105, fp.getAgeBroke());
+	}
+	
+	@Test
+	void testProjectedData1() {
+		// Test Case #1
+		UserInputs ui = new UserInputs();
+		ui.setCurrentAge(30);
+		ui.setAdjustDepositsByInflation(true);
+		ui.setMaxAge(105);
+		ui.setInflation(0.03);
+		ui.setPrincipal(0);
+		ui.setTargetRetirementAge(60);
+		ui.setTargetRetirement(25000);
+		ui.setYearlyDeposits(10000);
+		
+		InvestmentPortfolio ip = new InvestmentPortfolio(0.05, 0.0000001);
+		
+		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+		
+		assertEquals(255843.00, fp.getProjectedData(70).getPrincipal(), 1.0);
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			fp.getProjectedData(29);
+	    });
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			fp.getProjectedData(106);
+	    });
+
+
 	}
 
 }
