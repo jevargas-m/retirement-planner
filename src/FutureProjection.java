@@ -130,6 +130,10 @@ public class FutureProjection {
 		return data[age - currentAge];
 	}
 	
+	public int getMaxAge() {
+		return maxAge;
+	}
+
 	/**
 	 * Get a single randomized amortization table for simulated retirement
 	 * @return ArrayList<FutureProjectionData>
