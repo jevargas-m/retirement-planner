@@ -7,16 +7,7 @@ class FutureProjectionTest {
 	@Test
 	void testGetAgeBroke1() {
 		// Test Case #1
-		UserInputs ui = new UserInputs();
-		ui.setCurrentAge(30);
-		ui.setAdjustDepositsByInflation(true);
-		ui.setMaxAge(105);
-		ui.setInflation(0.03);
-		ui.setPrincipal(0);
-		ui.setTargetRetirementAge(60);
-		ui.setTargetRetirement(25000);
-		ui.setYearlyDeposits(10000);
-		
+		UserInputs ui = UserInputs.getDefaultInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.05, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
@@ -49,16 +40,7 @@ class FutureProjectionTest {
 	@Test
 	void testGetAgeBroke3() {
 		// Test Case #3
-		UserInputs ui = new UserInputs();
-		ui.setCurrentAge(30);
-		ui.setAdjustDepositsByInflation(true);
-		ui.setMaxAge(105);
-		ui.setInflation(0.0);
-		ui.setPrincipal(100000);
-		ui.setTargetRetirementAge(60);
-		ui.setTargetRetirement(25000);
-		ui.setYearlyDeposits(10000);
-		
+		UserInputs ui = new UserInputs(30, 105, 0.0, 10000, true, 25000, 60, 0.3, 100000);
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.06, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
@@ -70,16 +52,7 @@ class FutureProjectionTest {
 	@Test
 	void testProjectedData1() {
 		// Test Case #1
-		UserInputs ui = new UserInputs();
-		ui.setCurrentAge(30);
-		ui.setAdjustDepositsByInflation(true);
-		ui.setMaxAge(105);
-		ui.setInflation(0.03);
-		ui.setPrincipal(0);
-		ui.setTargetRetirementAge(60);
-		ui.setTargetRetirement(25000);
-		ui.setYearlyDeposits(10000);
-		
+		UserInputs ui = UserInputs.getDefaultInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.05, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
