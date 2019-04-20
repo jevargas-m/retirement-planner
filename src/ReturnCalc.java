@@ -31,6 +31,7 @@ public class ReturnCalc {
 				monthlyReturnStocksBonds.add(returnStockBonds);
 				
 			}
+			scanner.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
