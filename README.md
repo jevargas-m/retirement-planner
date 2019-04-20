@@ -11,16 +11,16 @@ The idea is to develop a retirement-planning tool for the average person that is
 The program will ask the user for their age and their retirement goals, and how much money they can regularly contribute toward retirement. It will also include a brief survey in the beginning to gauge userâ€™s risk appetite. Based on that information, the program will suggest a portfolio based on their goals and risk appetite. We plan on running a Monte Carlo simulation of the portfolio to present the user a projection of what their retirement income may look like in the future, and show scenarios of potential positive and negative outcomes based on the simulation.
 
 ## Key modules
-1. Risk profile questionnaire
+1 Risk profile questionnaire
   * Input: Answer to questions
   * Output: Risk score
-2. Portfolio Builder
+2 Portfolio Builder
   * Input: Risk score, portfolio allocation to different investments.
   * Output: average and standard deviation of expected return
-3. Simulation
+3 Simulation
   * Input: average and standard deviation of expected return.  Current age, retirement age, principal, monthly deposits, life expectancy
   * Output: prob of achieving certain amount of money in time
-4. GUI
+4 GUI
 
 ## Key User Inputs
 * User risk profile through a questionnaire or selecting a pre-built portfolio
