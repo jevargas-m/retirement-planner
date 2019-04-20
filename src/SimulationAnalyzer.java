@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
-import org.apache.commons.math3.distribution.*;
 import org.apache.commons.math3.stat.Frequency;
 
 /**
@@ -17,7 +15,11 @@ public class SimulationAnalyzer {
 	private int currentAge;
 	private int ageCardinality;
 	private int iterations;
-		
+	
+	/**
+	 * Analyze MonteCarlo simulation results
+	 * @param simulationData FutureProjection[]
+	 */
 	public SimulationAnalyzer(FutureProjection[] simulationData) {
 		this.data = simulationData;	
 		this.maxAge = simulationData[0].getMaxAge();
@@ -29,16 +31,9 @@ public class SimulationAnalyzer {
 		buildDataSets();
 	}
 		
-	public ConfidenceInterval[] getPrincipals() {
-		return principals;
-	}
-
-	
-	
-	public Frequency getAgeBrokeDistribution() {
-		return ageBrokeDistribution;
-	}
-
+	/**
+	 * Initialize analysis datasets, used in constructor
+	 */
 	private void buildDataSets() {
 		// Initialize principal confidence intervals
 		for (int i = 0; i < ageCardinality; i++) {
@@ -57,51 +52,59 @@ public class SimulationAnalyzer {
 		}
 	}
 	
+	/**
+	 * Cummulative probability of being broke up to certain age
+	 * @param age int
+	 * @return double
+	 * @throws IllegalArgumentException, when age is out of bounds
+	 */
+	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {
+		if (age < currentAge || age > maxAge) {
+			throw new IllegalArgumentException("Age out of bounds");
+		}
+		return ageBrokeDistribution.getCumPct(age);
+	}
+	
+	/**
+	 * Write CSV file with key analysis result from Monte Carlo simulation
+	 * @param filename string
+	 * @throws IOException
+	 */
+	public void writeOutputCSV(String filename) throws IOException {
+		FileWriter fw = new FileWriter(filename);
+		PrintWriter pw = new PrintWriter(fw);
+		pw.println("age,min_principal,max_principal,iterations_broke,cumm_prob_broke");
+		for (int i = 0; i < ageCardinality; i++ ) {
+			int age = i + currentAge;
+			String line = age + "," + Math.round(principals[i].getMinConfInterval());
+			line += "," + Math.round(principals[i].getMaxConfInterval());
+			line += "," + ageBrokeDistribution.getCount(age) + "," + ageBrokeDistribution.getCumPct(age);
+			pw.println(line);
+		}
+		pw.close();
+	}
+	
 	// for testing
 	public static void main(String[] args) {
 		// Test Case
 		UserInputs ui = new UserInputs();  // Use default constructor parameters
-		InvestmentPortfolio ip = new InvestmentPortfolio(ui.getEquityPercentage());
+		InvestmentPortfolio ip = new InvestmentPortfolio(50);
+		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
-
+		
+		System.out.println("Prob of broke at 90 is : " + sa.getProbBrokeAtAge(90));
+		
 		try {
 			// Test principal confidence intervals
-			FileWriter fw1 = new FileWriter("confgraph.csv");
-			PrintWriter pw1 = new PrintWriter(fw1);
-			ConfidenceInterval[] principals = sa.getPrincipals();
-			for (int i = 0; i < sa.ageCardinality; i++ ) {
-				String line = i + ui.getCurrentAge() + "," + Math.round(principals[i].getMinConfInterval()) + ","
-						+ Math.round(principals[i].getMaxConfInterval()) ;
-				System.out.println(line);
-				pw1.println(line);
-			}
-			pw1.close();
-			System.out.println();
-			
-			// Test ageBroke distribution
-			FileWriter fw2 = new FileWriter("ageBrokeDistribution.csv");
-			PrintWriter pw2 = new PrintWriter(fw2);
-			Frequency f = sa.getAgeBrokeDistribution();
-						
-			for (int i = 0; i < sa.ageCardinality - 1; i++ ) {
-				int age = i + ui.getCurrentAge();
-				String line = age  + "," + f.getCount(age) + "," + f.getCumPct(age);
-				System.out.println(line);
-				pw2.println(line);
-			}
-			pw2.close();
+			String filename = "output.csv";
+			sa.writeOutputCSV(filename);
+			System.out.println("DONE!: check " + filename);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("ERROR: Close the output file first!");
 		}
-		
-	}
-
-
-
-	
+	}	
 	
 }
