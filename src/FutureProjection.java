@@ -11,14 +11,15 @@ import org.apache.commons.math3.distribution.*;
  */
 public class FutureProjection {
 	private int ageBroke;
-	ArrayList<FutureProjectionData> data;
+	FutureProjectionData[] data;
 	private NormalDistribution nd;
 	private Random r;
 	private double initialPrincipal;
-	private double yrdeposits;
+	private double deposits;
 	private double withdrawals;
 	private int currentAge;
 	private int retirementAge;
+	private int maxAge;
 	private double inflation;
 	private InvestmentPortfolio portfolio;
 	
@@ -32,18 +33,19 @@ public class FutureProjection {
 	 * @param inflation
 	 * @param portfolio
 	 */
-	public FutureProjection(double principal, double yrdeposits, double withdrawals, int age, 
-			int retirementAge, double inflation, InvestmentPortfolio portfolio) {
+	public FutureProjection(double principal, double deposits, double withdrawals, int age, 
+			int maxAge, int retirementAge, double inflation, InvestmentPortfolio portfolio) {
 		this.initialPrincipal = principal;
-		this.yrdeposits = yrdeposits;
+		this.deposits = deposits;
 		this.withdrawals = withdrawals;
 		this.currentAge = age;
 		this.retirementAge = retirementAge;
+		this.maxAge = maxAge;
 		this.inflation = inflation;
 		this.portfolio = portfolio;
 		
 		this.r =new Random();
-		this.data = new ArrayList<>();
+		this.data = new FutureProjectionData[maxAge - currentAge + 1];
 		this.nd = new NormalDistribution(this.portfolio.getAverageReturns(), this.portfolio.getStdDevReturns());
 		buildProjectionData();
 	}
@@ -53,33 +55,28 @@ public class FutureProjection {
 	 */
 	private void buildProjectionData() {
 		double principal = initialPrincipal;  // Money in your account
-		boolean savingPeriod = true;
+		boolean flagBroke = false;
 		
-		// Saving period
-		int age = currentAge;
-		while ( savingPeriod || principal >= retirementAge ) {
-			// Append a row in the amortization table as long as you are saving and not broke
-			
+		for ( int age = currentAge; age <= maxAge; age++) {
 			//Get a randomly generated interest rate from probability distribution
 			double nominalRate = nd.inverseCumulativeProbability(r.nextDouble());
 			double realRate = realRate(nominalRate);
 			
 			double cashflow = 0;					
 			if (age <= retirementAge) {
-				cashflow = yrdeposits;
+				cashflow = deposits;
 			} else {
-				savingPeriod = false;
 				cashflow = -1 * withdrawals;
 			}
-			
-			FutureProjectionData fpd = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
-			data.add(fpd);
-			
+
+			data[age - currentAge] = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
 			principal += principal * realRate + cashflow;
-			age++;
+			
+			if (!flagBroke && (age >= retirementAge && principal < 0)) {
+				ageBroke = age;
+				flagBroke = true;
+			}
 		}
-		
-		ageBroke = age - 1;
 	}
 	
 	/**
@@ -93,8 +90,8 @@ public class FutureProjection {
 	public FutureProjection[] monteCarloSimulation(int iterations) {
 		FutureProjection[] results = new FutureProjection[iterations];
 		for (int i = 0; i < iterations; i++) {
-			FutureProjection projection = new FutureProjection(initialPrincipal, yrdeposits, withdrawals, 
-					currentAge, retirementAge, inflation, portfolio);
+			FutureProjection projection = new FutureProjection(initialPrincipal, deposits, withdrawals, 
+					currentAge, maxAge, retirementAge, inflation, portfolio);
 			results[i] = projection;
 		}
 		return results;
@@ -128,23 +125,23 @@ public class FutureProjection {
 	public FutureProjectionData getProjectedData(int age) throws IllegalArgumentException {
 		int i = age - currentAge;
 		
-		if (i < currentAge) {
-			throw new IllegalArgumentException("Age before present day");
+		if (age < currentAge || age > maxAge) {
+			throw new IllegalArgumentException("Age out of bounds");
 		}
 		
-		if (i < data.size() ) {
+		if (getAgeBroke() < maxAge ) {
 			// You are broke
 			return null;
 		}
 		
-		return data.get(i);
+		return data[i];
 	}
 	
 	/**
 	 * Get a single randomized amortization table for simulated retirement
 	 * @return ArrayList<FutureProjectionData>
 	 */
-	public ArrayList<FutureProjectionData> getData() {
+	public FutureProjectionData[] getData() {
 		return data;
 	}
 
@@ -166,8 +163,8 @@ public class FutureProjection {
 			PrintWriter pw = new PrintWriter(fw);
 			System.out.println("Age     P          r         f         CashFlow");
 			pw.println("Age,P,r,f,CashFlow");
-			for (int i = 0; i < data.size(); i++) {
-				FutureProjectionData fpd = data.get(i);
+			for (int i = 0; i < data.length; i++) {
+				FutureProjectionData fpd = data[i];
 				System.out.printf("%3d  %8.0f   %8.4f   %8.4f   %8.0f", fpd.getAge(), fpd.getPrincipal(), 
 						fpd.getRealRate(), fpd.getInflation(), fpd.getPmt());
 				System.out.println();
@@ -190,7 +187,7 @@ public class FutureProjection {
 		UserInputs ui = new UserInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(30);
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		
 		fp.printAmortizationTable();
 		System.out.println("Broke at age = " + fp.getAgeBroke());
