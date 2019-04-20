@@ -5,6 +5,7 @@
  */
 public class UserInputs {
 	private int currentAge;
+	private int maxAge;
 	private double inflation;
 	private double yearlyDeposits;
 	private boolean adjustDepositsByInflation;
@@ -15,7 +16,7 @@ public class UserInputs {
 		
 	public UserInputs() {
 		// Default values only for testing 
-		
+		this.maxAge = 105;
 		this.currentAge = 30;
 		this.inflation = 0.03;
 		this.yearlyDeposits =10000;
@@ -27,6 +28,16 @@ public class UserInputs {
 	}
 	
 	
+	public int getMaxAge() {
+		return maxAge;
+	}
+
+
+	public void setMaxAge(int maxAge) {
+		this.maxAge = maxAge;
+	}
+
+
 	public int getCurrentAge() {
 		return currentAge;
 	}
