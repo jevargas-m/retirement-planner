@@ -14,19 +14,54 @@ public class UserInputs {
 	private double equityPercentage;
 	private double principal;
 		
-	public UserInputs() {
-		// Default values only for testing 
-		this.maxAge = 105;
-		this.currentAge = 30;
-		this.inflation = 0.03;
-		this.yearlyDeposits =10000;
-		this.adjustDepositsByInflation = true;
-		this.targetRetirement = 2000 * 12;
-		this.targetRetirementAge = 60;
-		this.equityPercentage = 50;
-		this.principal = 0;
+	/**
+	 * 
+	 * @param currentAge int, User Age at present day
+	 * @param maxAge int, Maximum age to allow the simulation to run, safety margin
+	 * @param inflation double, expected annual inflation rate
+	 * @param deposits double, money the user plans to deposit every year
+	 * @param real boolean, true use today's money
+	 * @param withdrawals double, money user needs per year after retirement
+	 * @param retirementage int, age in which the user plans to retire
+	 * @param equity double, percentage of equity in the portfolio
+	 * @param principal double, initial money at present age
+	 */
+	public UserInputs(int currentAge, int maxAge, double inflation, double deposits, 
+			boolean real, double withdrawals, int retirementage, double equity, 
+			double principal) {
+
+		this.maxAge = maxAge;
+		this.currentAge = currentAge;
+		this.inflation = inflation;
+		this.yearlyDeposits =deposits;
+		this.adjustDepositsByInflation = real;
+		this.targetRetirement = withdrawals;
+		this.targetRetirementAge = retirementage;
+		this.equityPercentage = equity;
+		this.principal = principal;
 	}
 	
+	public UserInputs() {
+	}
+	
+	/**
+	 * Get UserInputs with default values used for testing
+	 * @return UserInputs
+	 */
+	public static UserInputs getDefaultInputs() {
+		// Default case used for testing
+		UserInputs defui = new UserInputs();
+		defui.setMaxAge(105);
+		defui.setCurrentAge(30);
+		defui.setInflation(0.03);
+		defui.setYearlyDeposits(10000);
+		defui.setAdjustDepositsByInflation(true);
+		defui.setTargetRetirement(2000.0 * 12);
+		defui.setTargetRetirementAge(60);
+		defui.setEquityPercentage(50);
+		defui.setPrincipal(0);
+		return defui;
+	}
 	
 	public int getMaxAge() {
 		return maxAge;
