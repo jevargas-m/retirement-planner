@@ -56,7 +56,7 @@ public class SimulationAnalyzer {
 			UserInputs ui = new UserInputs();
 			InvestmentPortfolio ip = new InvestmentPortfolio(30);
 			FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-					ui.getCurrentAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
+					ui.getCurrentAge(), ui.getMaxAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
 			SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
 			ConfidenceInterval[] ci = sa.getConfinterval();
 			
