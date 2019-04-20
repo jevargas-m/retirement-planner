@@ -72,11 +72,12 @@ public class FutureProjection {
 			data[age - currentAge] = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
 			principal += principal * realRate + cashflow;
 			
-			if (!flagBroke && (age >= retirementAge && principal < 0)) {
+			if (!flagBroke && age >= retirementAge && principal < 0) {
 				ageBroke = age;
 				flagBroke = true;
 			}
 		}
+		if (!flagBroke) ageBroke = maxAge;
 	}
 	
 	/**
