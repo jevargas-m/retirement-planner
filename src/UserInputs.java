@@ -49,16 +49,16 @@ public class UserInputs {
 	 * @return UserInputs
 	 */
 	public static UserInputs getDefaultInputs() {
-		// Default case used for testing
+		// Default case # 1 used for testing
 		UserInputs defui = new UserInputs();
 		defui.setMaxAge(105);
 		defui.setCurrentAge(30);
 		defui.setInflation(0.03);
 		defui.setYearlyDeposits(10000);
 		defui.setAdjustDepositsByInflation(true);
-		defui.setTargetRetirement(2000.0 * 12);
+		defui.setTargetRetirement(25000);
 		defui.setTargetRetirementAge(60);
-		defui.setEquityPercentage(50);
+		defui.setEquityPercentage(0.5);
 		defui.setPrincipal(0);
 		return defui;
 	}
