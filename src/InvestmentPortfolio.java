@@ -14,7 +14,7 @@ public class InvestmentPortfolio {
 	 * @param equityPercentage
 	 */
 	public InvestmentPortfolio (double equityPercentage) {
-		this.equity = equityPercentage / 100.0;
+		this.equity = equityPercentage;
 		ReturnCalc build = new ReturnCalc("portfoliodata.csv");
 		mean = build.averageAnnualReturn(build.returnsPortfolio(build.monthlyReturnStocksBonds, this.equity));
 		stdev = build.annualStandardDeviation(build.returnsPortfolio(build.monthlyReturnStocksBonds, this.equity));
