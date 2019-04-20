@@ -73,10 +73,11 @@ public class SimulationAnalyzer {
 	public void writeOutputCSV(String filename) throws IOException {
 		FileWriter fw = new FileWriter(filename);
 		PrintWriter pw = new PrintWriter(fw);
-		pw.println("age,min_principal,max_principal,iterations_broke,cumm_prob_broke");
+		pw.println("age,mean_principal,min_principal,max_principal,iterations_broke,cumm_prob_broke");
 		for (int i = 0; i < ageCardinality; i++ ) {
 			int age = i + currentAge;
-			String line = age + "," + Math.round(principals[i].getMinConfInterval());
+			String line = age + "," + Math.round(principals[i].getAverage());
+			line += "," + Math.round(principals[i].getMinConfInterval());
 			line += "," + Math.round(principals[i].getMaxConfInterval());
 			line += "," + ageBrokeDistribution.getCount(age) + "," + ageBrokeDistribution.getCumPct(age);
 			pw.println(line);
@@ -88,7 +89,7 @@ public class SimulationAnalyzer {
 	public static void main(String[] args) {
 		// Test Case
 		UserInputs ui = UserInputs.getDefaultInputs();  // Use default constructor parameters
-		InvestmentPortfolio ip = new InvestmentPortfolio(50);
+		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
