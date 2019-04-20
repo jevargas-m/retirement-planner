@@ -71,4 +71,16 @@ class FutureProjectionTest {
 	    });
 	}
 
+	@Test
+	void testGetProbBrokeAtAge() {
+		UserInputs ui = UserInputs.getDefaultInputs();
+		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
+		
+		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+		
+		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
+				
+		assertEquals(0.54, sa.getProbBrokeAtAge(90), 0.05);
+	}
 }
