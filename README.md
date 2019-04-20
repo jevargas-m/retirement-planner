@@ -14,12 +14,15 @@ The program will ask the user for their age and their retirement goals, and how 
 1 Risk profile questionnaire
   * Input: Answer to questions
   * Output: Risk score
+  
 2 Portfolio Builder
   * Input: Risk score, portfolio allocation to different investments.
   * Output: average and standard deviation of expected return
+  
 3 Simulation
   * Input: average and standard deviation of expected return.  Current age, retirement age, principal, monthly deposits, life expectancy
   * Output: prob of achieving certain amount of money in time
+  
 4 GUI
 
 ## Key User Inputs
