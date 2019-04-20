@@ -86,6 +86,8 @@ class FutureProjectionTest {
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
 		
 		assertEquals(255843.00, fp.getProjectedData(70).getPrincipal(), 1.0);
+		assertEquals(-25000.00, fp.getProjectedData(70).getPmt(), 1.0);
+		assertEquals(0.0194, fp.getProjectedData(70).getRealRate(), 0.0001);
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			fp.getProjectedData(29);
