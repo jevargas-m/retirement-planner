@@ -2,9 +2,9 @@
 Final Project OMCIT-591
 
 ## Team Members
-Arley Sasson.
-Xunjing Wu.
-Enrique Vargas.
+*. Arley Sasson.
+*. Xunjing Wu.
+*. Enrique Vargas.
 
 ## Project Description
 The idea is to develop a retirement-planning tool for the average person that is thinking about retirement; it is not designed for investment professionals. Although we would like the user to see the impact of volatility on the final outcome of their retirement plan, we want to make it user-friendly with a decent amount of user interaction through a graphic user interface.
