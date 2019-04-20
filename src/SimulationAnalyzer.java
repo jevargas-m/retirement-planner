@@ -87,7 +87,7 @@ public class SimulationAnalyzer {
 	// for testing
 	public static void main(String[] args) {
 		// Test Case
-		UserInputs ui = new UserInputs();  // Use default constructor parameters
+		UserInputs ui = UserInputs.getDefaultInputs();  // Use default constructor parameters
 		InvestmentPortfolio ip = new InvestmentPortfolio(50);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
