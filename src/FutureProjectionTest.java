@@ -69,8 +69,6 @@ class FutureProjectionTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			fp.getProjectedData(106);
 	    });
-
-
 	}
 
 }
