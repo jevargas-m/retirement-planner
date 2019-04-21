@@ -14,7 +14,10 @@ public class ReturnCalc {
 	ArrayList<MonthlyReturn> monthlyReturnStocksBonds;
 	ArrayList<Double> portfolioReturns;
 	
-	//constructor of class, produces an arraylist with all the monthly returns of stocks and bonds separately
+	/**
+	 * constructor of class, produces an arraylist with all the monthly returns of stocks and bonds separately
+	 * @param filename file to read
+	 */
 	public ReturnCalc(String filename) {
 		File historicalData = new File(filename);
 		monthlyReturnStocksBonds = new ArrayList<MonthlyReturn>();
@@ -86,7 +89,7 @@ public class ReturnCalc {
 	
 	
 	/**
-	 * 
+	 * Method that will take arraylist of monthly returns and will return annualized std dev
 	 * @param args
 	 */
 	public Double annualStandardDeviation(ArrayList<Double> portReturns) {
