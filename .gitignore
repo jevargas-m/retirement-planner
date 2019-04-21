@@ -1,7 +1,6 @@
 .classpath
 .settings/
 .project
-/bin/
 /doc/*.log
 /doc/*.aux
 /doc/*.gz
