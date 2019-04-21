@@ -44,5 +44,12 @@ Using Apache Math Commons libraries for Descriptive Statistics and Frequency dis
 http://commons.apache.org/proper/commons-math/
 
 ## Dataset's
-Using market datasets from:
+The construction of the portfolios that we are suggesting only consist of stocks and bonds and we change the percentage weight of 
+equities or bonds depending on how risk averse the user is. We are obtaining monthly returns in both assets since 1993. 
+For equity returns we are using the returns on the S&P 500  index ETF. Our source is Yahoo finance:
+https://finance.yahoo.com/quote/SPY/history?period1=728283600&period2=1553832000&interval=1mo&filter=history&frequency=1mo  
+
+For bond returns we are using the returns in the US Treasury 10yr bonds we are using the dataset from multpl.com:
+https://www.multpl.com/10-year-treasury-rate/table/by-month
+
 
