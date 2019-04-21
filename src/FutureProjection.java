@@ -3,10 +3,11 @@ import java.util.*;
 import org.apache.commons.math3.distribution.*;
 
 /**
- * Build a simulated retirement projection using portfolio variability using 
- * NormalDistribution for return estimation, all cashflows are assumed real
- * (real = Today's money)
- * @author Enrique Vargas
+ * Build a simulated retirement projection randomizing returns as per supplied
+ * portfolio variability.  Generates a random sampling assuming returns follow
+ * a NormalDistribution.  This object is inmutable, a new projecton is generated
+ * upon every new instance.
+ * @author Team 11
  *
  */
 public class FutureProjection {
@@ -22,19 +23,28 @@ public class FutureProjection {
 	private int maxAge;
 	private double inflation;
 	private InvestmentPortfolio portfolio;
-	
+	boolean assumeReal;
+
 	/**
 	 * Build a new simulated retirement projection using portfolio volatility
-	 * @param principal 
-	 * @param yrdeposits
-	 * @param withdrawals
-	 * @param age
-	 * @param retirementAge
-	 * @param inflation
-	 * @param portfolio
+	 * @param principal, Initial money at currentAge
+	 * @param deposits, Yearly deposits to make to the account at the end of 
+	 * every year before retirement age
+	 * @param withdrawals, Yearly withdrawals to make to the account at the end of 
+	 * every year before retirement age.  This will always be considered in present
+	 * day money (i.e. real)  If assumeReal is false, this will be adjusted by inflation
+	 * @param age, User age at present day
+	 * @param maxAge,  Max age to consider in projections.  Could be considered user
+	 * safety margin.
+	 * @param retirementAge,  Age at which user will start withdrawing money every year
+	 * @param inflation, Constant annualized inflation rate to assume. 
+	 * @param portfolio, Investment portfolio.
+	 * @param assumeReal, True if calculation is in real terms, i.e. Today's money, 
+	 * this would mean every year deposits and withdrawals increase in nominal terms
 	 */
 	public FutureProjection(double principal, double deposits, double withdrawals, int age, 
-			int maxAge, int retirementAge, double inflation, InvestmentPortfolio portfolio) {
+			int maxAge, int retirementAge, double inflation, InvestmentPortfolio portfolio,
+			boolean assumeReal) {
 		this.initialPrincipal = principal;
 		this.deposits = deposits;
 		this.withdrawals = withdrawals;
@@ -43,10 +53,11 @@ public class FutureProjection {
 		this.maxAge = maxAge;
 		this.inflation = inflation;
 		this.portfolio = portfolio;
+		this.assumeReal = assumeReal;
 		
-		this.r =new Random();
+		this.r = new Random();
 		this.data = new FutureProjectionData[maxAge - currentAge + 1];
-		this.nd = new NormalDistribution(this.portfolio.getAverageReturns(), this.portfolio.getStdDevReturns());
+		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
 		buildProjectionData();
 	}
 	
@@ -62,50 +73,52 @@ public class FutureProjection {
 			double nominalRate = nd.inverseCumulativeProbability(r.nextDouble());
 			double realRate = realRate(nominalRate);
 			
+			int year = age - currentAge; // consecutive year, starting at zero
 			double cashflow = 0;					
 			if (age <= retirementAge) {
 				cashflow = deposits;
+				// Deposits diminish every year in nominal terms
+				if (!assumeReal) cashflow *= Math.pow(1.0 + inflation, (-1 * year));
 			} else {
 				cashflow = -1 * withdrawals;
+				// Withdrawals increase every year in nominal terms
+				if (!assumeReal) cashflow *= Math.pow(1.0 + inflation, year);
 			}
 
-			data[age - currentAge] = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
-			principal += principal * realRate + cashflow;
+			data[year] = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
+			
+			if (assumeReal) {
+				principal += principal * realRate + cashflow;
+			} else {
+				principal += principal * nominalRate + cashflow;
+			}
 			
 			if (!flagBroke && age >= retirementAge && principal < 0) {
 				ageBroke = age;
 				flagBroke = true;
 			}
 		}
-		if (!flagBroke) ageBroke = maxAge;
+		if (!flagBroke) ageBroke = maxAge;  // if not broke ageBroke assumes maxAge
 	}
 	
 	/**
 	 * Perform MonteCarloSimulation building several random FutureProjections
-	 * with parameters used when object is instanciated
+	 * with parameters used when object was constructed
 	 * Each iteration item in the array is a complete randomized projection 
 	 * of cashflows until broke (i.e. each iteration is a complete amortization table)
-	 * @param iterations int
+	 * @param iterations, Number of iterations in the MonteCarlo
 	 * @return FutureProjection[iterations]
 	 */
 	public FutureProjection[] monteCarloSimulation(int iterations) {
 		FutureProjection[] results = new FutureProjection[iterations];
 		for (int i = 0; i < iterations; i++) {
 			FutureProjection projection = new FutureProjection(initialPrincipal, deposits, withdrawals, 
-					currentAge, maxAge, retirementAge, inflation, portfolio);
+					currentAge, maxAge, retirementAge, inflation, portfolio, assumeReal);
 			results[i] = projection;
 		}
 		return results;
 	}
 	
-	/**
-	 * Your age Today
-	 * @return int
-	 */
-	public int getCurrentAge() {
-		return currentAge;
-	}
-
 	/**
 	 * Calculate real interest rate based on nominalRate and provided inflation
 	 * based on Fisher Equation
@@ -118,7 +131,7 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Return Projected
+	 * Return Amortizatization table row at a given age
 	 * @param age
 	 * @return
 	 * @throws IllegalArgumentException
@@ -142,8 +155,13 @@ public class FutureProjection {
 		return data;
 	}
 
+	public int getCurrentAge() {
+		return currentAge;
+	}
+
 	/**
-	 * Age in which there is not enough money to cover retirement expenses
+	 * Age in which there is not enough money to cover retirement expenses, if 
+	 * projection never gets broke, returns maxAge
 	 * @return int
 	 */
 	public int getAgeBroke() {
@@ -184,7 +202,7 @@ public class FutureProjection {
 		UserInputs ui = UserInputs.getDefaultInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, false);
 		
 		fp.printAmortizationTable();
 		System.out.println("Broke at age = " + fp.getAgeBroke());

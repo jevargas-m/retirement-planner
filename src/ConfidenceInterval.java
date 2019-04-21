@@ -3,7 +3,7 @@ import org.apache.commons.math3.stat.descriptive.*;
 /**
  * Provide confidence interval for a given population
  * 2 sigma  confidence interval
- * @author Enrique Vargas;
+ * @author Team 11;
  */
 public class ConfidenceInterval {
 	private DescriptiveStatistics population;

@@ -2,7 +2,7 @@
  * Auxiliary class with amortization table data, each object is a row in the
  * amortization table 
  * immutable object only getters
- * @author Enrique Vargas
+ * @author Team 11
  *
  */
 public class FutureProjectionData {
@@ -12,7 +12,14 @@ public class FutureProjectionData {
 	private double principal;
 	private double pmt;
 
-	
+	/**
+	 * A row in the amortization table
+	 * @param age user age
+	 * @param r real returns
+	 * @param f inflation
+	 * @param p principal at the beginning of period
+	 * @param pmt deposit or withdrawal at the end of period
+	 */
 	public FutureProjectionData(int age, double r, double f, double p, double pmt) {
 		this.age = age;
 		this.realRate = r;

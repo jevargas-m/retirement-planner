@@ -11,7 +11,7 @@ class SimulationUnitTests {
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.05, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
 		assertEquals(81, fp.getAgeBroke());
 	}
@@ -21,7 +21,7 @@ class SimulationUnitTests {
 		// Test Case #2
 		UserInputs ui = new UserInputs();
 		ui.setCurrentAge(30);
-		ui.setAdjustDepositsByInflation(true);
+		ui.setRealMoney(true);
 		ui.setMaxAge(105);
 		ui.setInflation(0.03);
 		ui.setPrincipal(200000);
@@ -32,7 +32,7 @@ class SimulationUnitTests {
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.02, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
 		assertEquals(66, fp.getAgeBroke());
 	}
@@ -44,7 +44,7 @@ class SimulationUnitTests {
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.06, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
 		assertEquals(105, fp.getAgeBroke());
 	}
@@ -56,7 +56,7 @@ class SimulationUnitTests {
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.05, 0.0000001);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
 		assertEquals(255843.00, fp.getProjectedData(70).getPrincipal(), 1.0);
 		assertEquals(-25000.00, fp.getProjectedData(70).getPmt(), 1.0);
@@ -77,10 +77,10 @@ class SimulationUnitTests {
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
 		
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
 		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
 				
-		assertEquals(0.54, sa.getProbBrokeAtAge(90), 0.05);
+		assertEquals(0.54, sa.getProbBrokeAtAge(90), 0.02);
 	}
 }

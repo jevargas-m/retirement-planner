@@ -1,7 +1,7 @@
 /**
  * Build a user portfolio
  * TODO: This class could be merged with ReturnCalc for cohesion
- * @author Enrique Vargas
+ * @author Team 11
  *
  */
 public class InvestmentPortfolio {

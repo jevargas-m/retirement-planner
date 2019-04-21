@@ -4,7 +4,7 @@ import org.apache.commons.math3.stat.Frequency;
 /**
  * Analyze a simulation results providing meaningful information
  * such as confidence intervals of having money at any given age
- * @author Enrique Vargas
+ * @author Team 11
  *
  */
 public class SimulationAnalyzer {
@@ -56,7 +56,7 @@ public class SimulationAnalyzer {
 	 * Cummulative probability of being broke up to certain age
 	 * @param age int
 	 * @return double
-	 * @throws IllegalArgumentException, when age is out of bounds
+	 * @throws IllegalArgumentException when age is out of bounds
 	 */
 	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {
 		if (age < currentAge || age > maxAge) {
@@ -67,8 +67,9 @@ public class SimulationAnalyzer {
 	
 	/**
 	 * Write CSV file with key analysis result from Monte Carlo simulation
+	 * Has the form: "age,mean_principal,min_principal,max_principal,iterations_broke,cumm_prob_broke"
 	 * @param filename string
-	 * @throws IOException
+	 * @throws IOException For errors writing the file, typically if its open by another program
 	 */
 	public void writeOutputCSV(String filename) throws IOException {
 		FileWriter fw = new FileWriter(filename);
@@ -91,7 +92,7 @@ public class SimulationAnalyzer {
 		UserInputs ui = UserInputs.getDefaultInputs();  // Use default constructor parameters
 		InvestmentPortfolio ip = new InvestmentPortfolio(ui.getEquityPercentage());
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip);
+				ui.getCurrentAge(), ui.getMaxAge(), ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
 		
 		System.out.println("Prob of broke at 90 is : " + sa.getProbBrokeAtAge(90));

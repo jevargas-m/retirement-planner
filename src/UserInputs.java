@@ -1,6 +1,6 @@
 /**
  * Class intended to consolidate user provided inputs
- * @author Enrique Vargas
+ * @author Team 11
  *
  */
 public class UserInputs {
@@ -8,7 +8,7 @@ public class UserInputs {
 	private int maxAge;
 	private double inflation;
 	private double yearlyDeposits;
-	private boolean adjustDepositsByInflation;
+	private boolean realMoney;
 	private double targetRetirement;
 	private int targetRetirementAge;
 	private double equityPercentage;
@@ -34,7 +34,7 @@ public class UserInputs {
 		this.currentAge = currentAge;
 		this.inflation = inflation;
 		this.yearlyDeposits =deposits;
-		this.adjustDepositsByInflation = real;
+		this.realMoney = real;
 		this.targetRetirement = withdrawals;
 		this.targetRetirementAge = retirementage;
 		this.equityPercentage = equity;
@@ -55,7 +55,7 @@ public class UserInputs {
 		defui.setCurrentAge(30);
 		defui.setInflation(0.03);
 		defui.setYearlyDeposits(10000);
-		defui.setAdjustDepositsByInflation(true);
+		defui.setRealMoney(true);
 		defui.setTargetRetirement(25000);
 		defui.setTargetRetirementAge(60);
 		defui.setEquityPercentage(0.5);
@@ -91,11 +91,11 @@ public class UserInputs {
 	public void setYearlyDeposits(double yearlyDeposits) {
 		this.yearlyDeposits = yearlyDeposits;
 	}
-	public boolean isAdjustDepositsByInflation() {
-		return adjustDepositsByInflation;
+	public boolean isRealMoney() {
+		return realMoney;
 	}
-	public void setAdjustDepositsByInflation(boolean adjustDepositsByInflation) {
-		this.adjustDepositsByInflation = adjustDepositsByInflation;
+	public void setRealMoney(boolean realMoney) {
+		this.realMoney = realMoney;
 	}
 	public double getTargetRetirement() {
 		return targetRetirement;
