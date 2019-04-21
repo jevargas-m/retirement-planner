@@ -3,6 +3,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Read a file with historical return data which will produce
+ * an arraylist with all monthly returns of stocks and bonds separately
+ * @author Team 11
+ *
+ */
 public class ReturnCalc {
 
 	ArrayList<MonthlyReturn> monthlyReturnStocksBonds;
