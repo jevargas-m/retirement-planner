@@ -1,7 +1,7 @@
 # Possible questions the simulation could answer
 - [ ] Max amount of yearly/monthly withdrawal on retirement to reach certain age with certain probability.
-- [ ] Given a withdrawal amount, probability of reaching certain age
-- [ ] Age broke with certain probability
+- [X] Given a withdrawal amount, probability of reaching certain age
+- [X] Age broke with certain probability
 - [X] Probability of being broke at certain age (e.g. Graph.  age vs prob-broke)
 - [X] 2 sigma range of: retirement money
 - [ ] Questions could be answered in two ways, at my target retirement age, or at my current age.
@@ -9,4 +9,4 @@
 - [ ] Modify the range of market data to consider for volatility calculations
 - [ ] Allow user to choose and retrieve online data through market related API
 - [X] Graph ageBroke
-- [ ] Graph safe retirement amount (i.e. money I expect to have either as a 2 sigma or at a certain confidence probability)
+- [X] Graph safe retirement amount (i.e. money I expect to have either as a 2 sigma or at a certain confidence probability)
