@@ -82,5 +82,7 @@ class SimulationUnitTests {
 		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
 				
 		assertEquals(0.54, sa.getProbBrokeAtAge(90), 0.02);
+		assertEquals(0.54, fp.getProbBrokeAtAge(90,10000), 0.02);
+		
 	}
 }
