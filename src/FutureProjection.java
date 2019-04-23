@@ -68,7 +68,7 @@ public class FutureProjection {
 	/**
 	 * Build a new randomized amortization table
 	 */
-	private void buildProjectionData() {
+	public void buildProjectionData() {
 		double principal = initialPrincipal;  // Money in your account
 		boolean flagBroke = false;
 		
@@ -111,7 +111,7 @@ public class FutureProjection {
 	 * @param ageBroke 
 	 * @return
 	 */
-	public double getNoVolatileMaxWithdrawal(int ageBroke) {
+	private double getNoVolatileMaxWithdrawal(int ageBroke) {
 		if (ageBroke < currentAge) throw new IllegalArgumentException("Age out of bounds");
 		double interest = realRate(portfolio.getAverageReturns());
 		int n = ageBroke - currentAge;
@@ -145,10 +145,10 @@ public class FutureProjection {
 	public double getProbBrokeAtAge(double withdrawal, int age, int iterations) {
 		FutureProjection fp = this.clone();
 		fp.setWithdrawals(withdrawal);
-		fp.setRetirementAge(currentAge);
+		fp.setRetirementAge(currentAge - 1);
 		return fp.getProbBrokeAtAge(age, iterations); 
 	}
-	
+		
 	/**
 	 * Max withdrawal if retiring today achieving cumm probability of being broke
 	 * uses Illinois Secant method
@@ -305,7 +305,7 @@ public class FutureProjection {
 		UserInputs ui = UserInputs.getDefaultInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.8);
 		FutureProjection fp = new FutureProjection(100000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, false);
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, true);
 		
 //		fp.printAmortizationTable();
 //		System.out.println("Broke at age = " + fp.getAgeBroke());
@@ -316,8 +316,19 @@ public class FutureProjection {
 //		
 //		System.out.println("Prob broke at 100 @ 25000 /yr is " + fp.getProbBrokeAtAge(12000,80, 10000));
 		
-		System.out.println("Safe withdrawal is " + fp.getMaxSafeWithdrawal(95, 0.05));
-		System.out.println("Annuity withdrawal is " + fp.getNoVolatileMaxWithdrawal(95));
+		double safe = fp.getMaxSafeWithdrawal(105, 0.90);
+		fp.setRetirementAge(ui.getCurrentAge() - 1);
+		fp.setWithdrawals(safe);
+	//	fp.buildProjectionData();
+	//	fp2.printAmortizationTable();
+		
+		System.out.println("Safe withdrawal is " + safe );
+		System.out.println("Prob broke at 95 is " + fp.getProbBrokeAtAge(105, 10000));
+		
+		FutureProjection fp2 = new FutureProjection(100000, ui.getYearlyDeposits(), safe,
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getCurrentAge(), ui.getInflation(), ip, true);
+		System.out.println("Prob broke 2 at 95 is " + fp2.getProbBrokeAtAge(95, 10000));
+		
 	}
 
 }
