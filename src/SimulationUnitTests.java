@@ -78,11 +78,10 @@ class SimulationUnitTests {
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
-		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
-				
-		assertEquals(0.68, sa.getProbBrokeAtAge(90), 0.05);
+		fp.buildMonteCarlo(100000);
+
 		assertEquals(0.68, fp.getProbBrokeAtAge(90), 0.05);
-		
+
 	}
 	
 	@Test

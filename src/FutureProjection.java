@@ -1,19 +1,20 @@
 import java.io.*;
 import java.util.*;
 import org.apache.commons.math3.distribution.*;
+import org.apache.commons.math3.stat.Frequency;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.*;
 
 /**
  * Build a simulated retirement projection randomizing returns as per supplied
  * portfolio variability.  Generates a random sampling assuming returns follow
- * a NormalDistribution.  Object is inmutable.  A new projecton is generated upon every clone or new instance.
+ * a NormalDistribution.  Object is immutable.  A new projection is generated upon every clone or new instance.
  * @author Team 11
  *
  */
 public class FutureProjection {
 	private int ageBroke;
-	FutureProjectionData[] data;
+	private FutureProjectionData[] data;
 	private NormalDistribution nd;
 	private Random r;
 	private double initialPrincipal;
@@ -24,7 +25,11 @@ public class FutureProjection {
 	private int maxAge;
 	private double inflation;
 	private InvestmentPortfolio portfolio;
-	boolean assumeReal;
+	private boolean assumeReal;
+	private int ageCardinality;
+	private ConfidenceInterval[] principalsIntervals;
+	private Frequency ageBrokeDistribution;
+	private boolean isMonteCarloBuilt;
 	
 	private final int NUM_INT_ITERATIONS = 2000;  // Max internal iterations in MonteCarlo and Solver
 	private final int UPPERBOUND_WITHDRAWAL = 20; // Number of times non-volatile result considered upper bound for solver
@@ -58,15 +63,20 @@ public class FutureProjection {
 		this.inflation = inflation;
 		this.portfolio = portfolio;
 		this.assumeReal = assumeReal;
-		
+		this.isMonteCarloBuilt = false;
 		this.r = new Random();
-		this.data = new FutureProjectionData[maxAge - currentAge + 1];
+		
+		this.ageBrokeDistribution = new Frequency();
+		this.ageCardinality = maxAge - currentAge + 1;
+		this.principalsIntervals = new ConfidenceInterval[ageCardinality];	
+		this.data = new FutureProjectionData[ageCardinality];
 		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
+		
 		buildProjectionData();
 	}
 	
 	/**
-	 * Build a new randomized amortization table
+	 * Build a new randomized amortization table used on new instance creation only
 	 */
 	private void buildProjectionData() {
 		double principal = initialPrincipal;  // Money in your account
@@ -106,32 +116,26 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Simple annuity calculation, how much money to retire every year in real terms to 
-	 * get broke at a given age in real terms
-	 * @param ageBroke 
-	 * @return
+	 * Deep copy of object, parameters used on instance creation are the same
+	 * but a new projection is randomly generated
 	 */
-	private double getNoVolatileMaxWithdrawal(int ageBroke) {
-		double interest = realRate(portfolio.getAverageReturns());
-		double comp1 = Math.pow((1 + interest), (ageBroke - currentAge));  // (1+i)^n
-		return initialPrincipal * (interest * comp1) / (comp1 - 1);
+	public FutureProjection clone() {
+		return new FutureProjection(initialPrincipal, deposits, withdrawals, 
+				currentAge, maxAge, retirementAge, inflation, portfolio, assumeReal);
 	}
 	
+	
 	/**
-	 * Probability of being broke a certain age, calculated with MonteCarlo simulation
+	 * Probability of being broke a certain age, calculated with previously built MonteCarlo simulation
+	 * if Monte Carlo has not been built, one is built using default iterations
 	 * @param age At which user is brokeat which user is broke
 	 * @return Cummulative Probability [0-1] of being broke at the supplied age
-	 * @throws IllegalArgumentException If supplied age is less than currentAge
+	 * @throws IllegalArgumentException If supplied age is less than currentAge or greater than maxAge
 	 */
-	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {
-		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
-		
-		// Only need age + 1 values for SimulationAnalizer to build Frequency distribution
-		FutureProjection fp = new FutureProjection(initialPrincipal, deposits, withdrawals, currentAge, 
-				age + 1, retirementAge, inflation, portfolio, assumeReal);
-
-		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(NUM_INT_ITERATIONS));
-		return sa.getProbBrokeAtAge(age);
+	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {		
+		if (age < currentAge || age > maxAge) throw new IllegalArgumentException("Age out of bounds");
+		if (!isMonteCarloBuilt) buildMonteCarlo();
+		return ageBrokeDistribution.getCumPct(age);
 	}
 	
 	/**
@@ -144,9 +148,9 @@ public class FutureProjection {
 	 */
 	public double getProbBrokeAtAge(double withdrawal, int age) throws IllegalArgumentException {
 		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
-		// change withdrawal and retirementAge = currentAge
+		// change withdrawal and retirementAge = currentAge.  MaxAge only needs to be age + 1 for build Frequency
 		FutureProjection fp = new FutureProjection(initialPrincipal, deposits, withdrawal, currentAge, 
-				age, currentAge, inflation, portfolio, assumeReal);
+				age + 1, currentAge, inflation, portfolio, assumeReal);
 
 		return fp.getProbBrokeAtAge(age); 
 	}
@@ -169,11 +173,10 @@ public class FutureProjection {
 				return getProbBrokeAtAge(withdrawal, age) - probability; // function to search for root
 			} 
 		}
-
-		double estimate = getNoVolatileMaxWithdrawal(age);  // Simple annuity is start value for solver
 		WithdrawalFunction f = new WithdrawalFunction();
 		IllinoisSolver solver = new IllinoisSolver();
 
+		double estimate = getNoVolatileMaxWithdrawal(age);  // Simple annuity is start value for solver
 		double result = 0;
 		try {
 			result = solver.solve(NUM_INT_ITERATIONS, f, 0, UPPERBOUND_WITHDRAWAL * estimate, estimate);
@@ -185,12 +188,15 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Deep copy of object, parameters used on instance creation are the same
-	 * but a new projection is randomly generated
+	 * Simple annuity calculation, how much money to retire every year in real terms to 
+	 * get broke at a given age in real terms
+	 * @param ageBroke 
+	 * @return
 	 */
-	public FutureProjection clone() {
-		return new FutureProjection(initialPrincipal, deposits, withdrawals, 
-				currentAge, maxAge, retirementAge, inflation, portfolio, assumeReal);
+	private double getNoVolatileMaxWithdrawal(int ageBroke) {
+		double interest = realRate(portfolio.getAverageReturns());
+		double comp1 = Math.pow((1 + interest), (ageBroke - currentAge));  // (1+i)^n
+		return initialPrincipal * (interest * comp1) / (comp1 - 1);
 	}
 	
 	/**
@@ -201,13 +207,68 @@ public class FutureProjection {
 	 * @param iterations, Number of iterations in the MonteCarlo
 	 * @return FutureProjection[iterations]
 	 */
-	public FutureProjection[] monteCarloSimulation(int iterations) {
+	public FutureProjection[] getProjectionArray(int iterations) {
 		FutureProjection[] results = new FutureProjection[iterations];
 		for (int i = 0; i < iterations; i++) {
 			FutureProjection projection = this.clone();
 			results[i] = projection;
 		}
 		return results;
+	}
+	
+	/**
+	 * Build a MonteCarlo simulation using internal default iterations
+	 * @param iterations Number of iterations
+	 */
+	public void buildMonteCarlo() {
+		buildMonteCarlo(NUM_INT_ITERATIONS);
+	}
+	
+	/**
+	 * Build a MonteCarlo simulation as per supplied number of iterations
+	 * @param iterations Number of iterations
+	 */
+	public void buildMonteCarlo(int iterations) {
+		// Initialize principal confidence intervals		
+		for (int i = 0; i < ageCardinality; i++) {
+			principalsIntervals[i] = new ConfidenceInterval();
+		}
+		
+		// Build dataSets
+		for (int iter = 0; iter < iterations; iter++) {
+			FutureProjection projection = this.clone();
+			// Build ageBroke Frequency distribution
+			ageBrokeDistribution.addValue(projection.getAgeBroke()); 
+			
+			// Build Principal confidence intervals
+			for (int age = currentAge; age <= maxAge; age++) {
+				principalsIntervals[age - currentAge].addValue(projection.getProjectedData(age).getPrincipal());
+			}
+		}
+		isMonteCarloBuilt = true;
+	}
+	
+	/**
+	 * Write CSV file with key analysis result from previously built Monte Carlo simulation
+	 * if a Monte Carlo has not been built, it builds one using default interations
+	 * Has the form: "age,mean_principal,min_principal,max_principal,iterations_broke,cumm_prob_broke"
+	 * @param filename string
+	 * @throws IOException For errors writing the file, typically if its open by another program
+	 */
+	public void writeMontecarloOutputCSV(String filename) throws IOException {
+		if (!isMonteCarloBuilt) buildMonteCarlo(); 
+		FileWriter fw = new FileWriter(filename);
+		PrintWriter pw = new PrintWriter(fw);
+		pw.println("age,mean_principal,min_principal,max_principal,iterations_broke,cumm_prob_broke");
+		for (int i = 0; i < ageCardinality; i++ ) {
+			int age = i + currentAge;
+			String line = age + "," + Math.round(principalsIntervals[i].getAverage());
+			line += "," + Math.round(principalsIntervals[i].getMinConfInterval());
+			line += "," + Math.round(principalsIntervals[i].getMaxConfInterval());
+			line += "," + ageBrokeDistribution.getCount(age) + "," + ageBrokeDistribution.getCumPct(age);
+			pw.println(line);
+		}
+		pw.close();
 	}
 	
 	/**
@@ -234,20 +295,12 @@ public class FutureProjection {
 		return data[age - currentAge];
 	}
 	
-	public int getMaxAge() {
-		return maxAge;
-	}
-
 	/**
 	 * Get a single randomized amortization table for simulated retirement
 	 * @return Current scenario amortization table
 	 */
 	public FutureProjectionData[] getData() {
 		return data;
-	}
-
-	public int getCurrentAge() {
-		return currentAge;
 	}
 
 	/**
@@ -293,8 +346,8 @@ public class FutureProjection {
 	public static void main(String[] args) {
 		UserInputs ui = UserInputs.getDefaultInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
-		FutureProjection fp = new FutureProjection(100000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, true);
+		FutureProjection fp = new FutureProjection(200000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
+				42, ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, true);
 		
 //		fp.printAmortizationTable();
 //		System.out.println("Broke at age = " + fp.getAgeBroke());
@@ -305,17 +358,28 @@ public class FutureProjection {
 //		
 //		System.out.println("Prob broke at 100 @ 25000 /yr is " + fp.getProbBrokeAtAge(12000,80, 10000));
 		
-		double safe = fp.getMaxSafeWithdrawal(95, 0.1);
+		double safe = fp.getMaxSafeWithdrawal(85, 0.05);
 		
-		FutureProjection fp2 = new FutureProjection(100000, ui.getYearlyDeposits(), safe,
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getCurrentAge(), ui.getInflation(), ip, true);
+		FutureProjection fp2 = new FutureProjection(200000, ui.getYearlyDeposits(), safe,
+				42, ui.getMaxAge(),ui.getCurrentAge(), ui.getInflation(), ip, true);
 		
 		
 		
 		System.out.println("Safe withdrawal is " + safe );
-		System.out.println("Prob broke at 95 is " + fp2.getProbBrokeAtAge(95));
+		System.out.println("Prob broke at 85 is " + fp2.getProbBrokeAtAge(85));
 
 		fp2.printAmortizationTable();
+		
+		
+		try {
+			// Test principal confidence intervals
+			String filename = "output.csv";
+			fp2.writeMontecarloOutputCSV(filename);
+			System.out.println("DONE!: check " + filename);
+			
+		} catch (IOException e) {
+			System.out.println("ERROR: Close the output file first!");
+		}
 		
 	}
 
