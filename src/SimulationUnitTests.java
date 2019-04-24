@@ -13,7 +13,7 @@ class SimulationUnitTests {
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
-		assertEquals(81, fp.getAgeBroke());
+		assertEquals(79, fp.getAgeBroke());
 	}
 	
 	@Test
@@ -34,7 +34,7 @@ class SimulationUnitTests {
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
-		assertEquals(66, fp.getAgeBroke());
+		assertEquals(65, fp.getAgeBroke());
 	}
 	
 	@Test
@@ -58,10 +58,9 @@ class SimulationUnitTests {
 		FutureProjection fp = new FutureProjection(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
-		assertEquals(255843.00, fp.getProjectedData(70).getPrincipal(), 1.0);
+		assertEquals(214230.00, fp.getProjectedData(70).getPrincipal(), 1.0);
 		assertEquals(-25000.00, fp.getProjectedData(70).getPmt(), 1.0);
-		assertEquals(0.0194, fp.getProjectedData(70).getRealRate(), 0.0001);
-		
+			
 		assertThrows(IllegalArgumentException.class, () -> {
 			fp.getProjectedData(29);
 	    });
@@ -81,8 +80,25 @@ class SimulationUnitTests {
 		
 		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(50000));
 				
-		assertEquals(0.54, sa.getProbBrokeAtAge(90), 0.02);
-		assertEquals(0.54, fp.getProbBrokeAtAge(90,10000), 0.02);
+		assertEquals(0.68, sa.getProbBrokeAtAge(90), 0.05);
+		assertEquals(0.68, fp.getProbBrokeAtAge(90), 0.05);
 		
 	}
+	
+	@Test
+	void testMaxWithdrawal() {
+		UserInputs ui = UserInputs.getDefaultInputs();
+		InvestmentPortfolio ip = new InvestmentPortfolio(ui.getEquityPercentage());
+		
+		FutureProjection fp = new FutureProjection(250000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
+				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
+		
+		double safe = fp.getMaxSafeWithdrawal(90, 0.05);
+		
+		FutureProjection fp2 = new FutureProjection(250000, ui.getYearlyDeposits(), safe,
+				ui.getCurrentAge(), ui.getMaxAge(), ui.getCurrentAge(), ui.getInflation(), ip, true);
+		
+		assertEquals(0.05, fp2.getProbBrokeAtAge(90), 0.01);
+	}
+
 }

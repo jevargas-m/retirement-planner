@@ -26,7 +26,7 @@ public class FutureProjection {
 	private InvestmentPortfolio portfolio;
 	boolean assumeReal;
 	
-	private final int NUM_INT_ITERATIONS = 1000;  // Max internal iterations in MonteCarlo and Solver
+	private final int NUM_INT_ITERATIONS = 2000;  // Max internal iterations in MonteCarlo and Solver
 	private final int UPPERBOUND_WITHDRAWAL = 20; // Number of times non-volatile result considered upper bound for solver
 
 	/**
@@ -107,14 +107,13 @@ public class FutureProjection {
 	
 	/**
 	 * Simple annuity calculation, how much money to retire every year in real terms to 
-	 * get broke at a given age
+	 * get broke at a given age in real terms
 	 * @param ageBroke 
 	 * @return
 	 */
 	private double getNoVolatileMaxWithdrawal(int ageBroke) {
 		double interest = realRate(portfolio.getAverageReturns());
-		int n = ageBroke - currentAge;
-		double comp1 = Math.pow((1 + interest), n);
+		double comp1 = Math.pow((1 + interest), (ageBroke - currentAge));  // (1+i)^n
 		return initialPrincipal * (interest * comp1) / (comp1 - 1);
 	}
 	
@@ -142,7 +141,8 @@ public class FutureProjection {
 	 * @param age at which user is broke
 	 * @return cummulative probability of being broke by the age
 	 */
-	public double getProbBrokeAtAge(double withdrawal, int age) {
+	public double getProbBrokeAtAge(double withdrawal, int age) throws IllegalArgumentException {
+		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
 		// change withdrawal and retirementAge = currentAge
 		FutureProjection fp = new FutureProjection(initialPrincipal, deposits, withdrawal, currentAge, 
 				age, currentAge, inflation, portfolio, assumeReal);
@@ -165,7 +165,7 @@ public class FutureProjection {
 
 			@Override
 			public double value(double withdrawal) {
-				return getProbBrokeAtAge(withdrawal, age) - probability; 
+				return getProbBrokeAtAge(withdrawal, age) - probability; // function to search for root
 			} 
 		}
 
@@ -239,7 +239,7 @@ public class FutureProjection {
 
 	/**
 	 * Get a single randomized amortization table for simulated retirement
-	 * @return ArrayList<FutureProjectionData>
+	 * @return Current scenario amortization table
 	 */
 	public FutureProjectionData[] getData() {
 		return data;
