@@ -14,7 +14,7 @@ import org.apache.commons.math3.analysis.solvers.*;
  */
 public class RetirementAnalyzer {
 	private int ageBroke;
-	private FutureProjectionData[] data;
+	private AmotizationTableRow[] data;
 	private NormalDistribution nd;
 	private Random r;
 	private double initialPrincipal;
@@ -67,7 +67,7 @@ public class RetirementAnalyzer {
 		this.r = new Random();
 		
 		this.ageCardinality = maxAge - currentAge + 1;
-		this.data = new FutureProjectionData[ageCardinality];
+		this.data = new AmotizationTableRow[ageCardinality];
 		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
 		
 		buildProjectionData();
@@ -97,7 +97,7 @@ public class RetirementAnalyzer {
 				if (!assumeReal) cashflow *= Math.pow(1.0 + inflation, year);
 			}
 
-			data[year] = new FutureProjectionData(age, realRate, inflation, principal, cashflow);
+			data[year] = new AmotizationTableRow(age, realRate, inflation, principal, cashflow);
 			
 			if (assumeReal) {
 				principal += principal * realRate + cashflow;
@@ -288,7 +288,7 @@ public class RetirementAnalyzer {
 	 * @return Row in the amortization table
 	 * @throws IllegalArgumentException If age is less than currentAge or greater than supplied maxAge
 	 */
-	public FutureProjectionData getProjectedData(int age) throws IllegalArgumentException {
+	public AmotizationTableRow getProjectedData(int age) throws IllegalArgumentException {
 		if (age < currentAge || age > maxAge) {
 			throw new IllegalArgumentException("Age out of bounds");
 		}
@@ -299,7 +299,7 @@ public class RetirementAnalyzer {
 	 * Get a single randomized amortization table for simulated retirement
 	 * @return Current scenario amortization table
 	 */
-	public FutureProjectionData[] getData() {
+	public AmotizationTableRow[] getData() {
 		return data;
 	}
 
@@ -324,7 +324,7 @@ public class RetirementAnalyzer {
 			System.out.println("Age     P          r         f         CashFlow");
 			pw.println("Age,P,r,f,CashFlow");
 			for (int i = 0; i < data.length; i++) {
-				FutureProjectionData fpd = data[i];
+				AmotizationTableRow fpd = data[i];
 				System.out.printf("%3d  %8.0f   %8.4f   %8.4f   %8.0f", fpd.getAge(), fpd.getPrincipal(), 
 						fpd.getRealRate(), fpd.getInflation(), fpd.getPmt());
 				System.out.println();
