@@ -7,7 +7,7 @@ import org.apache.commons.math3.analysis.solvers.*;
 /**
  * Build a simulated retirement projection randomizing returns as per supplied
  * portfolio variability.  Generates a random sampling assuming returns follow
- * a NormalDistribution.  A new projecton is generated upon every new instance.
+ * a NormalDistribution.  Object is inmutable.  A new projecton is generated upon every clone or new instance.
  * @author Team 11
  *
  */
@@ -68,7 +68,7 @@ public class FutureProjection {
 	/**
 	 * Build a new randomized amortization table
 	 */
-	public void buildProjectionData() {
+	private void buildProjectionData() {
 		double principal = initialPrincipal;  // Money in your account
 		boolean flagBroke = false;
 		
@@ -79,7 +79,7 @@ public class FutureProjection {
 			
 			int year = age - currentAge; // consecutive year, starting at zero
 			double cashflow = 0;					
-			if (age <= retirementAge) {
+			if (age < retirementAge) {
 				cashflow = deposits;
 				// Deposits diminish every year in nominal terms
 				if (!assumeReal) cashflow *= Math.pow(1.0 + inflation, (-1 * year));
@@ -112,7 +112,6 @@ public class FutureProjection {
 	 * @return
 	 */
 	private double getNoVolatileMaxWithdrawal(int ageBroke) {
-		if (ageBroke < currentAge) throw new IllegalArgumentException("Age out of bounds");
 		double interest = realRate(portfolio.getAverageReturns());
 		int n = ageBroke - currentAge;
 		double comp1 = Math.pow((1 + interest), n);
@@ -122,14 +121,16 @@ public class FutureProjection {
 	/**
 	 * Probability of being broke a certain age
 	 * @param age at which user is broke
-	 * @param iterations 
 	 * @return cummulative probability of being broke by the age
 	 */
-	public double getProbBrokeAtAge(int age, int iterations) {
+	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {
 		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
-		FutureProjection fp = this.clone();
-		fp.setMaxAge(age + 1);  // Only need one year above desired value to build Frequency distribution  
-		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(iterations));
+		
+		// Only need age + 1 values for SimulationAnalizer to build Frequency distribution
+		FutureProjection fp = new FutureProjection(initialPrincipal, deposits, withdrawals, currentAge, 
+				age + 1, retirementAge, inflation, portfolio, assumeReal);
+
+		SimulationAnalyzer sa = new SimulationAnalyzer(fp.monteCarloSimulation(NUM_INT_ITERATIONS));
 		return sa.getProbBrokeAtAge(age);
 	}
 	
@@ -139,14 +140,14 @@ public class FutureProjection {
 	 * retirement starts at present age
 	 * @param withdrawal yealy amount in real terms
 	 * @param age at which user is broke
-	 * @param iterations 
 	 * @return cummulative probability of being broke by the age
 	 */
-	public double getProbBrokeAtAge(double withdrawal, int age, int iterations) {
-		FutureProjection fp = this.clone();
-		fp.setWithdrawals(withdrawal);
-		fp.setRetirementAge(currentAge - 1);
-		return fp.getProbBrokeAtAge(age, iterations); 
+	public double getProbBrokeAtAge(double withdrawal, int age) {
+		// change withdrawal and retirementAge = currentAge
+		FutureProjection fp = new FutureProjection(initialPrincipal, deposits, withdrawal, currentAge, 
+				age, currentAge, inflation, portfolio, assumeReal);
+
+		return fp.getProbBrokeAtAge(age); 
 	}
 		
 	/**
@@ -164,11 +165,11 @@ public class FutureProjection {
 
 			@Override
 			public double value(double withdrawal) {
-				return getProbBrokeAtAge(withdrawal, age, NUM_INT_ITERATIONS) - probability; 
+				return getProbBrokeAtAge(withdrawal, age) - probability; 
 			} 
 		}
 
-		double estimate = getNoVolatileMaxWithdrawal(age);
+		double estimate = getNoVolatileMaxWithdrawal(age);  // Simple annuity is start value for solver
 		WithdrawalFunction f = new WithdrawalFunction();
 		IllinoisSolver solver = new IllinoisSolver();
 
@@ -183,28 +184,14 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Deep copy of object, except projection which is randomly generated upon instance creation
+	 * Deep copy of object, parameters used on instance creation are the same
+	 * but a new projection is randomly generated
 	 */
 	public FutureProjection clone() {
 		return new FutureProjection(initialPrincipal, deposits, withdrawals, 
 				currentAge, maxAge, retirementAge, inflation, portfolio, assumeReal);
 	}
 	
-
-	public void setMaxAge(int maxAge) {
-		this.maxAge = maxAge;
-	}
-
-	
-	
-	public void setRetirementAge(int retirementAge) {
-		this.retirementAge = retirementAge;
-	}
-
-	public void setWithdrawals(double withdrawals) {
-		this.withdrawals = withdrawals;
-	}
-
 	/**
 	 * Perform MonteCarloSimulation building several random FutureProjections
 	 * with parameters used when object was constructed
@@ -263,9 +250,10 @@ public class FutureProjection {
 	}
 
 	/**
-	 * Age in which there is not enough money to cover retirement expenses, if 
-	 * projection never gets broke, returns maxAge
-	 * @return int
+	 * Age in which there is not enough money to cover retirement expenses, at scenario
+	 * built on instanciation
+	 * if projection never gets broke, returns maxAge
+	 * @return int Age at which user is broke 
 	 */
 	public int getAgeBroke() {
 		return ageBroke;
@@ -303,7 +291,7 @@ public class FutureProjection {
 	// For testing only
 	public static void main(String[] args) {
 		UserInputs ui = UserInputs.getDefaultInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(0.8);
+		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
 		FutureProjection fp = new FutureProjection(100000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, true);
 		
@@ -316,18 +304,17 @@ public class FutureProjection {
 //		
 //		System.out.println("Prob broke at 100 @ 25000 /yr is " + fp.getProbBrokeAtAge(12000,80, 10000));
 		
-		double safe = fp.getMaxSafeWithdrawal(105, 0.90);
-		fp.setRetirementAge(ui.getCurrentAge() - 1);
-		fp.setWithdrawals(safe);
-	//	fp.buildProjectionData();
-	//	fp2.printAmortizationTable();
-		
-		System.out.println("Safe withdrawal is " + safe );
-		System.out.println("Prob broke at 95 is " + fp.getProbBrokeAtAge(105, 10000));
+		double safe = fp.getMaxSafeWithdrawal(95, 0.1);
 		
 		FutureProjection fp2 = new FutureProjection(100000, ui.getYearlyDeposits(), safe,
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getCurrentAge(), ui.getInflation(), ip, true);
-		System.out.println("Prob broke 2 at 95 is " + fp2.getProbBrokeAtAge(95, 10000));
+		
+		
+		
+		System.out.println("Safe withdrawal is " + safe );
+		System.out.println("Prob broke at 95 is " + fp2.getProbBrokeAtAge(95));
+
+		fp2.printAmortizationTable();
 		
 	}
 
