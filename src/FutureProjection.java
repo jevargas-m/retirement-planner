@@ -66,9 +66,7 @@ public class FutureProjection {
 		this.isMonteCarloBuilt = false;
 		this.r = new Random();
 		
-		this.ageBrokeDistribution = new Frequency();
 		this.ageCardinality = maxAge - currentAge + 1;
-		this.principalsIntervals = new ConfidenceInterval[ageCardinality];	
 		this.data = new FutureProjectionData[ageCardinality];
 		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
 		
@@ -128,8 +126,8 @@ public class FutureProjection {
 	/**
 	 * Probability of being broke a certain age, calculated with previously built MonteCarlo simulation
 	 * if Monte Carlo has not been built, one is built using default iterations
-	 * @param age At which user is brokeat which user is broke
-	 * @return Cummulative Probability [0-1] of being broke at the supplied age
+	 * @param age At which user is broke at which user is broke
+	 * @return Cumulative Probability [0-1] of being broke at the supplied age
 	 * @throws IllegalArgumentException If supplied age is less than currentAge or greater than maxAge
 	 */
 	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {		
@@ -142,8 +140,8 @@ public class FutureProjection {
 	 * Probability of being broke a certain age given a withdrawal amount constant in Today's
 	 * money (real) and assuming retirement starts at present age, calculated with MonteCarlo simulation
 	 * @param withdrawal Yearly withdrawals in real money
-	 * @param age Age at which to estimte probability
-	 * @return Cummulative Probability [0-1] of being broke at the supplied age
+	 * @param age Age at which to estimate probability
+	 * @return Cumulative Probability [0-1] of being broke at the supplied age
 	 * @throws IllegalArgumentException If supplied age is less than currentAge
 	 */
 	public double getProbBrokeAtAge(double withdrawal, int age) throws IllegalArgumentException {
@@ -161,7 +159,7 @@ public class FutureProjection {
 	 * <br>
 	 *  <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/analysis/solvers/IllinoisSolver.html">IllinoisSolver Reference</a><br>
 	 * @param age Age to which to calculate probability
-	 * @param probability Cummulative probability of being broke at given age
+	 * @param probability Cumulative probability of being broke at given age
 	 * @return Maximum yearly withdrawal.  If not able to find solution returns -1
 	 */
 	public double getMaxSafeWithdrawal(int age, double probability) {
@@ -230,6 +228,8 @@ public class FutureProjection {
 	 */
 	public void buildMonteCarlo(int iterations) {
 		// Initialize principal confidence intervals		
+		this.ageBrokeDistribution = new Frequency();
+		this.principalsIntervals = new ConfidenceInterval[ageCardinality];	
 		for (int i = 0; i < ageCardinality; i++) {
 			principalsIntervals[i] = new ConfidenceInterval();
 		}
@@ -342,45 +342,6 @@ public class FutureProjection {
 	}
 	
 	
-	// For testing only
-	public static void main(String[] args) {
-		UserInputs ui = UserInputs.getDefaultInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
-		FutureProjection fp = new FutureProjection(200000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				42, ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, true);
-		
-//		fp.printAmortizationTable();
-//		System.out.println("Broke at age = " + fp.getAgeBroke());
-//		
-//		System.out.println("Prob broke at 90 is " + fp.getProbBrokeAtAge(90, 10000));
-//		System.out.println("Prob broke at 120 is " + fp.getProbBrokeAtAge(120, 10000));
-//		
-//		
-//		System.out.println("Prob broke at 100 @ 25000 /yr is " + fp.getProbBrokeAtAge(12000,80, 10000));
-		
-		double safe = fp.getMaxSafeWithdrawal(85, 0.05);
-		
-		FutureProjection fp2 = new FutureProjection(200000, ui.getYearlyDeposits(), safe,
-				42, ui.getMaxAge(),ui.getCurrentAge(), ui.getInflation(), ip, true);
-		
-		
-		
-		System.out.println("Safe withdrawal is " + safe );
-		System.out.println("Prob broke at 85 is " + fp2.getProbBrokeAtAge(85));
 
-		fp2.printAmortizationTable();
-		
-		
-		try {
-			// Test principal confidence intervals
-			String filename = "output.csv";
-			fp2.writeMontecarloOutputCSV(filename);
-			System.out.println("DONE!: check " + filename);
-			
-		} catch (IOException e) {
-			System.out.println("ERROR: Close the output file first!");
-		}
-		
-	}
 
 }
