@@ -31,19 +31,19 @@ public class FutureProjection {
 
 	/**
 	 * Build a new simulated retirement projection using portfolio volatility
-	 * @param principal, Initial money at currentAge
-	 * @param deposits, Yearly deposits to make to the account at the end of 
+	 * @param principal Initial money at currentAge
+	 * @param deposits Yearly deposits to make to the account at the end of 
 	 * every year before retirement age
-	 * @param withdrawals, Yearly withdrawals to make to the account at the end of 
+	 * @param withdrawals Yearly withdrawals to make to the account at the end of 
 	 * every year before retirement age.  This will always be considered in present
 	 * day money (i.e. real)  If assumeReal is false, this will be adjusted by inflation
-	 * @param age, User age at present day
-	 * @param maxAge,  Max age to consider in projections.  Could be considered user
+	 * @param age User age at present day
+	 * @param maxAge Max age to consider in projections.  Could be considered user
 	 * safety margin.
-	 * @param retirementAge,  Age at which user will start withdrawing money every year
-	 * @param inflation, Constant annualized inflation rate to assume. 
-	 * @param portfolio, Investment portfolio.
-	 * @param assumeReal, True if calculation is in real terms, i.e. Today's money, 
+	 * @param retirementAge Age at which user will start withdrawing money every year
+	 * @param inflation Constant annualized inflation rate to assume. 
+	 * @param portfolio Investment portfolio.
+	 * @param assumeReal True if calculation is in real terms, i.e. Today's money, 
 	 * this would mean every year deposits and withdrawals increase in nominal terms
 	 */
 	public FutureProjection(double principal, double deposits, double withdrawals, int age, 
@@ -118,9 +118,10 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Probability of being broke a certain age
-	 * @param age at which user is broke
-	 * @return cummulative probability of being broke by the age
+	 * Probability of being broke a certain age, calculated with MonteCarlo simulation
+	 * @param age At which user is brokeat which user is broke
+	 * @return Cummulative Probability [0-1] of being broke at the supplied age
+	 * @throws IllegalArgumentException If supplied age is less than currentAge
 	 */
 	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {
 		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
@@ -133,13 +134,13 @@ public class FutureProjection {
 		return sa.getProbBrokeAtAge(age);
 	}
 	
-	
 	/**
-	 * Probability of being broke a certain age given a withdrawal amount and assuming
-	 * retirement starts at present age
-	 * @param withdrawal yealy amount in real terms
-	 * @param age at which user is broke
-	 * @return cummulative probability of being broke by the age
+	 * Probability of being broke a certain age given a withdrawal amount constant in Today's
+	 * money (real) and assuming retirement starts at present age, calculated with MonteCarlo simulation
+	 * @param withdrawal Yearly withdrawals in real money
+	 * @param age Age at which to estimte probability
+	 * @return Cummulative Probability [0-1] of being broke at the supplied age
+	 * @throws IllegalArgumentException If supplied age is less than currentAge
 	 */
 	public double getProbBrokeAtAge(double withdrawal, int age) throws IllegalArgumentException {
 		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
@@ -152,15 +153,15 @@ public class FutureProjection {
 		
 	/**
 	 * Max withdrawal if retiring today achieving cumm probability of being broke
-	 * uses Illinois Secant method
-	 *  http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/analysis/solvers/IllinoisSolver.html
-	 *  http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/analysis/UnivariateFunction.html
-	 *  
+	 * uses Illinois Secant method iterating over Montecarlo Simulations.
+	 * <br>
+	 *  <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/analysis/solvers/IllinoisSolver.html">IllinoisSolver Reference</a><br>
 	 * @param age Age to which to calculate probability
 	 * @param probability Cummulative probability of being broke at given age
 	 * @return Maximum yearly withdrawal.  If not able to find solution returns -1
 	 */
 	public double getMaxSafeWithdrawal(int age, double probability) {
+		// http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/analysis/UnivariateFunction.html
 		class WithdrawalFunction implements UnivariateFunction {
 
 			@Override
@@ -221,10 +222,10 @@ public class FutureProjection {
 	}
 	
 	/**
-	 * Return Amortizatization table row at a given age
+	 * Return Row in Amortizatization built randomly upon instanciation
 	 * @param age
-	 * @return
-	 * @throws IllegalArgumentException
+	 * @return Row in the amortization table
+	 * @throws IllegalArgumentException If age is less than currentAge or greater than supplied maxAge
 	 */
 	public FutureProjectionData getProjectedData(int age) throws IllegalArgumentException {
 		if (age < currentAge || age > maxAge) {

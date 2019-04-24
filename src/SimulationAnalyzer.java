@@ -4,6 +4,7 @@ import org.apache.commons.math3.stat.Frequency;
 /**
  * Analyze a simulation results providing meaningful information
  * such as confidence intervals of having money at any given age
+ * TODO: may be cohesive to integrate with FutureProjection class
  * @author Team 11
  *
  */
