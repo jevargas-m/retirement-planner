@@ -12,7 +12,7 @@ import org.apache.commons.math3.analysis.solvers.*;
  * @author Team 11
  *
  */
-public class FutureProjection {
+public class RetirementAnalyzer {
 	private int ageBroke;
 	private FutureProjectionData[] data;
 	private NormalDistribution nd;
@@ -51,7 +51,7 @@ public class FutureProjection {
 	 * @param assumeReal True if calculation is in real terms, i.e. Today's money, 
 	 * this would mean every year deposits and withdrawals increase in nominal terms
 	 */
-	public FutureProjection(double principal, double deposits, double withdrawals, int age, 
+	public RetirementAnalyzer(double principal, double deposits, double withdrawals, int age, 
 			int maxAge, int retirementAge, double inflation, InvestmentPortfolio portfolio,
 			boolean assumeReal) {
 		this.initialPrincipal = principal;
@@ -117,8 +117,8 @@ public class FutureProjection {
 	 * Deep copy of object, parameters used on instance creation are the same
 	 * but a new projection is randomly generated
 	 */
-	public FutureProjection clone() {
-		return new FutureProjection(initialPrincipal, deposits, withdrawals, 
+	public RetirementAnalyzer clone() {
+		return new RetirementAnalyzer(initialPrincipal, deposits, withdrawals, 
 				currentAge, maxAge, retirementAge, inflation, portfolio, assumeReal);
 	}
 	
@@ -147,7 +147,7 @@ public class FutureProjection {
 	public double getProbBrokeAtAge(double withdrawal, int age) throws IllegalArgumentException {
 		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
 		// change withdrawal and retirementAge = currentAge.  MaxAge only needs to be age + 1 for build Frequency
-		FutureProjection fp = new FutureProjection(initialPrincipal, deposits, withdrawal, currentAge, 
+		RetirementAnalyzer fp = new RetirementAnalyzer(initialPrincipal, deposits, withdrawal, currentAge, 
 				age + 1, currentAge, inflation, portfolio, assumeReal);
 
 		return fp.getProbBrokeAtAge(age); 
@@ -205,10 +205,10 @@ public class FutureProjection {
 	 * @param iterations, Number of iterations in the MonteCarlo
 	 * @return FutureProjection[iterations]
 	 */
-	public FutureProjection[] getProjectionArray(int iterations) {
-		FutureProjection[] results = new FutureProjection[iterations];
+	public RetirementAnalyzer[] getProjectionArray(int iterations) {
+		RetirementAnalyzer[] results = new RetirementAnalyzer[iterations];
 		for (int i = 0; i < iterations; i++) {
-			FutureProjection projection = this.clone();
+			RetirementAnalyzer projection = this.clone();
 			results[i] = projection;
 		}
 		return results;
@@ -236,7 +236,7 @@ public class FutureProjection {
 		
 		// Build dataSets
 		for (int iter = 0; iter < iterations; iter++) {
-			FutureProjection projection = this.clone();
+			RetirementAnalyzer projection = this.clone();
 			// Build ageBroke Frequency distribution
 			ageBrokeDistribution.addValue(projection.getAgeBroke()); 
 			

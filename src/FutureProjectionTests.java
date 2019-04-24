@@ -5,7 +5,7 @@ public class FutureProjectionTests {
 	public static void main(String[] args) {
 		UserInputs ui = UserInputs.getDefaultInputs();
 		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
-		FutureProjection fp = new FutureProjection(200000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
+		RetirementAnalyzer fp = new RetirementAnalyzer(200000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				42, ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, true);
 		
 //		fp.printAmortizationTable();
@@ -19,7 +19,7 @@ public class FutureProjectionTests {
 		
 		double safe = fp.getMaxSafeWithdrawal(85, 0.05);
 		
-		FutureProjection fp2 = new FutureProjection(200000, ui.getYearlyDeposits(), safe,
+		RetirementAnalyzer fp2 = new RetirementAnalyzer(200000, ui.getYearlyDeposits(), safe,
 				42, ui.getMaxAge(),ui.getCurrentAge(), ui.getInflation(), ip, true);
 		
 		
