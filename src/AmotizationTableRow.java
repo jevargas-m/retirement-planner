@@ -5,7 +5,7 @@
  * @author Team 11
  *
  */
-public class FutureProjectionData {
+public class AmotizationTableRow {
 	private int age;
 	private double realRate;
 	private double inflation;
@@ -20,7 +20,7 @@ public class FutureProjectionData {
 	 * @param p principal at the beginning of period
 	 * @param pmt deposit or withdrawal at the end of period
 	 */
-	public FutureProjectionData(int age, double r, double f, double p, double pmt) {
+	public AmotizationTableRow(int age, double r, double f, double p, double pmt) {
 		this.age = age;
 		this.realRate = r;
 		this.inflation = f;
