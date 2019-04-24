@@ -1,37 +1,46 @@
+import java.util.Random;
+import org.apache.commons.math3.distribution.NormalDistribution;
+
 /**
  * Build a user portfolio
- * TODO: This class could be merged with ReturnCalc for cohesion
  * @author Team 11
  *
  */
-public class InvestmentPortfolio {
-	private double equity;
-	private double mean;
-	private double stdev;
+public class InvestmentPortfolio implements SimulableRate {
+	private NormalDistribution nd;
+	private Random r;
+	private double defaultReturn;
 	
 	/**
 	 * Build a portfolio according to 
 	 * @param equityPercentage
 	 */
-	public InvestmentPortfolio (double equityPercentage) {
-		this.equity = equityPercentage;
+	public InvestmentPortfolio(double equityPercentage) throws IllegalArgumentException {
 		ReturnCalc build = new ReturnCalc("portfoliodata.csv");
-		mean = build.averageAnnualReturn(build.returnsPortfolio(build.monthlyReturnStocksBonds, this.equity));
-		stdev = build.annualStandardDeviation(build.returnsPortfolio(build.monthlyReturnStocksBonds, this.equity));
+		defaultReturn = build.averageAnnualReturn(build.returnsPortfolio(build.monthlyReturnStocksBonds, equityPercentage));
+		double stdev = build.annualStandardDeviation(build.returnsPortfolio(build.monthlyReturnStocksBonds, equityPercentage));
+		if (stdev <= 0) throw new IllegalArgumentException("Invalid standatd deviation");
+		buildParameters(defaultReturn, stdev);
 	}
 	
-	public InvestmentPortfolio (double mean, double stdev) {
-		this.mean = mean;
-		this.stdev = stdev;
-		this.equity = 0.0;
+	public InvestmentPortfolio(double mean, double stdev) throws IllegalArgumentException {
+		if (stdev <= 0) throw new IllegalArgumentException("Invalid standatd deviation");
+		defaultReturn = mean;
+		buildParameters(mean, stdev);
+	}
+	
+	public void buildParameters(double mean, double stdev) {
+		this.r = new Random();
+		this.nd = new NormalDistribution(mean, stdev);
+	}
+	
+	@Override
+	public double nextRate() {
+		return nd.inverseCumulativeProbability(r.nextDouble());
 	}
 
-	public double getAverageReturns() {
-		return mean; 
-	}
-	
-	public double getStdDevReturns() {
-		return stdev;
-	}
-	
+	@Override
+	public double getDefaultRate() {
+		return defaultReturn;
+	}	
 }

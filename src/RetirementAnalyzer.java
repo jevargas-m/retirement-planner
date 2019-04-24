@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.*;
-import org.apache.commons.math3.distribution.*;
 import org.apache.commons.math3.stat.Frequency;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.*;
@@ -8,15 +6,16 @@ import org.apache.commons.math3.analysis.solvers.*;
 /**
  * Build a simulated retirement projection randomizing returns as per supplied
  * portfolio variability.  Generates a random sampling assuming returns follow
- * a NormalDistribution.  Object is immutable.  A new projection is generated upon every clone or new instance.
+ * a NormalDistribution.  Object is immutable.  A new amortization table with 
+ * a randomized projection is generated upon every clone or new instance.
  * @author Team 11
  *
  */
 public class RetirementAnalyzer {
 	private int ageBroke;
 	private AmotizationTableRow[] data;
-	private NormalDistribution nd;
-	private Random r;
+	
+	
 	private double initialPrincipal;
 	private double deposits;
 	private double withdrawals;
@@ -24,7 +23,7 @@ public class RetirementAnalyzer {
 	private int retirementAge;
 	private int maxAge;
 	private double inflation;
-	private InvestmentPortfolio portfolio;
+	private SimulableRate portfolio;
 	private boolean assumeReal;
 	private int ageCardinality;
 	private ConfidenceInterval[] principalsIntervals;
@@ -52,7 +51,7 @@ public class RetirementAnalyzer {
 	 * this would mean every year deposits and withdrawals increase in nominal terms
 	 */
 	public RetirementAnalyzer(double principal, double deposits, double withdrawals, int age, 
-			int maxAge, int retirementAge, double inflation, InvestmentPortfolio portfolio,
+			int maxAge, int retirementAge, double inflation, SimulableRate portfolio,
 			boolean assumeReal) {
 		this.initialPrincipal = principal;
 		this.deposits = deposits;
@@ -64,12 +63,10 @@ public class RetirementAnalyzer {
 		this.portfolio = portfolio;
 		this.assumeReal = assumeReal;
 		this.isMonteCarloBuilt = false;
-		this.r = new Random();
 		
 		this.ageCardinality = maxAge - currentAge + 1;
 		this.data = new AmotizationTableRow[ageCardinality];
-		this.nd = new NormalDistribution(portfolio.getAverageReturns(), portfolio.getStdDevReturns());
-		
+	
 		buildProjectionData();
 	}
 	
@@ -82,7 +79,9 @@ public class RetirementAnalyzer {
 		
 		for ( int age = currentAge; age <= maxAge; age++) {
 			//Get a randomly generated interest rate from probability distribution
-			double nominalRate = nd.inverseCumulativeProbability(r.nextDouble());
+			double nominalRate = portfolio.nextRate(); 
+					
+
 			double realRate = realRate(nominalRate);
 			
 			int year = age - currentAge; // consecutive year, starting at zero
@@ -121,7 +120,6 @@ public class RetirementAnalyzer {
 		return new RetirementAnalyzer(initialPrincipal, deposits, withdrawals, 
 				currentAge, maxAge, retirementAge, inflation, portfolio, assumeReal);
 	}
-	
 	
 	/**
 	 * Probability of being broke a certain age, calculated with previously built MonteCarlo simulation
@@ -192,7 +190,7 @@ public class RetirementAnalyzer {
 	 * @return
 	 */
 	private double getNoVolatileMaxWithdrawal(int ageBroke) {
-		double interest = realRate(portfolio.getAverageReturns());
+		double interest = realRate(portfolio.getDefaultRate());
 		double comp1 = Math.pow((1 + interest), (ageBroke - currentAge));  // (1+i)^n
 		return initialPrincipal * (interest * comp1) / (comp1 - 1);
 	}
