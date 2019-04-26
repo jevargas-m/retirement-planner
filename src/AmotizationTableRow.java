@@ -3,7 +3,7 @@
  * amortization table 
  * immutable object only getters
  * @author Team 11
- * test comment
+ *
  */
 public class AmotizationTableRow {
 	private int age;
