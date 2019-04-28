@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="min Principal" />
+                  <Label id="minPrincipal" fx:id="minPrincipal" prefWidth="150.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="Bauhaus 93" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="max Principal" />
+                  <Label id="maxPrincipal" fx:id="maxPrincipal" prefWidth="150.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="Bauhaus 93" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="prob broke at Max Age:" />
+                  <Label id="pBrokeAtMaxAge" fx:id="pBrokeAtMaxAge" prefWidth="150.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="Bauhaus 93" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Safe Withdrawal retiring today" />
+                  <Label id="safeWithdrawal" fx:id="safeWithdrawal" prefWidth="150.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="Bauhaus 93" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <TextField id="withdrawals" fx:id="fieldWithdrawal" />
+            <TextField id="Retirementage" fx:id="fieldRetAge" />
+            <TextField id="deposits" fx:id="fieldDeposits" />
+            <TextField id="principal" fx:id="fieldPrincipal" />
+            <TextField id="maxage" fx:id="fieldMaxAge" />
+            <TextField id="equity" fx:id="fieldEquity" />
+            <TextField id="currentAge" fx:id="fieldCurrentAge" />
+         </children>
+      </VBox>
+      <StackPane maxHeight="100.0" prefHeight="401.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#doCalc" text="Calc" />
+         </children></StackPane>
+      <StackPane maxHeight="100.0" prefHeight="401.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#loadDefaults" text="Load Defaults" />
+         </children>
+      </StackPane>
+   </children>
+</VBox>
