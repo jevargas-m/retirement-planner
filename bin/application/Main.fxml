@@ -56,13 +56,48 @@
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <TextField id="withdrawals" fx:id="fieldWithdrawal" />
-            <TextField id="Retirementage" fx:id="fieldRetAge" />
-            <TextField id="deposits" fx:id="fieldDeposits" />
-            <TextField id="principal" fx:id="fieldPrincipal" />
-            <TextField id="maxage" fx:id="fieldMaxAge" />
-            <TextField id="equity" fx:id="fieldEquity" />
-            <TextField id="currentAge" fx:id="fieldCurrentAge" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Yearly Withdrawals : " />
+                  <TextField id="withdrawals" fx:id="fieldWithdrawal" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Current Age : " />
+                  <TextField id="currentAge" fx:id="fieldCurrentAge" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Max Age : " />
+                  <TextField id="withdrawals" fx:id="fieldMaxAge" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Yearly Deposits : " />
+                  <TextField id="withdrawals" fx:id="fieldDeposits" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Max Age : " />
+                  <TextField id="withdrawals" fx:id="fieldPrincipal" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Retirement Age : " />
+                  <TextField id="withdrawals" fx:id="fieldRetAge" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Percentage Equity : " />
+                  <TextField id="withdrawals" fx:id="fieldEquity" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <StackPane maxHeight="100.0" prefHeight="401.0">
