@@ -1,14 +1,16 @@
 package modelPlanner;
 import java.io.*;
+
 import org.apache.commons.math3.stat.Frequency;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.*;
 
 /**
  * Build a simulated retirement projection randomizing returns as per supplied
- * portfolio variability.  Generates a random sampling assuming returns follow
- * a NormalDistribution.  Object is immutable.  A new amortization table with 
- * a randomized projection is generated upon every clone or new instance.
+ * portfolio variability.  Generates a random sampling assuming returns from 
+ * class implementing SimulableRate interface.  Object is immutable.  
+ * A new amortization table with a randomized projection is generated upon every 
+ * clone or new instance.
  * @author Team 11
  *
  */
@@ -127,7 +129,7 @@ public class RetirementAnalyzer {
 	 * @throws IllegalArgumentException If supplied age is less than currentAge or greater than maxAge
 	 */
 	public double getProbBrokeAtAge(int age) throws IllegalArgumentException {		
-		if (age < currentAge || age > maxAge) throw new IllegalArgumentException("Age out of bounds");
+		validateAgeBounds(age, true);
 		if (!isMonteCarloBuilt) buildMonteCarlo();
 		return ageBrokeDistribution.getCumPct(age);
 	}
@@ -141,7 +143,7 @@ public class RetirementAnalyzer {
 	 * @throws IllegalArgumentException If supplied age is less than currentAge
 	 */
 	public double getProbBrokeAtAge(double withdrawal, int age) throws IllegalArgumentException {
-		if (age < currentAge) throw new IllegalArgumentException("Age out of bounds");
+		validateAgeBounds(age, false);
 		// change withdrawal and retirementAge = currentAge.  MaxAge only needs to be age + 1 for build Frequency
 		RetirementAnalyzer fp = new RetirementAnalyzer(initialPrincipal, deposits, withdrawal, currentAge, 
 				age + 1, currentAge, inflation, portfolio, assumeReal);
@@ -160,6 +162,7 @@ public class RetirementAnalyzer {
 	 */
 	public double getMaxSafeWithdrawal(int age, double probability) {
 		// http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math4/analysis/UnivariateFunction.html
+		validateAgeBounds(age, false);
 		class WithdrawalFunction implements UnivariateFunction {
 
 			@Override
@@ -252,19 +255,33 @@ public class RetirementAnalyzer {
 	 * @throws IOException For errors writing the file, typically if its open by another program
 	 */
 	public void writeMontecarloOutputCSV(String filename) throws IOException {
-		if (!isMonteCarloBuilt) buildMonteCarlo(); 
+		SummaryMonteCarlo summary = getMonteCarloSummary(); 
 		FileWriter fw = new FileWriter(filename);
 		PrintWriter pw = new PrintWriter(fw);
 		pw.println("age,mean_principal,min_principal,max_principal,iterations_broke,cumm_prob_broke");
 		for (int i = 0; i < ageCardinality; i++ ) {
-			int age = i + currentAge;
-			String line = age + "," + Math.round(principalsIntervals[i].getAverage());
-			line += "," + Math.round(principalsIntervals[i].getMinConfInterval());
-			line += "," + Math.round(principalsIntervals[i].getMaxConfInterval());
-			line += "," + ageBrokeDistribution.getCount(age) + "," + ageBrokeDistribution.getCumPct(age);
+			String line = summary.getAge().get(i) + "," + summary.getMeanPrincipal().get(i);
+			line += "," + summary.getMinPrincipal().get(i);
+			line += "," + summary.getMaxPrincipal().get(i);
+			line += "," + summary.getNumBroke().get(i) + "," + summary.getProbBroke().get(i);
 			pw.println(line);
 		}
 		pw.close();
+	}
+	
+	public SummaryMonteCarlo getMonteCarloSummary() {
+		if (!isMonteCarloBuilt) buildMonteCarlo(); 
+		SummaryMonteCarlo output = new SummaryMonteCarlo(retirementAge);
+		for (int i = 0; i < ageCardinality; i++ ) {
+			int age = i + currentAge;
+			double minPrincipal = Math.round(principalsIntervals[i].getMinConfInterval());
+			double maxPrincipal = Math.round(principalsIntervals[i].getMaxConfInterval());
+			double meanPrincipal = Math.round(principalsIntervals[i].getAverage());
+			int numBroke = (int)ageBrokeDistribution.getCount(age);
+			double probBroke = ageBrokeDistribution.getCumPct(age);
+			output.addRow(age, minPrincipal, maxPrincipal, meanPrincipal, numBroke, probBroke);
+		}
+		return output;
 	}
 	
 	/**
@@ -285,9 +302,7 @@ public class RetirementAnalyzer {
 	 * @throws IllegalArgumentException If age is less than currentAge or greater than supplied maxAge
 	 */
 	public AmotizationTableRow getProjectedData(int age) throws IllegalArgumentException {
-		if (age < currentAge || age > maxAge) {
-			throw new IllegalArgumentException("Age out of bounds");
-		}
+		validateAgeBounds(age, true);
 		return data[age - currentAge];
 	}
 	
@@ -337,12 +352,25 @@ public class RetirementAnalyzer {
 		}
 	}
 	
-	public ConfidenceInterval getPrincipalInterval(int age) {
+	/**
+	 * Validate that age is within object construction bounds
+	 * @param age Age 
+	 * @param upper If true validates age >= currentAge and age <= maxAge, if false
+	 * only validates lower limit
+	 */
+	private void validateAgeBounds(int age, boolean upper) {
+		if (upper && age > maxAge) {
+			throw new IllegalArgumentException("Age less than currentAge");
+		} 
+		if (age < currentAge) {
+			throw new IllegalArgumentException("Age greater than maxAge");
+		}
+	}
+	
+	public ConfidenceInterval getPrincipalInterval(int age) throws IllegalArgumentException {
+		validateAgeBounds(age, true);
 		if (!isMonteCarloBuilt) buildMonteCarlo();
 		return principalsIntervals[age - currentAge];
 	}
 	
-	
-
-
 }

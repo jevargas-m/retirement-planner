@@ -30,7 +30,7 @@ public class FutureProjectionTests {
 
 		fp2.printAmortizationTable();
 		
-		fp2.buildMonteCarlo(100000);
+		fp2.buildMonteCarlo(75000);
 		
 		try {
 			// Test principal confidence intervals
