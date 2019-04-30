@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -29,7 +30,7 @@ public class MainController {
 	private LineChart<Number, Number> brokeChart;
 	
 	@FXML 
-	private LineChart<Number, Number> principalChart;
+	private AreaChart<Number, Number> principalChart;
 	
 	@FXML 
 	private Label minPrincipal;
@@ -72,22 +73,20 @@ public class MainController {
 		RetirementAnalyzer ra = new RetirementAnalyzer(principal, deposits, withdrawals, age, maxAge + 10, retirementAge, inflation, portfolio, true);
 		SummaryMonteCarlo smc = ra.getMonteCarloSummary();
 		
-		ra.buildMonteCarlo();
-		
 		double minp = Math.round(ra.getPrincipalInterval(retirementAge).getMinConfInterval());
-		minPrincipal.setText(Double.toString(minp));
+		minPrincipal.setText("$ " + Integer.toString((int)minp));
 		
 		double maxp = Math.round(ra.getPrincipalInterval(retirementAge).getMaxConfInterval());
 		
 		ra.getPrincipalInterval(maxAge).getAverage();
 		
-		maxPrincipal.setText(Double.toString(maxp));
+		maxPrincipal.setText("$ " + Integer.toString((int)maxp));
 		
 		double pb = ra.getProbBrokeAtAge(maxAge);
 		pBrokeAtMaxAge.setText(Double.toString(pb));
 		
 		double sw = Math.round(ra.getMaxSafeWithdrawal(maxAge, 0.1));
-		safeWithdrawal.setText(Double.toString(sw));
+		safeWithdrawal.setText("$ " + Integer.toString((int)sw));
 		
 		generateBrokeChart(smc);
 		generatePrincipalChart(smc);
@@ -106,15 +105,23 @@ public class MainController {
 	}
 	
 	public void generatePrincipalChart(SummaryMonteCarlo smc) {
-		XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+		XYChart.Series<Number, Number> seriesMax = new XYChart.Series<Number, Number>();
+		XYChart.Series<Number, Number> seriesMin = new XYChart.Series<Number, Number>();
 		for (int i = 0; i < smc.getNumRows() - 1; i++) {
-			series.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMeanPrincipal().get(i)));
+			seriesMax.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMaxPrincipal().get(i)));
+			seriesMin.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMinPrincipal().get(i)));
 		}
 		
 		NumberAxis xAxis = (NumberAxis)principalChart.getXAxis();
 		xAxis.setLowerBound(age);
 		xAxis.setUpperBound(maxAge);
-		principalChart.getData().add(series);
+		
+		NumberAxis yAxis = (NumberAxis)principalChart.getYAxis();
+		yAxis.setLowerBound(0.0);
+		yAxis.setUpperBound(smc.getMaxValue());
+		
+		principalChart.getData().add(seriesMax);
+		principalChart.getData().add(seriesMin);
 	}
 	
 	

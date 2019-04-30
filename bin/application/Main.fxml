@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -14,12 +15,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <children>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="435.0" minWidth="10.0" prefWidth="435.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="522.0" minWidth="10.0" prefWidth="421.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="522.0" minWidth="10.0" prefWidth="421.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
@@ -71,59 +72,9 @@
                         <TextField id="withdrawals" fx:id="fieldEquity" />
                      </children>
                   </HBox>
-                  <ButtonBar>
-                     <buttons>
-                        <Button mnemonicParsing="false" onAction="#loadDefaults" text="Load Defaults" />
-                        <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#doCalc" text="Calc" />
-                     </buttons>
-                  </ButtonBar>
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="532.0">
-                     <children>
-                        <Label text="min Principal" />
-                        <Label id="minPrincipal" fx:id="minPrincipal" prefWidth="150.0" textAlignment="CENTER">
-                           <font>
-                              <Font name="Bauhaus 93" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="max Principal" />
-                        <Label id="maxPrincipal" fx:id="maxPrincipal" prefWidth="150.0" textAlignment="CENTER">
-                           <font>
-                              <Font name="Bauhaus 93" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="prob broke at Max Age:" />
-                        <Label id="pBrokeAtMaxAge" fx:id="pBrokeAtMaxAge" prefWidth="150.0" textAlignment="CENTER">
-                           <font>
-                              <Font name="Bauhaus 93" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Safe Withdrawal retiring today" />
-                        <Label id="safeWithdrawal" fx:id="safeWithdrawal" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER">
-                           <font>
-                              <Font name="Bauhaus 93" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <LineChart fx:id="brokeChart" createSymbols="false" prefHeight="220.0" prefWidth="300.0" title="Probability having money as time pass" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <LineChart fx:id="brokeChart" createSymbols="false" legendVisible="false" prefHeight="220.0" prefWidth="300.0" title="Probability having enough money" GridPane.columnIndex="1" GridPane.rowIndex="1">
               <xAxis>
                 <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
               </xAxis>
@@ -131,14 +82,80 @@
                 <NumberAxis autoRanging="false" label="Cum Probability" side="LEFT" tickUnit="0.1" upperBound="1.0" />
               </yAxis>
             </LineChart>
-            <LineChart fx:id="principalChart" createSymbols="false" layoutX="448.0" layoutY="10.0" prefHeight="220.0" prefWidth="300.0" title="Estimated Principal" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <xAxis>
-                  <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis label="Money" side="LEFT" tickUnit="0.1" upperBound="1.0" />
-               </yAxis>
-            </LineChart>
+            <AreaChart fx:id="principalChart" createSymbols="false" legendVisible="false" title="Estimated Principal" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <xAxis>
+                <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Balance in account" side="LEFT" tickUnit="100.0" />
+              </yAxis>
+            </AreaChart>
+            <VBox prefHeight="300.0" prefWidth="225.0" GridPane.rowIndex="2">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="532.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="min Principal" />
+                              <Label id="minPrincipal" fx:id="minPrincipal" prefWidth="150.0" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Bauhaus 93" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="max Principal" />
+                              <Label id="maxPrincipal" fx:id="maxPrincipal" prefWidth="150.0" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Bauhaus 93" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="prob broke at Max Age:" />
+                              <Label id="pBrokeAtMaxAge" fx:id="pBrokeAtMaxAge" prefWidth="150.0" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Bauhaus 93" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="Safe Withdrawal anticipated retirement Today" />
+                              <Label id="safeWithdrawal" fx:id="safeWithdrawal" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Bauhaus 93" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <ButtonBar>
+               <buttons>
+                  <Button mnemonicParsing="false" onAction="#loadDefaults" text="Load Defaults" />
+                  <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#doCalc" text="Calc" />
+               </buttons>
+            </ButtonBar>
          </children>
       </GridPane>
    </children>

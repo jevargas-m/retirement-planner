@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class SummaryMonteCarlo {
 	private int retirementAge;
+	private double maxValue;
 	
 	private ArrayList<Integer> age;
 	private ArrayList<Double> minPrincipal;
@@ -25,17 +26,24 @@ public class SummaryMonteCarlo {
 		numBroke = new ArrayList<Integer>();
 		probBroke = new ArrayList<Double>();
 		this.retirementAge = retiremetAge;
+		this.maxValue = 0;
 	}
 
 	public void addRow (int age, double minPrincipal, double maxPrincipal, double meanPrincipal, 
 			int numBroke , double probBroke) {
 		this.age.add(age);
+		if (minPrincipal < 0) minPrincipal = 0;
+		if (meanPrincipal < 0) meanPrincipal = 0;
+		if (maxPrincipal < 0) maxPrincipal = 0;
+		
 		this.minPrincipal.add(minPrincipal);
 		this.maxPrincipal.add(maxPrincipal);
 		this.meanPrincipal.add(meanPrincipal);
 		this.numBroke.add(numBroke);
 		this.probBroke.add(probBroke);
-		
+		if (maxPrincipal > maxValue) {
+			maxValue = maxPrincipal;
+		}
 		
 	}
 
@@ -78,5 +86,10 @@ public class SummaryMonteCarlo {
 	public int getMaxAge() {
 		return age.get(age.size() - 2); // Return second to last age
 	}
+
+	public double getMaxValue() {
+		return maxValue;
+	}
+	
 	
 }
