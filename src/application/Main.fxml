@@ -153,7 +153,8 @@
             <ButtonBar>
                <buttons>
                   <Button mnemonicParsing="false" onAction="#loadDefaults" text="Load Defaults" />
-                  <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#doCalc" text="Calc" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#doCalc" text="Calc" />
+                  <Button mnemonicParsing="false" onAction="#clearGraphs" text="Clear" />
                </buttons>
             </ButtonBar>
          </children>

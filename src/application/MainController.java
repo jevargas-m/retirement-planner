@@ -1,7 +1,5 @@
 package application;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
@@ -144,5 +142,11 @@ public class MainController {
 		fieldRetAge.setText(Integer.toString(retirementAge));
 		fieldMaxAge.setText(Integer.toString(maxAge));
 		fieldEquity.setText(Double.toString(equity));
+	}
+	
+	@FXML
+	public void clearGraphs(ActionEvent e) {
+		principalChart.getData().clear();
+		brokeChart.getData().clear();
 	}
 }
