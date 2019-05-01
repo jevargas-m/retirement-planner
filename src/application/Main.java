@@ -12,13 +12,11 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/application/Main.fxml"));
-			Scene scene = new Scene(root,800,600);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			Parent root = FXMLLoader.load(getClass().getResource("/application/AnalyzerScene.fxml"));
+			Scene analizerScene = new Scene(root,800,600);
+			analizerScene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 			primaryStage.setResizable(false);
-			
-			
-			primaryStage.setScene(scene);
+			primaryStage.setScene(analizerScene);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

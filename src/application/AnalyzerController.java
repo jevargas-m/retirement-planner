@@ -1,16 +1,24 @@
 package application;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import modelPlanner.*;
-import org.apache.commons.math3.util.*;
 
 
-public class MainController {
+
+public class AnalyzerController {
 	
 	private double equity = 0.3;
 	private int maxAge = 100;
@@ -23,6 +31,7 @@ public class MainController {
 	
 	@FXML private LineChart<Number, Number> brokeChart;
 	@FXML private LineChart<Number, Number> principalChart;
+	@FXML private Slider equitySlider;
 	@FXML private Label minPrincipal;
 	@FXML private Label maxPrincipal;
 	@FXML private Label pBrokeAtMaxAge;
@@ -34,9 +43,11 @@ public class MainController {
 	@FXML private TextField fieldWithdrawal;
 	@FXML private TextField fieldDeposits;
 	@FXML private TextField fieldEquity;
+	@FXML private Pane analyzerPane;
 		
 	@FXML
 	public void doCalc(ActionEvent e) {
+		clearGraphs();
 		getInputs();
 		
 		InvestmentPortfolio portfolio = new InvestmentPortfolio(equity);
@@ -102,7 +113,7 @@ public class MainController {
 		principal = Double.parseDouble(fieldPrincipal.getText());
 		retirementAge = Integer.parseInt(fieldRetAge.getText());
 		maxAge = Integer.parseInt(fieldMaxAge.getText());
-		equity = Double.parseDouble(fieldEquity.getText());
+		equity = equitySlider.getValue();
 	}
 	
 	@FXML
@@ -113,12 +124,25 @@ public class MainController {
 		fieldPrincipal.setText(Double.toString(principal));
 		fieldRetAge.setText(Integer.toString(retirementAge));
 		fieldMaxAge.setText(Integer.toString(maxAge));
-		fieldEquity.setText(Double.toString(equity));
+		equitySlider.setValue(equity);
+	}
+	
+
+	private void clearGraphs() {
+		principalChart.getData().clear();
+		brokeChart.getData().clear();
 	}
 	
 	@FXML
-	public void clearGraphs(ActionEvent e) {
-		principalChart.getData().clear();
-		brokeChart.getData().clear();
+	public void showWizard(ActionEvent e) throws IOException {
+		Parent wizardParent = FXMLLoader.load(getClass().getResource("/application/Wizard.fxml"));
+		Scene wizardScene = new Scene(wizardParent, 800, 600);
+		Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
+		window.setScene(wizardScene);
+		window.show();
+	}
+	
+	public void setEquity(double equity) {
+		this.equity = equity;
 	}
 }
