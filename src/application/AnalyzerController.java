@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import modelPlanner.*;
 
@@ -31,7 +32,7 @@ public class AnalyzerController implements Initializable {
 	
 	private UserInputs inputs;
 	private final double DEFAULT_INFLATION = 0.03;
-	private final int DEFAULT_MONTECARLO_ITERATIONS = 10000;
+	private final int DEFAULT_MONTECARLO_ITERATIONS = 50000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
 	
 	@FXML private LineChart<Number, Number> brokeChart;
@@ -41,6 +42,7 @@ public class AnalyzerController implements Initializable {
 	@FXML private Label maxPrincipal;
 	@FXML private Label pBrokeAtMaxAge;
 	@FXML private Label safeWithdrawal;
+	@FXML private Label labelOutputTitle;
 	@FXML private TextField fieldCurrentAge;
 	@FXML private TextField fieldRetAge;
 	@FXML private TextField fieldMaxAge;
@@ -49,6 +51,7 @@ public class AnalyzerController implements Initializable {
 	@FXML private TextField fieldDeposits;
 	@FXML private TextField fieldEquity;
 	@FXML private Pane analyzerPane;
+	@FXML private VBox outputInsights;
 	
 	@FXML private ComboBox<String> answerEquity1;
 	@FXML private ComboBox<String> answerEquity2;
@@ -82,6 +85,9 @@ public class AnalyzerController implements Initializable {
 			
 			double sw = Math.round(ra.getMaxSafeWithdrawal(inputs.getMaxAge(), DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY));  
 			safeWithdrawal.setText("$ " + Integer.toString((int)sw));
+			
+			labelOutputTitle.setText("Key insights after " + DEFAULT_MONTECARLO_ITERATIONS + " simulations");
+			outputInsights.setVisible(true);
 			
 			// Charts
 			clearGraphs();
@@ -180,6 +186,7 @@ public class AnalyzerController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		outputInsights.setVisible(false);
 		ObservableList<String> list1 = FXCollections.observableArrayList("Nonexistent", "I sometimes watch CNBC",
 				"I read the WSJ", "I'm the Wolf of Wall St");
 		ObservableList<String> list2 = FXCollections.observableArrayList("Save my money", "Get some income",
