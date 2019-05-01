@@ -19,10 +19,10 @@ public class ReturnCalc {
 	 * constructor of class, produces an arraylist with all the monthly returns of stocks and bonds separately
 	 * @param filename file to read
 	 */
-	public ReturnCalc(String filename) {
+	public ReturnCalc(String filename) throws FileNotFoundException {
 		File historicalData = new File(filename);
 		monthlyReturnStocksBonds = new ArrayList<MonthlyReturn>();
-		try {
+
 			Double stockRet;
 			Double bondRet;
 			
@@ -42,10 +42,7 @@ public class ReturnCalc {
 				
 			}
 			scanner.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}// end of Class ReturnCalc
 		
 	
