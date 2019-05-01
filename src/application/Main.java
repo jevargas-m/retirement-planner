@@ -16,7 +16,7 @@ public class Main extends Application {
 			Scene analizerScene = new Scene(root,800,600);
 			analizerScene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 			primaryStage.setTitle("Retirement Simulator - Team 11 - OMCIT 591");
-			primaryStage.setResizable(false);
+			// primaryStage.setResizable(false);
 			primaryStage.setScene(analizerScene);
 			primaryStage.show();
 		} catch(Exception e) {
