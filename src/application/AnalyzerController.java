@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -107,13 +109,20 @@ public class AnalyzerController {
 	
 	
 	private void getInputs() {
-		age = Integer.parseInt(fieldCurrentAge.getText());
-		deposits = Double.parseDouble(fieldDeposits.getText());
-		withdrawals = Double.parseDouble(fieldWithdrawal.getText());
-		principal = Double.parseDouble(fieldPrincipal.getText());
-		retirementAge = Integer.parseInt(fieldRetAge.getText());
-		maxAge = Integer.parseInt(fieldMaxAge.getText());
-		equity = equitySlider.getValue();
+		try {
+			age = Integer.parseInt(fieldCurrentAge.getText());
+			deposits = Double.parseDouble(fieldDeposits.getText());
+			withdrawals = Double.parseDouble(fieldWithdrawal.getText());
+			principal = Double.parseDouble(fieldPrincipal.getText());
+			retirementAge = Integer.parseInt(fieldRetAge.getText());
+			maxAge = Integer.parseInt(fieldMaxAge.getText());
+			equity = equitySlider.getValue();
+		} catch (Exception e) {
+			Alert alert = new Alert (AlertType.ERROR);
+			alert.setTitle("Input Error");
+			alert.setHeaderText("Inputs must be positive numbers");
+			alert.showAndWait();
+		}
 	}
 	
 	@FXML
