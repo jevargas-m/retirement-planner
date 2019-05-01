@@ -2,15 +2,21 @@ package application;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -21,7 +27,7 @@ import modelPlanner.*;
 
 
 
-public class AnalyzerController {
+public class AnalyzerController implements Initializable {
 	
 	private UserInputs inputs;
 	private final double DEFAULT_INFLATION = 0.03;
@@ -43,6 +49,11 @@ public class AnalyzerController {
 	@FXML private TextField fieldDeposits;
 	@FXML private TextField fieldEquity;
 	@FXML private Pane analyzerPane;
+	
+	@FXML private ComboBox<String> answerEquity1;
+	@FXML private ComboBox<String> answerEquity2;
+	@FXML private ComboBox<String> answerEquity3;
+	@FXML private ComboBox<String> answerEquity4;
 		
 	@FXML
 	public void doCalc(ActionEvent e) {
@@ -165,6 +176,24 @@ public class AnalyzerController {
 	private void clearGraphs() {
 		principalChart.getData().clear();
 		brokeChart.getData().clear();
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		ObservableList<String> list1 = FXCollections.observableArrayList("Nonexistent", "I sometimes watch CNBC",
+				"I read the WSJ", "I'm the Wolf of Wall St");
+		ObservableList<String> list2 = FXCollections.observableArrayList("Save my money", "Get some income",
+				"Some income, some growth", "I want to make it rain $$$");
+		ObservableList<String> list3 = FXCollections.observableArrayList("Panic and sell!!!",
+				"Cancel my vacation, sell a little, and cry", "Have two shots of Tequila and buy a little",
+				"Bring it on market!!! I'd wave it in!");
+		ObservableList<String> list4 = FXCollections.observableArrayList("No way! Keep me safe and snug!",
+				"Gulp, maybe a little", "I can take some risk, not too crazy", "Volatility is my middle name!!!");
+		
+		answerEquity1.setItems(list1);
+		answerEquity2.setItems(list2);
+		answerEquity3.setItems(list3);
+		answerEquity4.setItems(list4);
 	}
 	
 //	@FXML
