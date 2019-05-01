@@ -26,7 +26,7 @@ public class AnalyzerController implements Initializable {
 	
 	private UserInputs inputs;
 	private final double DEFAULT_INFLATION = 0.03;
-	private final int DEFAULT_MONTECARLO_ITERATIONS = 50000;
+	private final int DEFAULT_MONTECARLO_ITERATIONS = 5000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
 	
 	@FXML private LineChart<Number, Number> brokeChart;
