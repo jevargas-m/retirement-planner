@@ -69,8 +69,8 @@
                         <Font name="Bauhaus 93" size="18.0" />
                      </font>
                   </Label>
-                  <Label text="Minum forecasted balance at retirement age :" />
-                  <Label text="Maximum forecasted balance at retirement age :" GridPane.rowIndex="1" />
+                  <Label text="Minum forecasted balance at retirement age :" GridPane.halignment="RIGHT" />
+                  <Label text="Maximum forecasted balance at retirement age :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                   <Label id="maxPrincipal" fx:id="maxPrincipal" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font name="Bauhaus 93" size="18.0" />
@@ -81,8 +81,8 @@
                         <Font name="Bauhaus 93" size="18.0" />
                      </font>
                   </Label>
-                  <Label text="prob broke at Max Age:" GridPane.rowIndex="2" />
-                  <Label text="Safe Withdrawal anticipated retirement Today" GridPane.rowIndex="3" />
+                  <Label text="prob broke at Max Age:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                  <Label prefHeight="17.0" prefWidth="249.0" text="Anticipated retirement safe yearly withdraws :  " GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                   <Label id="safeWithdrawal" fx:id="safeWithdrawal" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font name="Bauhaus 93" size="18.0" />
@@ -106,17 +106,17 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Initial Principal:" />
+                        <Label text="Initial Principal : " GridPane.halignment="RIGHT" />
                         <TextField id="withdrawals" fx:id="fieldPrincipal" GridPane.columnIndex="1" />
-                        <Label text="Current Age : " GridPane.columnIndex="2" />
+                        <Label text="Current Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
                         <TextField id="currentAge" fx:id="fieldCurrentAge" GridPane.columnIndex="3" />
-                        <Label text="Retirement Age : " GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label text="Retirement Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                         <TextField id="withdrawals" fx:id="fieldRetAge" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Label text="Max Age : " GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label text="Max Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                         <TextField id="withdrawals" fx:id="fieldMaxAge" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Label text="Yearly Deposits : " GridPane.rowIndex="1" />
+                        <Label text="Yearly Deposits : " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                         <TextField id="withdrawals" fx:id="fieldDeposits" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Yearly Withdrawals : " GridPane.rowIndex="2" />
+                        <Label text="Yearly Withdrawals : " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                         <TextField id="withdrawals" fx:id="fieldWithdrawal" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="Percentage Equity : " GridPane.rowIndex="3" />
                         <Slider fx:id="equitySlider" blockIncrement="0.1" majorTickUnit="0.1" max="1.0" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" />
