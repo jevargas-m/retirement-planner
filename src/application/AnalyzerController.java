@@ -50,30 +50,37 @@ public class AnalyzerController {
 	@FXML
 	public void doCalc(ActionEvent e) {
 		clearGraphs();
-		getInputs();
+		try {
+			getInputs();
+			InvestmentPortfolio portfolio = new InvestmentPortfolio(equity);
+			RetirementAnalyzer ra = new RetirementAnalyzer(principal, deposits, withdrawals, age, maxAge + 10, retirementAge, inflation, portfolio, true);
+			SummaryMonteCarlo smc = ra.getMonteCarloSummary();
+			ra.buildMonteCarlo(10000);
+			
+			double minp = Math.round(ra.getPrincipalInterval(retirementAge).getMinConfInterval());
+			minPrincipal.setText("$ " + Integer.toString((int)minp));
+			
+			double maxp = Math.round(ra.getPrincipalInterval(retirementAge).getMaxConfInterval());
+			
+			ra.getPrincipalInterval(maxAge).getAverage();
+			
+			maxPrincipal.setText("$ " + Integer.toString((int)maxp));
+			
+			double pb = ra.getProbBrokeAtAge(maxAge);
+			pBrokeAtMaxAge.setText(Double.toString(pb));
+			
+			double sw = Math.round(ra.getMaxSafeWithdrawal(maxAge, 0.1));
+			safeWithdrawal.setText("$ " + Integer.toString((int)sw));
+			
+			generateBrokeChart(smc);
+			generatePrincipalChart(smc);
+		} catch (Exception exception) {
+			Alert alert = new Alert (AlertType.ERROR);
+			alert.setTitle("Input Error");
+			alert.setHeaderText("Inputs must be positive numbers");
+			alert.showAndWait();
+		}
 		
-		InvestmentPortfolio portfolio = new InvestmentPortfolio(equity);
-		RetirementAnalyzer ra = new RetirementAnalyzer(principal, deposits, withdrawals, age, maxAge + 10, retirementAge, inflation, portfolio, true);
-		SummaryMonteCarlo smc = ra.getMonteCarloSummary();
-		ra.buildMonteCarlo(10000);
-		
-		double minp = Math.round(ra.getPrincipalInterval(retirementAge).getMinConfInterval());
-		minPrincipal.setText("$ " + Integer.toString((int)minp));
-		
-		double maxp = Math.round(ra.getPrincipalInterval(retirementAge).getMaxConfInterval());
-		
-		ra.getPrincipalInterval(maxAge).getAverage();
-		
-		maxPrincipal.setText("$ " + Integer.toString((int)maxp));
-		
-		double pb = ra.getProbBrokeAtAge(maxAge);
-		pBrokeAtMaxAge.setText(Double.toString(pb));
-		
-		double sw = Math.round(ra.getMaxSafeWithdrawal(maxAge, 0.1));
-		safeWithdrawal.setText("$ " + Integer.toString((int)sw));
-		
-		generateBrokeChart(smc);
-		generatePrincipalChart(smc);
 	}
 	
 	public void generateBrokeChart(SummaryMonteCarlo smc) {
@@ -108,21 +115,14 @@ public class AnalyzerController {
 	}
 	
 	
-	private void getInputs() {
-		try {
-			age = Integer.parseInt(fieldCurrentAge.getText());
-			deposits = Double.parseDouble(fieldDeposits.getText());
-			withdrawals = Double.parseDouble(fieldWithdrawal.getText());
-			principal = Double.parseDouble(fieldPrincipal.getText());
-			retirementAge = Integer.parseInt(fieldRetAge.getText());
-			maxAge = Integer.parseInt(fieldMaxAge.getText());
-			equity = equitySlider.getValue();
-		} catch (Exception e) {
-			Alert alert = new Alert (AlertType.ERROR);
-			alert.setTitle("Input Error");
-			alert.setHeaderText("Inputs must be positive numbers");
-			alert.showAndWait();
-		}
+	private void getInputs() throws Exception {
+		age = Integer.parseInt(fieldCurrentAge.getText());
+		deposits = Double.parseDouble(fieldDeposits.getText());
+		withdrawals = Double.parseDouble(fieldWithdrawal.getText());
+		principal = Double.parseDouble(fieldPrincipal.getText());
+		retirementAge = Integer.parseInt(fieldRetAge.getText());
+		maxAge = Integer.parseInt(fieldMaxAge.getText());
+		equity = equitySlider.getValue();
 	}
 	
 	@FXML
