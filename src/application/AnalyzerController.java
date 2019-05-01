@@ -127,13 +127,14 @@ public class AnalyzerController {
 	
 	@FXML
 	public void loadDefaults(ActionEvent e) {
-		fieldCurrentAge.setText(Integer.toString(age));
-		fieldDeposits.setText(Double.toString(deposits));
-		fieldWithdrawal.setText(Double.toString(withdrawals));
-		fieldPrincipal.setText(Double.toString(principal));
-		fieldRetAge.setText(Integer.toString(retirementAge));
-		fieldMaxAge.setText(Integer.toString(maxAge));
-		equitySlider.setValue(equity);
+		UserInputs ui = UserInputs.getDefaultInputs();
+		fieldCurrentAge.setText(Integer.toString(ui.getCurrentAge()));
+		fieldDeposits.setText(Double.toString(ui.getYearlyDeposits()));
+		fieldWithdrawal.setText(Double.toString(ui.getTargetRetirement()));
+		fieldPrincipal.setText(Double.toString(ui.getPrincipal()));
+		fieldRetAge.setText(Integer.toString(ui.getTargetRetirementAge()));
+		fieldMaxAge.setText(Integer.toString(ui.getMaxAge()));
+		equitySlider.setValue(ui.getEquityPercentage());
 	}
 	
 
