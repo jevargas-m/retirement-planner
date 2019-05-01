@@ -1,6 +1,8 @@
 package modelPlanner;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.Test;
 
 class SimulationUnitTests {
@@ -74,31 +76,51 @@ class SimulationUnitTests {
 	@Test
 	void testGetProbBrokeAtAge() {
 		UserInputs ui = UserInputs.getDefaultInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(0.3);
-		
-		RetirementAnalyzer fp = new RetirementAnalyzer(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
-		
-		fp.buildMonteCarlo(100000);
+		InvestmentPortfolio ip;
+		try {
+			ip = new InvestmentPortfolio(0.3);
+			RetirementAnalyzer fp = new RetirementAnalyzer(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
+					ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
+			
+			fp.buildMonteCarlo(100000);
 
-		assertEquals(0.68, fp.getProbBrokeAtAge(90), 0.05);
+			assertEquals(0.68, fp.getProbBrokeAtAge(90), 0.05);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 
 	}
 	
 	@Test
 	void testMaxWithdrawal() {
 		UserInputs ui = UserInputs.getDefaultInputs();
-		InvestmentPortfolio ip = new InvestmentPortfolio(ui.getEquityPercentage());
+		InvestmentPortfolio ip;
+		try {
+			ip = new InvestmentPortfolio(ui.getEquityPercentage());
+			RetirementAnalyzer fp = new RetirementAnalyzer(250000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
+					ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
+			
+			double safe = fp.getMaxSafeWithdrawal(90, 0.1);
+			
+			RetirementAnalyzer fp2 = new RetirementAnalyzer(250000, ui.getYearlyDeposits(), safe,
+					ui.getCurrentAge(), ui.getMaxAge(), ui.getCurrentAge(), ui.getInflation(), ip, true);
+			
+			assertEquals(0.1, fp2.getProbBrokeAtAge(90), 0.02);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		RetirementAnalyzer fp = new RetirementAnalyzer(250000, ui.getYearlyDeposits(), ui.getTargetRetirement(),
-				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
-		
-		double safe = fp.getMaxSafeWithdrawal(90, 0.1);
-		
-		RetirementAnalyzer fp2 = new RetirementAnalyzer(250000, ui.getYearlyDeposits(), safe,
-				ui.getCurrentAge(), ui.getMaxAge(), ui.getCurrentAge(), ui.getInflation(), ip, true);
-		
-		assertEquals(0.1, fp2.getProbBrokeAtAge(90), 0.02);
+	
 	}
 
 }

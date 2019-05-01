@@ -1,4 +1,5 @@
 package modelPlanner;
+import java.io.FileNotFoundException;
 import java.util.Random;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
@@ -16,8 +17,9 @@ public class InvestmentPortfolio implements SimulableRate {
 	/**
 	 * Build a portfolio according to equitu percentage
 	 * @param equityPercentage
+	 * @throws FileNotFoundException 
 	 */
-	public InvestmentPortfolio(double equityPercentage) throws IllegalArgumentException {
+	public InvestmentPortfolio(double equityPercentage) throws IllegalArgumentException, FileNotFoundException {
 		ReturnCalc build = new ReturnCalc("portfoliodata.csv");
 		defaultReturn = build.averageAnnualReturn(build.returnsPortfolio(build.monthlyReturnStocksBonds, equityPercentage));
 		double stdev = build.annualStandardDeviation(build.returnsPortfolio(build.monthlyReturnStocksBonds, equityPercentage));

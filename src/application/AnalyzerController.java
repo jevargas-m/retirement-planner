@@ -1,5 +1,6 @@
 package application;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -22,14 +23,9 @@ import modelPlanner.*;
 
 public class AnalyzerController {
 	
-	private double equity = 0.3;
-	private int maxAge = 100;
-	private int age = 30;
-	private int retirementAge = 65;
-	private double deposits = 12000;
-	private double withdrawals = 24000;
-	private double principal = 100000;
-	private final double inflation = 0.03;
+	UserInputs inputs;
+	private final double DEFAULT_INFLATION = 0.03;
+	private final int DEFAULT_MONTECARLO_ITERATIONS = 10000;
 	
 	@FXML private LineChart<Number, Number> brokeChart;
 	@FXML private LineChart<Number, Number> principalChart;
@@ -52,32 +48,48 @@ public class AnalyzerController {
 		clearGraphs();
 		try {
 			getInputs();
-			InvestmentPortfolio portfolio = new InvestmentPortfolio(equity);
-			RetirementAnalyzer ra = new RetirementAnalyzer(principal, deposits, withdrawals, age, maxAge + 10, retirementAge, inflation, portfolio, true);
+			InvestmentPortfolio portfolio = new InvestmentPortfolio(inputs.getEquityPercentage());
+			// using +10 yrs in MaxAge to avoid graph jump
+			RetirementAnalyzer ra = new RetirementAnalyzer(inputs.getPrincipal(), inputs.getYearlyDeposits(), 
+					inputs.getTargetRetirement(), inputs.getCurrentAge(), inputs.getMaxAge() + 10, 
+					inputs.getTargetRetirementAge(), inputs.getInflation(),	portfolio, inputs.isRealMoney());
 			SummaryMonteCarlo smc = ra.getMonteCarloSummary();
-			ra.buildMonteCarlo(10000);
+			ra.buildMonteCarlo(DEFAULT_MONTECARLO_ITERATIONS);
 			
-			double minp = Math.round(ra.getPrincipalInterval(retirementAge).getMinConfInterval());
+			double minp = Math.round(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMinConfInterval());
 			minPrincipal.setText("$ " + Integer.toString((int)minp));
 			
-			double maxp = Math.round(ra.getPrincipalInterval(retirementAge).getMaxConfInterval());
+			double maxp = Math.round(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMaxConfInterval());
 			
-			ra.getPrincipalInterval(maxAge).getAverage();
+			ra.getPrincipalInterval(inputs.getMaxAge()).getAverage();
 			
 			maxPrincipal.setText("$ " + Integer.toString((int)maxp));
 			
-			double pb = ra.getProbBrokeAtAge(maxAge);
+			double pb = ra.getProbBrokeAtAge(inputs.getMaxAge());
 			pBrokeAtMaxAge.setText(Double.toString(pb));
 			
-			double sw = Math.round(ra.getMaxSafeWithdrawal(maxAge, 0.1));
+			double sw = Math.round(ra.getMaxSafeWithdrawal(inputs.getMaxAge(), 0.1));  
 			safeWithdrawal.setText("$ " + Integer.toString((int)sw));
 			
 			generateBrokeChart(smc);
 			generatePrincipalChart(smc);
-		} catch (Exception exception) {
+		} catch (NumberFormatException exception) {
 			Alert alert = new Alert (AlertType.ERROR);
 			alert.setTitle("Input Error");
-			alert.setHeaderText("Inputs must be positive numbers");
+			alert.setHeaderText("Inputs error");
+			alert.setContentText(exception.getMessage());
+			alert.showAndWait();
+		} catch (IllegalArgumentException exception) {
+			Alert alert = new Alert (AlertType.ERROR);
+			alert.setTitle("Input bounds error");
+			alert.setHeaderText("Value error");
+			alert.setContentText(exception.getMessage());
+			alert.showAndWait();
+		} catch (FileNotFoundException exception) {
+			Alert alert = new Alert (AlertType.ERROR);
+			alert.setTitle("Internal File Error");
+			alert.setHeaderText("A required file is not present");
+			alert.setContentText(exception.getMessage());
 			alert.showAndWait();
 		}
 		
@@ -90,8 +102,8 @@ public class AnalyzerController {
 		}
 		
 		NumberAxis xAxis = (NumberAxis)brokeChart.getXAxis();
-		xAxis.setLowerBound(retirementAge);
-		xAxis.setUpperBound(maxAge);
+		xAxis.setLowerBound(inputs.getTargetRetirementAge());
+		xAxis.setUpperBound(inputs.getMaxAge());
 		brokeChart.getData().add(series);
 	}
 	
@@ -106,8 +118,8 @@ public class AnalyzerController {
 		}
 		
 		NumberAxis xAxis = (NumberAxis)principalChart.getXAxis();
-		xAxis.setLowerBound(age);
-		xAxis.setUpperBound(maxAge);
+		xAxis.setLowerBound(inputs.getCurrentAge());
+		xAxis.setUpperBound(inputs.getMaxAge());
 				
 		principalChart.getData().add(seriesAvg);
 		principalChart.getData().add(seriesMax);
@@ -115,14 +127,16 @@ public class AnalyzerController {
 	}
 	
 	
-	private void getInputs() throws Exception {
-		age = Integer.parseInt(fieldCurrentAge.getText());
-		deposits = Double.parseDouble(fieldDeposits.getText());
-		withdrawals = Double.parseDouble(fieldWithdrawal.getText());
-		principal = Double.parseDouble(fieldPrincipal.getText());
-		retirementAge = Integer.parseInt(fieldRetAge.getText());
-		maxAge = Integer.parseInt(fieldMaxAge.getText());
-		equity = equitySlider.getValue();
+	private void getInputs() throws NumberFormatException {
+		int age = Integer.parseInt(fieldCurrentAge.getText());
+		double deposits = Double.parseDouble(fieldDeposits.getText());
+		double withdrawals = Double.parseDouble(fieldWithdrawal.getText());
+		double principal = Double.parseDouble(fieldPrincipal.getText());
+		int retirementage = Integer.parseInt(fieldRetAge.getText());
+		int maxAge = Integer.parseInt(fieldMaxAge.getText());
+		double equity = equitySlider.getValue();
+		
+		inputs = new UserInputs(age, maxAge, DEFAULT_INFLATION, deposits, true, withdrawals, retirementage, equity, principal);;
 	}
 	
 	@FXML
@@ -152,7 +166,4 @@ public class AnalyzerController {
 		window.show();
 	}
 	
-	public void setEquity(double equity) {
-		this.equity = equity;
-	}
 }
