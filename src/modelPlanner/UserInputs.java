@@ -59,8 +59,8 @@ public class UserInputs {
 		defui.setRealMoney(true);
 		defui.setTargetRetirement(25000);
 		defui.setTargetRetirementAge(60);
-		defui.setEquityPercentage(0.5);
-		defui.setPrincipal(0);
+		defui.setEquityPercentage(0.3);
+		defui.setPrincipal(100000);
 		return defui;
 	}
 	
