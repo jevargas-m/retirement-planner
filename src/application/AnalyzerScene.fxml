@@ -25,8 +25,8 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
-            <RowConstraints maxHeight="387.0" minHeight="10.0" prefHeight="295.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="300.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="387.0" minHeight="10.0" prefHeight="310.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="300.0" minHeight="10.0" prefHeight="265.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <LineChart fx:id="brokeChart" createSymbols="false" legendVisible="false" prefHeight="220.0" prefWidth="300.0" title="Probability of having enough money" GridPane.rowIndex="2">
@@ -58,6 +58,7 @@
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -65,28 +66,33 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label id="minPrincipal" fx:id="minPrincipal" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1">
+                  <Label id="minPrincipal" fx:id="minPrincipal" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font name="Bauhaus 93" size="18.0" />
                      </font>
                   </Label>
-                  <Label text="Minum forecasted balance at retirement age :" GridPane.halignment="RIGHT" />
-                  <Label text="Maximum forecasted balance at retirement age :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                  <Label id="maxPrincipal" fx:id="maxPrincipal" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label text="Minum forecasted balance at retirement age :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                  <Label text="Maximum forecasted balance at retirement age :" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                  <Label id="maxPrincipal" fx:id="maxPrincipal" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <font>
                         <Font name="Bauhaus 93" size="18.0" />
                      </font>
                   </Label>
-                  <Label id="pBrokeAtMaxAge" fx:id="pBrokeAtMaxAge" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Label id="pBrokeAtMaxAge" fx:id="pBrokeAtMaxAge" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font name="Bauhaus 93" size="18.0" />
                      </font>
                   </Label>
-                  <Label text="prob broke at Max Age:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                  <Label prefHeight="17.0" prefWidth="249.0" text="Anticipated retirement safe yearly withdraws :  " GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                  <Label id="safeWithdrawal" fx:id="safeWithdrawal" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <Label text="prob broke at Max Age:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                  <Label prefHeight="17.0" prefWidth="249.0" text="Anticipated retirement safe yearly withdraws :  " GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                  <Label id="safeWithdrawal" fx:id="safeWithdrawal" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <font>
                         <Font name="Bauhaus 93" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label text="Key results after 10,000 simulations" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
                </children>
