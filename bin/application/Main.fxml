@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -82,14 +81,6 @@
                 <NumberAxis autoRanging="false" label="Cum Probability" side="LEFT" tickUnit="0.1" upperBound="1.0" />
               </yAxis>
             </LineChart>
-            <AreaChart fx:id="principalChart" createSymbols="false" legendVisible="false" title="Estimated Principal" GridPane.columnIndex="1" GridPane.rowIndex="2">
-              <xAxis>
-                <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis label="Balance in account" side="LEFT" tickUnit="100.0" />
-              </yAxis>
-            </AreaChart>
             <VBox prefHeight="300.0" prefWidth="225.0" GridPane.rowIndex="2">
                <children>
                   <HBox prefHeight="100.0" prefWidth="532.0">
@@ -157,6 +148,14 @@
                   <Button mnemonicParsing="false" onAction="#clearGraphs" text="Clear" />
                </buttons>
             </ButtonBar>
+            <LineChart fx:id="principalChart" createSymbols="false" legendVisible="false" title="Forecasted Principal Variability" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <xAxis>
+                <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Balance" side="LEFT" tickUnit="100000.0" />
+              </yAxis>
+            </LineChart>
          </children>
       </GridPane>
    </children>

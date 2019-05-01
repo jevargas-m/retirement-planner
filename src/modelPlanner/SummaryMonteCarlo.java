@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class SummaryMonteCarlo {
 	private int retirementAge;
 	private double maxValue;
+	private double minValue;
 	
 	private ArrayList<Integer> age;
 	private ArrayList<Double> minPrincipal;
@@ -26,15 +27,16 @@ public class SummaryMonteCarlo {
 		numBroke = new ArrayList<Integer>();
 		probBroke = new ArrayList<Double>();
 		this.retirementAge = retiremetAge;
-		this.maxValue = 0;
+		this.maxValue = Double.NEGATIVE_INFINITY;
+		this.minValue = Double.POSITIVE_INFINITY;
 	}
 
 	public void addRow (int age, double minPrincipal, double maxPrincipal, double meanPrincipal, 
 			int numBroke , double probBroke) {
 		this.age.add(age);
-		if (minPrincipal < 0) minPrincipal = 0;
-		if (meanPrincipal < 0) meanPrincipal = 0;
-		if (maxPrincipal < 0) maxPrincipal = 0;
+//		if (minPrincipal < 0) minPrincipal = 0;
+//		if (meanPrincipal < 0) meanPrincipal = 0;
+//		if (maxPrincipal < 0) maxPrincipal = 0;
 		
 		this.minPrincipal.add(minPrincipal);
 		this.maxPrincipal.add(maxPrincipal);
@@ -43,6 +45,9 @@ public class SummaryMonteCarlo {
 		this.probBroke.add(probBroke);
 		if (maxPrincipal > maxValue) {
 			maxValue = maxPrincipal;
+		}
+		if (minPrincipal < minValue) {
+			minValue = minPrincipal;
 		}
 		
 	}
@@ -90,6 +95,12 @@ public class SummaryMonteCarlo {
 	public double getMaxValue() {
 		return maxValue;
 	}
+
+	public double getMinValue() {
+		return minValue;
+	}
+	
+	
 	
 	
 }

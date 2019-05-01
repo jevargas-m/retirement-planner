@@ -327,7 +327,7 @@ public class RetirementAnalyzer {
 	/**
 	 * Used for debugging, print amortization table in console and data.csv file
 	 */
-	public void printAmortizationTable () {
+	public void printAmortizationTable() {
 
 		try {
 			FileWriter fw = new FileWriter("data.csv");
@@ -358,7 +358,7 @@ public class RetirementAnalyzer {
 	 * @param upper If true validates age >= currentAge and age <= maxAge, if false
 	 * only validates lower limit
 	 */
-	private void validateAgeBounds(int age, boolean upper) {
+	private void validateAgeBounds(int age, boolean upper) throws IllegalArgumentException {
 		if (upper && age > maxAge) {
 			throw new IllegalArgumentException("Age less than currentAge");
 		} 

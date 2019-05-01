@@ -2,15 +2,13 @@ package application;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.Node;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import modelPlanner.InvestmentPortfolio;
-import modelPlanner.RetirementAnalyzer;
-import modelPlanner.SummaryMonteCarlo;
+import modelPlanner.*;
+import org.apache.commons.math3.util.*;
+
 
 public class MainController {
 	
@@ -21,47 +19,21 @@ public class MainController {
 	private double deposits = 12000;
 	private double withdrawals = 24000;
 	private double principal = 100000;
-	
 	private final double inflation = 0.03;
 	
-	@FXML 
-	private LineChart<Number, Number> brokeChart;
-	
-	@FXML 
-	private AreaChart<Number, Number> principalChart;
-	
-	@FXML 
-	private Label minPrincipal;
-	
-	@FXML
-	private Label maxPrincipal;
-	
-	@FXML
-	private Label pBrokeAtMaxAge;
-	
-	@FXML
-	private Label safeWithdrawal;
-	
-	@FXML
-	private TextField fieldCurrentAge;
-	
-	@FXML
-	private TextField fieldRetAge;
-	
-	@FXML
-	private TextField fieldMaxAge;
-	
-	@FXML
-	private TextField fieldPrincipal;
-	
-	@FXML
-	private TextField fieldWithdrawal;
-	
-	@FXML
-	private TextField fieldDeposits;
-	
-	@FXML
-	private TextField fieldEquity;
+	@FXML private LineChart<Number, Number> brokeChart;
+	@FXML private LineChart<Number, Number> principalChart;
+	@FXML private Label minPrincipal;
+	@FXML private Label maxPrincipal;
+	@FXML private Label pBrokeAtMaxAge;
+	@FXML private Label safeWithdrawal;
+	@FXML private TextField fieldCurrentAge;
+	@FXML private TextField fieldRetAge;
+	@FXML private TextField fieldMaxAge;
+	@FXML private TextField fieldPrincipal;
+	@FXML private TextField fieldWithdrawal;
+	@FXML private TextField fieldDeposits;
+	@FXML private TextField fieldEquity;
 		
 	@FXML
 	public void doCalc(ActionEvent e) {
@@ -70,6 +42,7 @@ public class MainController {
 		InvestmentPortfolio portfolio = new InvestmentPortfolio(equity);
 		RetirementAnalyzer ra = new RetirementAnalyzer(principal, deposits, withdrawals, age, maxAge + 10, retirementAge, inflation, portfolio, true);
 		SummaryMonteCarlo smc = ra.getMonteCarloSummary();
+		ra.buildMonteCarlo(10000);
 		
 		double minp = Math.round(ra.getPrincipalInterval(retirementAge).getMinConfInterval());
 		minPrincipal.setText("$ " + Integer.toString((int)minp));
@@ -105,19 +78,18 @@ public class MainController {
 	public void generatePrincipalChart(SummaryMonteCarlo smc) {
 		XYChart.Series<Number, Number> seriesMax = new XYChart.Series<Number, Number>();
 		XYChart.Series<Number, Number> seriesMin = new XYChart.Series<Number, Number>();
+		XYChart.Series<Number, Number> seriesAvg = new XYChart.Series<Number, Number>();
 		for (int i = 0; i < smc.getNumRows() - 1; i++) {
 			seriesMax.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMaxPrincipal().get(i)));
 			seriesMin.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMinPrincipal().get(i)));
+			seriesAvg.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMeanPrincipal().get(i)));
 		}
 		
 		NumberAxis xAxis = (NumberAxis)principalChart.getXAxis();
 		xAxis.setLowerBound(age);
 		xAxis.setUpperBound(maxAge);
-		
-		NumberAxis yAxis = (NumberAxis)principalChart.getYAxis();
-		yAxis.setLowerBound(0.0);
-		yAxis.setUpperBound(smc.getMaxValue());
-		
+				
+		principalChart.getData().add(seriesAvg);
 		principalChart.getData().add(seriesMax);
 		principalChart.getData().add(seriesMin);
 	}
