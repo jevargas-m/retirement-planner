@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="analyzerPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
+<Pane fx:id="analyzerPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
    <children>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
          <columnConstraints>
@@ -159,7 +159,7 @@
                               <ComboBox fx:id="answerEquity3" prefHeight="25.0" prefWidth="350.0" promptText="If the market dropped 20% you would most likely ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                               <ComboBox fx:id="answerEquity2" prefHeight="25.0" prefWidth="350.0" promptText="My objective is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                               <ComboBox fx:id="answerEquity4" prefHeight="25.0" prefWidth="350.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                              <Button alignment="BOTTOM_RIGHT" mnemonicParsing="false" text="Equity Wizard" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <Button alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#updateEquity" text="Equity Wizard" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                            </children>
                            <padding>
                               <Insets top="10.0" />

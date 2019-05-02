@@ -25,6 +25,7 @@ import modelPlanner.*;
 public class AnalyzerController implements Initializable {
 	
 	private UserInputs inputs;
+	private EquityPercent equityPercent; 
 	private final double DEFAULT_INFLATION = 0.03;
 	private final int DEFAULT_MONTECARLO_ITERATIONS = 50000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
@@ -196,6 +197,62 @@ public class AnalyzerController implements Initializable {
 		answerEquity3.setItems(list3);
 		answerEquity4.setItems(list4);
 	}
+	
+	
+	public int getRiskScore() {
+		int scoreList1 = 0; 
+		int scoreList2 = 0; 
+		int scoreList3 = 0; 
+		int scoreList4 = 0; 
+		
+		if (answerEquity1.getValue().equals("Nonexistent")) {
+			scoreList1 = 1; 
+		} else if (answerEquity1.getValue().equals("I sometimes watch CNBC.")) {
+			scoreList1 = 2; 
+		} else if (answerEquity1.getValue().equals("I read the WSJ.")) {
+			scoreList1 = 3; 
+		} else {
+			scoreList1 = 4;
+		}
+		
+		if (answerEquity2.getValue().equals("Save my money! I don't like the volatility.")) {
+			scoreList2 = 1; 
+		} else if (answerEquity2.getValue().equals("Get some income, with low volatility.")) {
+			scoreList2 = 2; 
+		} else if (answerEquity2.getValue().equals("Some income, some growth; Some volatility is ok.")) {
+			scoreList2 = 3; 
+		} else {
+			scoreList2 = 4;
+		}
+		
+		if (answerEquity3.getValue().equals("Panic and sell!!!")) {
+			scoreList3 = 1; 
+		} else if (answerEquity3.getValue().equals("Cancel my vacation, sell a little, and cry.")) {
+			scoreList3 = 2; 
+		} else if (answerEquity3.getValue().equals("Have two shots of Tequila and buy a little.")) {
+			scoreList3 = 3; 
+		} else {
+			scoreList3 = 4;
+		}
+		
+		if (answerEquity4.getValue().equals("No way! Keep me safe and snug!")) {
+			scoreList4 = 1; 
+		} else if (answerEquity4.getValue().equals("Gulp, maybe a little.")) {
+			scoreList4 = 2; 
+		} else if (answerEquity4.getValue().equals("I can take some risk, not too crazy.")) {
+			scoreList4 = 3; 
+		} else {
+			scoreList4 = 4;
+		}
+		return scoreList1 + scoreList2 + scoreList3 + scoreList4; 	
+	}
+	
+	@FXML
+	public void updateEquity(ActionEvent e) {
+		double equity = equityPercent.getEquityPercent(getRiskScore());
+		equitySlider.setValue(equity);
+	}
+	
 	
 //	@FXML
 //	public void showWizard(ActionEvent e) throws IOException {
