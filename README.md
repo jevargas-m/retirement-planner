@@ -17,7 +17,8 @@ The program will ask the user for their age and their retirement goals, and how 
   * Build a normal probability distribution with market volatility 
   * Build randomized amortization tables using Monte Carlo simulation sampling investment returns from probability distribution
   * JUnit test for retirement calculations
-  * Use JavaFX for GUI.  Leverage Graph components for displaying results
+  * Use JavaFX for GUI.  Leverage Graph components for displaying results.  
+  * Using MVC design paradigm.
   * Leverage Apache Commons Math libraries for building probability distribution, statistical analysis of results and Univariate root finding for estimating the right time to retire.
 
 ## Key modules
