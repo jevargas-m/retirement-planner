@@ -1,1 +1,4 @@
 .project
+.classpath
+build.fxbuild
+.settings
