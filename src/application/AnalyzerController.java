@@ -181,15 +181,15 @@ public class AnalyzerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		outputInsights.setVisible(false);
-		ObservableList<String> list1 = FXCollections.observableArrayList("Nonexistent", "I sometimes watch CNBC",
-				"I read the WSJ", "I'm the Wolf of Wall St");
-		ObservableList<String> list2 = FXCollections.observableArrayList("Save my money", "Get some income",
-				"Some income, some growth", "I want to make it rain $$$");
+		ObservableList<String> list1 = FXCollections.observableArrayList("Nonexistent", "I sometimes watch CNBC.",
+				"I read the WSJ.", "I'm the Wolf of Wall St.");
+		ObservableList<String> list2 = FXCollections.observableArrayList("Save my money! I don't like the volatility.", "Get some income, with low volatility.",
+				"Some income, some growth; Some volatility is ok.", "I want to make it rain $$$; I can handle the risk.");
 		ObservableList<String> list3 = FXCollections.observableArrayList("Panic and sell!!!",
-				"Cancel my vacation, sell a little, and cry", "Have two shots of Tequila and buy a little",
+				"Cancel my vacation, sell a little, and cry.", "Have two shots of Tequila and buy a little.",
 				"Bring it on market!!! I'd wave it in!");
 		ObservableList<String> list4 = FXCollections.observableArrayList("No way! Keep me safe and snug!",
-				"Gulp, maybe a little", "I can take some risk, not too crazy", "Volatility is my middle name!!!");
+				"Gulp, maybe a little.", "I can take some risk, not too crazy.", "Volatility is my middle name!!!");
 		
 		answerEquity1.setItems(list1);
 		answerEquity2.setItems(list2);
