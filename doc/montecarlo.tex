@@ -1,0 +1,130 @@
+\documentclass[8pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,graphicx}
+\usepackage[parfill]{parskip}
+
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[L]{Retirement Planner - Monte Carlo Simulation}
+\fancyhead[R]{\today}
+
+\begin{document}
+
+\section{Introduction}
+
+
+A retirement plan can be modeled as an amortization table in which there is a positive annuity during a certain period (namely, saving period) and a negative annuity during another period (namely, retirement period).
+
+
+The whole idea is that the Principal (i.e. The total money in the account) compounds interest every year.
+
+
+The amortization table can be built with the following equation:
+
+\[P_{i+1} = P_i + I_i + a_i\]
+
+Where:
+\begin{itemize}
+\item $i$ : Any given consecutive year (1,2,3,\ldots).
+\item $P_i$ : The Principal in the account when the $i$'th year starts.
+\item $I_i = P_i \cdot R_i$ : Interest earned after period $i$'th ends.
+
+$R_i$ : The real returns for the year $i$.
+\item $a_i =
+\begin{cases}
+\geq 0: \text{ Deposit made to the account at the end of year $i$, during saving period} \\
+< 0: \text{ Withdrawal made from the account at the end of year $i$, during retired period}
+\end{cases} $
+
+\end{itemize}
+
+Note that upon start at year $i=1$, $P_1$ is a constant representing the initial money one puts in the account which can be any number such that $P_1\geq 0$, therefore $P_0=I_0=0$.
+
+The timeline for the amortization table starts in year $i=1$ and ends in year $i=y$, there will be a total of $s$ years making deposits ($a_i \geq 0$) and $r$ years making withdrawals ($a_i < 0$).
+
+\section{Retirement Scenario}
+
+A retirement scenario $S$ is a projected amortization table per the above parameters, consisting of a set in the form: $S= \{ (i,P_i) \mid  P_i ~ \forall i \in [1..y] \}$, where $y$ is number of years in the scenario.  This period of time can be modeled as $y=s+r$ where:
+\begin{itemize}
+\item $s$ : The number of years in which $a_i \geq 0$ (i.e. the person is not withdrawing money).  This period starts at the present day and ends the day the person retires (i.e. starts periodically withdrawing money from the account).  For simplicity we will assume $a_i$ is constant in real terms during the $s$ years. \\
+(Note: $a_i$, could have a random nature assuming the person is not always able to save, though not considered in this analysis.  For simplicity would assume $A_i$ is constant during all $s$ years.).
+\item $r$ : The number of years in which $a_i < 0$ (i.e. the person is retired), noting that a person can withdraw money from the account only if there is enough money left.  Therefore there is a year in which the person would become broke (denoted $b$), ideally not before the person dies.  
+
+\end{itemize}
+
+For simulation purposes when $P_i$ becomes negative after year $s$, the person is broke at year $b=i$.
+
+
+As this is a projection into the future there are several sources of uncertainty:
+
+\begin{enumerate}
+\item $I_i$ : Due to the volatility of markets and inflation the real returns $r_i$ has a random nature, therefore the amount of interest earned on a year is also random.  We can consider both $R_i$ and $I_i$ to be random variables with certain distribution.  
+
+For simplicity can consider $R_i$ to be normally distributed.
+
+\item $s$ : Saving period is determined by the number of years a person can save money, this can only be estimated.
+
+\item $r$ : Retirement period is determined by the time a person dies or by the time is broke.
+
+\item $a_i$ : This is an estimation.  A person cannot be sure whether would be able to make deposits during the whole $s$ years.  Also cannot be sure whether $A_i$ would be enough during $r$ years.
+\end{enumerate}
+
+Interestingly in the retirement scenario, each pair $(i,P_i)$ is a function of the above variables and the previous pair $(i-1,P_{i-1})$.  In the most simplistic form considering \textbf{$R_i$} the only source of randomness we have:
+
+\[ (i,P_i) = f(R_i, P_{i-1}, a_i) \]
+
+Noting that $R_i$ would be a random sample from $R_i$ assumed distribution.
+
+\section{Monte Carlo Simulation}
+
+The Monte Carlo simulation will consist on generating a set $M$ of $|M|=n$ randomized iterations of projection scenarios.  
+
+\begin{align*}
+M & = \{ S_j \mid j \in [1..n] \} \\
+S_j & = \{(1,P_1)\} \cup \{(i,P_i) \mid  P_{i} = P_{i-1} + I_{i-1} + a_{i-1}, ~ \forall i \in [2..y] \}
+\end{align*}
+
+Note $P_1$, the initial money at present day is fixed in all scenarios.
+
+\section{Analysis of results}
+
+
+After the simulation is performed the set $M$ can be used to perform the following analysis:
+
+\begin{itemize}
+\item Probability of being broke before certain year $y$, denoted as the event $B_y$.  Basically consists in counting in how many scenarios $S_j\in M$ the person became broke before year $y$ and dividing by the total number of iterations.
+
+\[ Pr[B_y] = \frac{|B|}{n} \]
+\[B  = \{S_j \in M\mid b < y \} \]
+
+Where $b$ is the age in which the person is broke in each $j$'th iteration.
+
+\item Distribution of $P_i$ at certain year $i$.  The population $D$ would be given by:
+
+\[D=\{P_i \mid P_i \in S_j, ~\forall j \in [1..n] \}\]
+
+\end{itemize}
+
+\section{Further analysis}
+
+How much money can a person safely withdraw per year if retiring Today?
+
+Assume you make annual withdraws $a_i$ from the present day all the way to $y$, such that with that amount there is a certain probability $Pr[B_y]$ greater that certain confidence level.
+
+Algorithm idea:
+\begin{itemize}
+\item Estimate a starting point for $a_i$ assuming no randomized $R_i$.  This is a simple annuity calculation:
+
+\[ a_i=P \cdot \frac{R \cdot (1+R)^y}{(1+R)^y-1}\]
+
+Where $P$ is Today's Principal, $R$ is the constant expected return and $y$ the number of years.
+
+\item Perform a Monte Carlo simulation $M$.
+\item Store pair $(a_i, Pr[B_y])$
+\item Change $a_i$ and repeat process.
+\item Graph or build a distribution.
+\end{itemize}
+
+
+
+\end{document}
