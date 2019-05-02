@@ -2,13 +2,23 @@
 Final Project OMCIT-591
 
 ## Team Members
-* Arley Sasson.
-* Xunjing Wu.
-* Enrique Vargas.
+* Arley Sasson
+* Enrique Vargas
+* Xunjing Wu
+
 
 ## Project Description
 The idea is to develop a retirement-planning tool for the average person that is thinking about retirement; it is not designed for investment professionals. Although we would like the user to see the impact of volatility on the final outcome of their retirement plan, we want to make it user-friendly with a decent amount of user interaction through a graphic user interface.
 The program will ask the user for their age and their retirement goals, and how much money they can regularly contribute toward retirement. It will also include a brief survey in the beginning to gauge user's risk appetite. Based on that information, the program will suggest a portfolio based on their goals and risk appetite. We plan on running a Monte Carlo simulation of the portfolio to present the user a projection of what their retirement income may look like in the future, and show scenarios of potential positive and negative outcomes based on the simulation.
+
+## Key features
+  * Recommend Equity/Bonds ratio for investment according to user profile
+  * Read dataset in csv format with historic market returns for bonds and equity in order to estimate market volatility.
+  * Build a normal probability distribution with market volatility 
+  * Build randomized amortization tables using Monte Carlo simulation sampling investment returns from probability distribution
+  * JUnit test for retirement calculations
+  * Use JavaFX for GUI.  Leverage Graph components for displaying results
+  * Leverage Apache Commons Math libraries for build probability distribution, statistical analysis of results and solver for estimating the right time to retire.
 
 ## Key modules
 1 Risk profile questionnaire
