@@ -1,5 +1,5 @@
 # Retirement-Planner
-Final Project OMCIT-591
+Final Project OMCIT-591 Spring 2019
 
 ## Team Members
 * Arley Sasson
