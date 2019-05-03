@@ -24,8 +24,8 @@ import modelPlanner.*;
 
 public class AnalyzerController implements Initializable {
 	
-	private UserInputs inputs;
-	private EquityPercent equityPercent; 
+	private UserInputs inputs = new UserInputs();
+	private EquityPercent equityPercent = new EquityPercent(); 
 	private final double DEFAULT_INFLATION = 0.03;
 	private final int DEFAULT_MONTECARLO_ITERATIONS = 50000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
@@ -52,6 +52,7 @@ public class AnalyzerController implements Initializable {
 	@FXML private ComboBox<String> answerEquity2;
 	@FXML private ComboBox<String> answerEquity3;
 	@FXML private ComboBox<String> answerEquity4;
+	
 		
 	@FXML
 	public void doCalc(ActionEvent e) {
@@ -244,6 +245,7 @@ public class AnalyzerController implements Initializable {
 		} else {
 			scoreList4 = 4;
 		}
+		System.out.println("score:" + (scoreList1 + scoreList2 + scoreList3 + scoreList4));
 		return scoreList1 + scoreList2 + scoreList3 + scoreList4; 	
 	}
 	
