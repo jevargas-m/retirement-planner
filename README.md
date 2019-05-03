@@ -12,11 +12,11 @@ The idea is to develop a retirement-planning tool for the average person that is
 The program will ask the user for their age and their retirement goals, and how much money they can regularly contribute toward retirement. It will also include a brief survey to gauge user's risk appetite. Based on that information, the program will suggest a portfolio (a mix of equity and bonds) based on their goals and risk appetite. We plan on running a Monte Carlo simulation of the portfolio to present the user a projection of what their retirement income may look like in the future, and show scenarios of potential positive and negative outcomes based on the simulation.
 
 ## How to run the program
-Step 1: Find the Main.java file and run it. Wait for a pop-up window. 
-Step 2: Provide all the inputs in the pop-up window, including Initial Principal, Yearly Deposits, Yearly Withdrawls, Current Age, Retirement Age, and Max Age. 
-Step 3: Answer the four questions by selecting answers in the dropdown menus, and click the "Equity Wizard" button. OR manually move the percentage equity slider to pick your desired percent of equity in your investment portfolio. 
-Step 4: Click the "Analyze" button. You should then see the investment recommendations displayed on the same window. 
-Step 5: Feel free to change any inputs and click "Equity Wizard and "Analyze" buttons again (in this order) to see how they impact your portfolio recommendation. 
+* Step 1: Find the Main.java file and run it. Wait for a pop-up window. 
+* Step 2: Provide all the inputs in the pop-up window, including Initial Principal, Yearly Deposits, Yearly Withdrawls, Current Age, Retirement Age, and Max Age. 
+* Step 3: Answer the four questions by selecting answers in the dropdown menus, and click the "Equity Wizard" button. OR manually move the percentage equity slider to pick your desired percent of equity in your investment portfolio. 
+* Step 4: Click the "Analyze" button. You should then see the investment recommendations displayed on the same window. 
+* Step 5: Feel free to change any inputs and click "Equity Wizard and "Analyze" buttons again (in this order) to see how they impact your portfolio recommendation. 
 
 ## Key features
   * Recommend Equity/Bonds ratio for retirement investment according to user profile
