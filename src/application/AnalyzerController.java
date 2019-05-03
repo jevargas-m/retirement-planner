@@ -199,54 +199,38 @@ public class AnalyzerController implements Initializable {
 		answerEquity4.setItems(list4);
 	}
 	
+	private String[][] riskSurveyAnswers = {
+			{"Nonexistent", "I sometimes watch CNBC.", "I read the WSJ.", "I'm the Wolf of Wall St."}, 
+			{"Save my money! I don't like the volatility.", "Get some income, with low volatility.", "Some income, some growth; Some volatility is ok.", "I want to make it rain $$$; I can handle the risk."}, 
+			{"Panic and sell!!!","Cancel my vacation, sell a little, and cry.", "Have two shots of Tequila and buy a little.", "Bring it on market!!! I'd wave it in!"}, 
+			{"No way! Keep me safe and snug!","Gulp, maybe a little.", "I can take some risk, not too crazy.", "Volatility is my middle name!!!"}
+	};
+	
+	public int getAnswerScore(ComboBox<String> questions, String[][] answers) {
+		int score = 0;
+		for (int i = 0; i < 4; i++) {
+			if (questions.getValue().equals(answers[i][0])) {
+				score = 1; 
+				System.out.println("score " + i + score);
+			} else if (questions.getValue().equals(answers[i][1])) {
+				score = 2; 
+				System.out.println("score " + i + score);
+			} else if (questions.getValue().equals(answers[i][2])) {
+				
+				score = 3; 
+				System.out.println("score " + i + score);
+			}else if (questions.getValue().equals(answers[i][3])){
+				score = 4; 
+				System.out.println("score " + i + score);
+			}
+		}
+		return score; 	
+		
+	}
 	
 	public int getRiskScore() {
-		int scoreList1 = 0; 
-		int scoreList2 = 0; 
-		int scoreList3 = 0; 
-		int scoreList4 = 0; 
-		
-		if (answerEquity1.getValue().equals("Nonexistent")) {
-			scoreList1 = 1; 
-		} else if (answerEquity1.getValue().equals("I sometimes watch CNBC.")) {
-			scoreList1 = 2; 
-		} else if (answerEquity1.getValue().equals("I read the WSJ.")) {
-			scoreList1 = 3; 
-		} else {
-			scoreList1 = 4;
-		}
-		
-		if (answerEquity2.getValue().equals("Save my money! I don't like the volatility.")) {
-			scoreList2 = 1; 
-		} else if (answerEquity2.getValue().equals("Get some income, with low volatility.")) {
-			scoreList2 = 2; 
-		} else if (answerEquity2.getValue().equals("Some income, some growth; Some volatility is ok.")) {
-			scoreList2 = 3; 
-		} else {
-			scoreList2 = 4;
-		}
-		
-		if (answerEquity3.getValue().equals("Panic and sell!!!")) {
-			scoreList3 = 1; 
-		} else if (answerEquity3.getValue().equals("Cancel my vacation, sell a little, and cry.")) {
-			scoreList3 = 2; 
-		} else if (answerEquity3.getValue().equals("Have two shots of Tequila and buy a little.")) {
-			scoreList3 = 3; 
-		} else {
-			scoreList3 = 4;
-		}
-		
-		if (answerEquity4.getValue().equals("No way! Keep me safe and snug!")) {
-			scoreList4 = 1; 
-		} else if (answerEquity4.getValue().equals("Gulp, maybe a little.")) {
-			scoreList4 = 2; 
-		} else if (answerEquity4.getValue().equals("I can take some risk, not too crazy.")) {
-			scoreList4 = 3; 
-		} else {
-			scoreList4 = 4;
-		}
-		System.out.println("score:" + (scoreList1 + scoreList2 + scoreList3 + scoreList4));
-		return scoreList1 + scoreList2 + scoreList3 + scoreList4; 	
+		return getAnswerScore(answerEquity1, riskSurveyAnswers) + getAnswerScore(answerEquity2, riskSurveyAnswers)+ 
+				getAnswerScore(answerEquity3, riskSurveyAnswers)+ getAnswerScore(answerEquity4, riskSurveyAnswers);
 	}
 	
 	@FXML

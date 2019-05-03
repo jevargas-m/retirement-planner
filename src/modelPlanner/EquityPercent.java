@@ -8,7 +8,7 @@ package modelPlanner;
 public class EquityPercent {	
 
 	public double getEquityPercent(int riskScore) {
-		if (riskScore == 4) {
+		if (riskScore <= 4 && riskScore >= 1) {
 			return 0.2; 
 		} else if  (riskScore <= 8 && riskScore >= 5) {
 			return 0.4; 
