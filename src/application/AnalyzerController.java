@@ -211,17 +211,12 @@ public class AnalyzerController implements Initializable {
 		for (int i = 0; i < 4; i++) {
 			if (questions.getValue().equals(answers[i][0])) {
 				score = 1; 
-				System.out.println("score " + i + score);
 			} else if (questions.getValue().equals(answers[i][1])) {
 				score = 2; 
-				System.out.println("score " + i + score);
 			} else if (questions.getValue().equals(answers[i][2])) {
-				
 				score = 3; 
-				System.out.println("score " + i + score);
-			}else if (questions.getValue().equals(answers[i][3])){
+			} else if (questions.getValue().equals(answers[i][3])){
 				score = 4; 
-				System.out.println("score " + i + score);
 			}
 		}
 		return score; 	
