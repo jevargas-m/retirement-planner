@@ -2,6 +2,8 @@ package application;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -27,7 +29,7 @@ public class AnalyzerController implements Initializable {
 	
 	// Parameters
 	private final double DEFAULT_INFLATION = 0.03;
-	private final int DEFAULT_MONTECARLO_ITERATIONS = 50000;
+	private final int DEFAULT_MONTECARLO_ITERATIONS = 100000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
 	
 	
@@ -39,11 +41,15 @@ public class AnalyzerController implements Initializable {
 	@FXML private LineChart<Number, Number> brokeChart;
 	@FXML private LineChart<Number, Number> principalChart;
 	@FXML private Slider equitySlider;
-	@FXML private Label minPrincipal;
-	@FXML private Label maxPrincipal;
+	@FXML private Label minPrincipalRetAge;
+	@FXML private Label expectedPrincipalRetAge;
+	@FXML private Label maxPrincipalRetAge;
+	@FXML private Label minPrincipalMaxAge;
+	@FXML private Label expectedPrincipalMaxAge;
+	@FXML private Label maxPrincipalMaxAge;
 	@FXML private Label pBrokeAtMaxAge;
 	@FXML private Label safeWithdrawal;
-	@FXML private Label labelOutputTitle;
+	@FXML private Label labelIterations;
 	@FXML private TextField fieldCurrentAge;
 	@FXML private TextField fieldRetAge;
 	@FXML private TextField fieldMaxAge;
@@ -59,13 +65,29 @@ public class AnalyzerController implements Initializable {
 	@FXML private ComboBox<String> answerEquity2;
 	@FXML private ComboBox<String> answerEquity3;
 	@FXML private ComboBox<String> answerEquity4;
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {	
+		wizardBtn.setDisable(true);
+		ObservableList<String> list1 = FXCollections.observableArrayList(equityPercent.getAnswers(1));
+		ObservableList<String> list2 = FXCollections.observableArrayList(equityPercent.getAnswers(2));
+		ObservableList<String> list3 = FXCollections.observableArrayList(equityPercent.getAnswers(3));
+		ObservableList<String> list4 = FXCollections.observableArrayList(equityPercent.getAnswers(4));
 		
+		// FXML SceneBuilder requires independent items, array not accepted
+		answerEquity1.setItems(list1);
+		answerEquity2.setItems(list2);
+		answerEquity3.setItems(list3);
+		answerEquity4.setItems(list4);
+	}
+	
 	@FXML
-	public void doCalc(ActionEvent e) {
+	public void doAnalyze(ActionEvent e) {
 		
 		try {
 			getInputs();
 			
+		// Do Monte Carlo Simulation
 			InvestmentPortfolio portfolio = new InvestmentPortfolio(inputs.getEquityPercentage());
 			// using +10 yrs in MaxAge to avoid graph jump
 			RetirementAnalyzer ra = new RetirementAnalyzer(inputs.getPrincipal(), inputs.getYearlyDeposits(), 
@@ -73,25 +95,21 @@ public class AnalyzerController implements Initializable {
 					inputs.getTargetRetirementAge(), inputs.getInflation(),	portfolio, inputs.isRealMoney());
 			SummaryMonteCarlo smc = ra.getMonteCarloSummary();
 			ra.buildMonteCarlo(DEFAULT_MONTECARLO_ITERATIONS);
+			labelIterations.setText(DEFAULT_MONTECARLO_ITERATIONS + " iterations");
 			
-			// Outputs to display
-			double minp = Math.round(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMinConfInterval());
-			minPrincipal.setText("$ " + Integer.toString((int)minp));
+		// Principals 
+			minPrincipalRetAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMinConfInterval()));
+			maxPrincipalRetAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMaxConfInterval()));
+			expectedPrincipalRetAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getAverage()));
+			minPrincipalMaxAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getMaxAge()).getMinConfInterval()));
+			maxPrincipalMaxAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getMaxAge()).getMaxConfInterval()));
+			expectedPrincipalMaxAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getMaxAge()).getAverage()));
+		
+		// Others
+			pBrokeAtMaxAge.setText(Double.toString(1.0 - ra.getProbBrokeAtAge(inputs.getMaxAge())));
+			safeWithdrawal.setText(moneyToLabel(ra.getMaxSafeWithdrawal(inputs.getMaxAge(), DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY)));
 			
-			double maxp = Math.round(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMaxConfInterval());
-			maxPrincipal.setText("$ " + Integer.toString((int)maxp));
-			//ra.getPrincipalInterval(inputs.getMaxAge()).getAverage();
-						
-			double pb = ra.getProbBrokeAtAge(inputs.getMaxAge());
-			pBrokeAtMaxAge.setText(Double.toString(pb));
-			
-			double sw = Math.round(ra.getMaxSafeWithdrawal(inputs.getMaxAge(), DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY));  
-			safeWithdrawal.setText("$ " + Integer.toString((int)sw));
-			
-			labelOutputTitle.setText("Key insights after " + DEFAULT_MONTECARLO_ITERATIONS + " simulations");
-			outputInsights.setVisible(true);
-			
-			// Charts
+		// Charts
 			clearGraphs();
 			generateBrokeChart(smc);
 			generatePrincipalChart(smc);
@@ -121,6 +139,16 @@ public class AnalyzerController implements Initializable {
 			alert.showAndWait();
 		}
 		
+	}
+	
+	private String moneyToLabel(double money) {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+		nf.setMaximumFractionDigits(0);
+		if (money >= 0) {
+			return nf.format(money);
+		} else {
+			return "$  < 0";
+		}
 	}
 	
 	private void generateBrokeChart(SummaryMonteCarlo smc) {
@@ -178,6 +206,7 @@ public class AnalyzerController implements Initializable {
 		fieldRetAge.setText(Integer.toString(ui.getTargetRetirementAge()));
 		fieldMaxAge.setText(Integer.toString(ui.getMaxAge()));
 		equitySlider.setValue(ui.getEquityPercentage());
+		clearAnswers();
 	}
 	
 
@@ -186,20 +215,7 @@ public class AnalyzerController implements Initializable {
 		brokeChart.getData().clear();
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {	
-		wizardBtn.setDisable(true);
-		ObservableList<String> list1 = FXCollections.observableArrayList(equityPercent.getAnswers(1));
-		ObservableList<String> list2 = FXCollections.observableArrayList(equityPercent.getAnswers(2));
-		ObservableList<String> list3 = FXCollections.observableArrayList(equityPercent.getAnswers(3));
-		ObservableList<String> list4 = FXCollections.observableArrayList(equityPercent.getAnswers(4));
-		
-		// FXML SceneBuilder requires independent items, array not accepted
-		answerEquity1.setItems(list1);
-		answerEquity2.setItems(list2);
-		answerEquity3.setItems(list3);
-		answerEquity4.setItems(list4);
-	}
+
 	
 	@FXML
 	public void updateEquity(ActionEvent e) {
@@ -211,13 +227,27 @@ public class AnalyzerController implements Initializable {
 		equitySlider.setValue(equityPercent.getEquityPercent(userAnswers));
 	}
 	
-	@FXML void enableWizardBtn(ActionEvent e) {
+	@FXML 
+	public void enableWizardBtn(ActionEvent e) {
 		if (!answerEquity1.getSelectionModel().isEmpty() && 
 				!answerEquity2.getSelectionModel().isEmpty() &&
 				  !answerEquity3.getSelectionModel().isEmpty() &&
 				     !answerEquity4.getSelectionModel().isEmpty() ) {
 			wizardBtn.setDisable(false);
 		};
+	}
+	
+	@FXML
+	public void clearAnswers(ActionEvent e) {
+		clearAnswers();
+	}
+	
+	private void clearAnswers() {
+		wizardBtn.setDisable(true);
+		answerEquity1.getSelectionModel().clearSelection();
+		answerEquity2.getSelectionModel().clearSelection();
+		answerEquity3.getSelectionModel().clearSelection();
+		answerEquity4.getSelectionModel().clearSelection();
 	}
 
 	
