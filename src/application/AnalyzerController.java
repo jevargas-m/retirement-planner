@@ -110,7 +110,6 @@ public class AnalyzerController implements Initializable {
 			NumberFormat nf = NumberFormat.getPercentInstance();
 			nf.setMinimumFractionDigits(1);
 			nf.setMaximumFractionDigits(1);
-			System.out.println(pbroke);
 			pBrokeAtMaxAge.setText(nf.format(1.0 - pbroke));
 			safeWithdrawal.setText(moneyToLabel(ra.getMaxSafeWithdrawal(inputs.getMaxAge(), DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY)));
 			
