@@ -106,7 +106,12 @@ public class AnalyzerController implements Initializable {
 			expectedPrincipalMaxAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getMaxAge()).getAverage()));
 		
 		// Others
-			pBrokeAtMaxAge.setText(Double.toString(1.0 - ra.getProbBrokeAtAge(inputs.getMaxAge())));
+			double pbroke = ra.getProbBrokeAtAge(inputs.getMaxAge());
+			NumberFormat nf = NumberFormat.getPercentInstance();
+			nf.setMinimumFractionDigits(1);
+			nf.setMaximumFractionDigits(1);
+			System.out.println(pbroke);
+			pBrokeAtMaxAge.setText(nf.format(1.0 - pbroke));
 			safeWithdrawal.setText(moneyToLabel(ra.getMaxSafeWithdrawal(inputs.getMaxAge(), DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY)));
 			
 		// Charts
