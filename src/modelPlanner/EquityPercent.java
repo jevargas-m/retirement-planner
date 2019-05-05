@@ -17,7 +17,14 @@ public class EquityPercent {
 						"Volatility is my middle name!!!"}
 	};
 	
-	public double getEquityPercent(int riskScore) {
+	private int numQuestions;
+	
+	public EquityPercent() {
+		numQuestions = riskSurveyAnswers.length;
+	}
+	
+	public double getEquityPercent(String[] userAnswers) {
+		int riskScore = getRiskScore(userAnswers);
 		if (riskScore <= 4 && riskScore >= 1) {
 			return 0.2; 
 		} else if  (riskScore <= 8 && riskScore >= 5) {
@@ -27,6 +34,18 @@ public class EquityPercent {
 		} else {
 			return 0.8;
 		}
+	}
+	
+	private int getRiskScore(String[] userAnswers) {
+		int riskScore = 0;
+		for (int i = 0; i < numQuestions; i++) {
+			for (int j = 0; j < numQuestions; j++) {
+				if (userAnswers[i].equals(riskSurveyAnswers[i][j])) {
+					riskScore += j + 1;
+				}
+			}
+		}
+		return riskScore;
 	}
 	
 	public String[] getAnswers(int question) {

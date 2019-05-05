@@ -191,39 +191,21 @@ public class AnalyzerController implements Initializable {
 		ObservableList<String> list3 = FXCollections.observableArrayList(equityPercent.getAnswers(3));
 		ObservableList<String> list4 = FXCollections.observableArrayList(equityPercent.getAnswers(4));
 		
+		// FXML requires independent items, array not accepted
 		answerEquity1.setItems(list1);
 		answerEquity2.setItems(list2);
 		answerEquity3.setItems(list3);
 		answerEquity4.setItems(list4);
 	}
 	
-	
-	
-	public int getAnswerScore(ComboBox<String> questions, String[] answers) {
-		if (questions.getValue().equals(answers[0])) {
-			return 1; 
-		} else if (questions.getValue().equals(answers[1])) {
-			return 2; 
-		} else if (questions.getValue().equals(answers[2])) {
-			return 3; 
-		} else {
-			return 4; 
-		}
-	}
-	
-	public int getRiskScore() {
-		int result = 0;
-		result += getAnswerScore(answerEquity1, equityPercent.getAnswers(1));
-		result += getAnswerScore(answerEquity2, equityPercent.getAnswers(2));
-		result += getAnswerScore(answerEquity3, equityPercent.getAnswers(3));
-		result += getAnswerScore(answerEquity4, equityPercent.getAnswers(4));
-		return result;
-	}
-	
 	@FXML
 	public void updateEquity(ActionEvent e) {
-		double equity = equityPercent.getEquityPercent(getRiskScore());
-		equitySlider.setValue(equity);
+		String[] userAnswers = new String[4];
+		userAnswers[0] = answerEquity1.getValue();
+		userAnswers[1] = answerEquity2.getValue();
+		userAnswers[2] = answerEquity3.getValue();
+		userAnswers[3] = answerEquity4.getValue();
+		equitySlider.setValue(equityPercent.getEquityPercent(userAnswers));
 	}
 
 	
