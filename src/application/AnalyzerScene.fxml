@@ -155,11 +155,11 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ComboBox fx:id="answerEquity1" prefHeight="25.0" prefWidth="350.0" promptText="My knowledge of investments is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                              <ComboBox fx:id="answerEquity3" prefHeight="25.0" prefWidth="350.0" promptText="If the market dropped 20% you would most likely ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                              <ComboBox fx:id="answerEquity2" prefHeight="25.0" prefWidth="350.0" promptText="My objective is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                              <ComboBox fx:id="answerEquity4" prefHeight="25.0" prefWidth="350.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                              <Button alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#updateEquity" text="Equity Wizard" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="answerEquity1" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="My knowledge of investments is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <ComboBox fx:id="answerEquity3" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="If the market dropped 20% you would most likely ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                              <ComboBox fx:id="answerEquity2" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="My objective is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                              <ComboBox fx:id="answerEquity4" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                              <Button fx:id="wizardBtn" alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#updateEquity" text="Equity Wizard" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                            </children>
                            <padding>
                               <Insets top="10.0" />

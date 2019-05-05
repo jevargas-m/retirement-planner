@@ -13,6 +13,7 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -52,6 +53,7 @@ public class AnalyzerController implements Initializable {
 	@FXML private TextField fieldEquity;
 	@FXML private Pane analyzerPane;
 	@FXML private VBox outputInsights;
+	@FXML private Button wizardBtn;
 	
 	@FXML private ComboBox<String> answerEquity1;
 	@FXML private ComboBox<String> answerEquity2;
@@ -185,13 +187,14 @@ public class AnalyzerController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {		
+	public void initialize(URL location, ResourceBundle resources) {	
+		wizardBtn.setDisable(true);
 		ObservableList<String> list1 = FXCollections.observableArrayList(equityPercent.getAnswers(1));
 		ObservableList<String> list2 = FXCollections.observableArrayList(equityPercent.getAnswers(2));
 		ObservableList<String> list3 = FXCollections.observableArrayList(equityPercent.getAnswers(3));
 		ObservableList<String> list4 = FXCollections.observableArrayList(equityPercent.getAnswers(4));
 		
-		// FXML requires independent items, array not accepted
+		// FXML SceneBuilder requires independent items, array not accepted
 		answerEquity1.setItems(list1);
 		answerEquity2.setItems(list2);
 		answerEquity3.setItems(list3);
@@ -206,6 +209,15 @@ public class AnalyzerController implements Initializable {
 		userAnswers[2] = answerEquity3.getValue();
 		userAnswers[3] = answerEquity4.getValue();
 		equitySlider.setValue(equityPercent.getEquityPercent(userAnswers));
+	}
+	
+	@FXML void enableWizardBtn(ActionEvent e) {
+		if (!answerEquity1.getSelectionModel().isEmpty() && 
+				!answerEquity2.getSelectionModel().isEmpty() &&
+				  !answerEquity3.getSelectionModel().isEmpty() &&
+				     !answerEquity4.getSelectionModel().isEmpty() ) {
+			wizardBtn.setDisable(false);
+		};
 	}
 
 	
