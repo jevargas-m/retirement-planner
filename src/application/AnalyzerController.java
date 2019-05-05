@@ -24,12 +24,17 @@ import modelPlanner.*;
 
 public class AnalyzerController implements Initializable {
 	
-	private UserInputs inputs = new UserInputs();
-	private EquityPercent equityPercent = new EquityPercent(); 
+	// Parameters
 	private final double DEFAULT_INFLATION = 0.03;
 	private final int DEFAULT_MONTECARLO_ITERATIONS = 50000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
 	
+	
+	
+	private UserInputs inputs = new UserInputs();
+	private EquityPercent equityPercent = new EquityPercent(); 
+	
+	// Required by the View
 	@FXML private LineChart<Number, Number> brokeChart;
 	@FXML private LineChart<Number, Number> principalChart;
 	@FXML private Slider equitySlider;
@@ -52,7 +57,6 @@ public class AnalyzerController implements Initializable {
 	@FXML private ComboBox<String> answerEquity2;
 	@FXML private ComboBox<String> answerEquity3;
 	@FXML private ComboBox<String> answerEquity4;
-	
 		
 	@FXML
 	public void doCalc(ActionEvent e) {
@@ -181,17 +185,11 @@ public class AnalyzerController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		outputInsights.setVisible(false);
-		ObservableList<String> list1 = FXCollections.observableArrayList("Nonexistent", "I sometimes watch CNBC.",
-				"I read the WSJ.", "I'm the Wolf of Wall St.");
-		ObservableList<String> list2 = FXCollections.observableArrayList("Save my money! I don't like the volatility.", "Get some income, with low volatility.",
-				"Some income, some growth; Some volatility is ok.", "I want to make it rain $$$; I can handle the risk.");
-		ObservableList<String> list3 = FXCollections.observableArrayList("Panic and sell!!!",
-				"Cancel my vacation, sell a little, and cry.", "Have two shots of Tequila and buy a little.",
-				"Bring it on market!!! I'd wave it in!");
-		ObservableList<String> list4 = FXCollections.observableArrayList("No way! Keep me safe and snug!",
-				"Gulp, maybe a little.", "I can take some risk, not too crazy.", "Volatility is my middle name!!!");
+	public void initialize(URL location, ResourceBundle resources) {		
+		ObservableList<String> list1 = FXCollections.observableArrayList(equityPercent.getAnswers(1));
+		ObservableList<String> list2 = FXCollections.observableArrayList(equityPercent.getAnswers(2));
+		ObservableList<String> list3 = FXCollections.observableArrayList(equityPercent.getAnswers(3));
+		ObservableList<String> list4 = FXCollections.observableArrayList(equityPercent.getAnswers(4));
 		
 		answerEquity1.setItems(list1);
 		answerEquity2.setItems(list2);
@@ -199,33 +197,27 @@ public class AnalyzerController implements Initializable {
 		answerEquity4.setItems(list4);
 	}
 	
-	private String[][] riskSurveyAnswers = {
-			{"Nonexistent", "I sometimes watch CNBC.", "I read the WSJ.", "I'm the Wolf of Wall St."}, 
-			{"Save my money! I don't like the volatility.", "Get some income, with low volatility.", "Some income, some growth; Some volatility is ok.", "I want to make it rain $$$; I can handle the risk."}, 
-			{"Panic and sell!!!","Cancel my vacation, sell a little, and cry.", "Have two shots of Tequila and buy a little.", "Bring it on market!!! I'd wave it in!"}, 
-			{"No way! Keep me safe and snug!","Gulp, maybe a little.", "I can take some risk, not too crazy.", "Volatility is my middle name!!!"}
-	};
 	
-	public int getAnswerScore(ComboBox<String> questions, String[][] answers) {
-		int score = 0;
-		for (int i = 0; i < 4; i++) {
-			if (questions.getValue().equals(answers[i][0])) {
-				score = 1; 
-			} else if (questions.getValue().equals(answers[i][1])) {
-				score = 2; 
-			} else if (questions.getValue().equals(answers[i][2])) {
-				score = 3; 
-			} else if (questions.getValue().equals(answers[i][3])){
-				score = 4; 
-			}
+	
+	public int getAnswerScore(ComboBox<String> questions, String[] answers) {
+		if (questions.getValue().equals(answers[0])) {
+			return 1; 
+		} else if (questions.getValue().equals(answers[1])) {
+			return 2; 
+		} else if (questions.getValue().equals(answers[2])) {
+			return 3; 
+		} else {
+			return 4; 
 		}
-		return score; 	
-		
 	}
 	
 	public int getRiskScore() {
-		return getAnswerScore(answerEquity1, riskSurveyAnswers) + getAnswerScore(answerEquity2, riskSurveyAnswers)+ 
-				getAnswerScore(answerEquity3, riskSurveyAnswers)+ getAnswerScore(answerEquity4, riskSurveyAnswers);
+		int result = 0;
+		result += getAnswerScore(answerEquity1, equityPercent.getAnswers(1));
+		result += getAnswerScore(answerEquity2, equityPercent.getAnswers(2));
+		result += getAnswerScore(answerEquity3, equityPercent.getAnswers(3));
+		result += getAnswerScore(answerEquity4, equityPercent.getAnswers(4));
+		return result;
 	}
 	
 	@FXML
@@ -233,15 +225,6 @@ public class AnalyzerController implements Initializable {
 		double equity = equityPercent.getEquityPercent(getRiskScore());
 		equitySlider.setValue(equity);
 	}
-	
-	
-//	@FXML
-//	public void showWizard(ActionEvent e) throws IOException {
-//		Parent wizardParent = FXMLLoader.load(getClass().getResource("/application/Wizard.fxml"));
-//		Scene wizardScene = new Scene(wizardParent, 800, 600);
-//		Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
-//		window.setScene(wizardScene);
-//		window.show();
-//	}
+
 	
 }
