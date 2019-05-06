@@ -14,7 +14,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/application/AnalyzerScene.fxml"));
-			Scene analizerScene = new Scene(root,900,600);
+			Scene analizerScene = new Scene(root,900,700);
 			analizerScene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 			primaryStage.setTitle("Retirement Simulator - Team 11 - OMCIT 591");
 			primaryStage.setResizable(false);

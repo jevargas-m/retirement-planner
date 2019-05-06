@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
@@ -16,9 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="analyzerPane" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
+<Pane fx:id="analyzerPane" prefHeight="700.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
    <children>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="900.0">
+      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.6666768391927" minWidth="10.0" prefWidth="436.6666768391927" />
             <ColumnConstraints hgrow="ALWAYS" maxWidth="522.0" minWidth="10.0" prefWidth="462.99998982747394" />
@@ -29,7 +30,7 @@
             <RowConstraints maxHeight="300.0" minHeight="10.0" prefHeight="265.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <LineChart fx:id="brokeChart" createSymbols="false" legendVisible="false" prefHeight="220.0" prefWidth="300.0" title="Probability of having enough money" GridPane.rowIndex="2">
+            <LineChart fx:id="brokeChart" createSymbols="false" legendVisible="false" prefHeight="276.0" prefWidth="437.0" title="Probability of having enough money at a given age" GridPane.rowIndex="2">
               <xAxis>
                 <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
               </xAxis>
@@ -43,7 +44,7 @@
                   <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#doAnalyze" text="Analyze" />
                </buttons>
             </ButtonBar>
-            <LineChart fx:id="principalChart" createSymbols="false" legendVisible="false" title="Forecasted Principal according to volatility" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <LineChart fx:id="principalChart" createSymbols="false" legendVisible="false" title="Expected, Minimum and Maximum Principal" GridPane.columnIndex="1" GridPane.rowIndex="2">
               <xAxis>
                 <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
               </xAxis>
@@ -87,13 +88,13 @@
                            </font>
                         </Label>
                         <Label text="Probability of having enough money at Max. Age : " GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-                        <Label prefHeight="17.0" prefWidth="301.0" text="Safe yearly withdraws if retirement is anticipated Today : " GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                        <Label id="safeWithdrawal" fx:id="safeWithdrawal" alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                        <Label prefHeight="17.0" prefWidth="290.0" text="Safe yearly withdraws if retirement happened Today : " GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
+                        <Label id="safeWithdrawal" fx:id="safeWithdrawal" alignment="CENTER" contentDisplay="CENTER" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="6">
                            <font>
                               <Font name="Arial Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labelOutputTitle" text="Key Insights" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+                        <Label fx:id="labelOutputTitle" prefHeight="25.0" prefWidth="203.0" text="Simulation Results" GridPane.columnSpan="2" GridPane.halignment="CENTER">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
@@ -127,7 +128,7 @@
                   </GridPane>
                </children>
             </VBox>
-            <GridPane GridPane.rowSpan="2" GridPane.valignment="CENTER">
+            <GridPane prefHeight="392.0" prefWidth="437.0" GridPane.rowSpan="2" GridPane.valignment="CENTER">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
@@ -136,44 +137,86 @@
                   <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="142.0" valignment="CENTER" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <GridPane prefHeight="147.0" prefWidth="395.0" GridPane.valignment="CENTER">
+                  <GridPane prefHeight="219.0" prefWidth="437.0" GridPane.valignment="CENTER">
                      <columnConstraints>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="152.33334350585938" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="89.66668701171875" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="119.66664632161459" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="77.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="87.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="101.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="48.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Initial Principal : " GridPane.halignment="RIGHT" />
-                        <TextField id="withdrawals" fx:id="fieldPrincipal" GridPane.columnIndex="1" />
-                        <Label text="Current Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
-                        <TextField id="currentAge" fx:id="fieldCurrentAge" GridPane.columnIndex="3" />
-                        <Label text="Retirement Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                        <TextField id="withdrawals" fx:id="fieldRetAge" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Label text="Max Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                        <TextField id="withdrawals" fx:id="fieldMaxAge" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Label text="Yearly Deposits : " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                        <TextField id="withdrawals" fx:id="fieldDeposits" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Yearly Withdrawals : " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                        <TextField id="withdrawals" fx:id="fieldWithdrawal" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="Percentage Equity : " GridPane.rowIndex="3" />
-                        <Slider fx:id="equitySlider" blockIncrement="0.1" majorTickUnit="0.1" max="1.0" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" />
+                        <Label text="Initial Principal : " GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <tooltip>
+                              <Tooltip text="This is the amount that you can contribute right now to your retirement fund">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip></Label>
+                        <TextField id="withdrawals" fx:id="fieldPrincipal" prefHeight="25.0" prefWidth="80.0" promptText="e.g. 100000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Current Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                        <TextField id="currentAge" fx:id="fieldCurrentAge" promptText="e.g. 30" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Label text="Retirement Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                        <TextField id="withdrawals" fx:id="fieldRetAge" promptText="e.g.60" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Label text="Max Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                        <TextField id="withdrawals" fx:id="fieldMaxAge" promptText="e.g. 105" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <Label text="Yearly Deposits : " GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                           <tooltip>
+                              <Tooltip text="This is how much you expect to contribute every year">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip></Label>
+                        <TextField id="withdrawals" fx:id="fieldDeposits" promptText="e.g. 10000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Yearly Withdrawals : " GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                           <tooltip>
+                              <Tooltip text="This is how much you expect to withdraw upon retirement">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip></Label>
+                        <TextField id="withdrawals" fx:id="fieldWithdrawal" promptText="e.g. 25000" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="Percentage Equity : " GridPane.rowIndex="5">
+                           <tooltip>
+                              <Tooltip text="You can manually adjust this slider to change the percentage equity in your portfolio">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip></Label>
+                        <Slider fx:id="equitySlider" blockIncrement="0.1" majorTickUnit="0.1" max="1.0" showTickLabels="true" showTickMarks="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" />
+                        <Label fx:id="labelOutputTitle1" prefHeight="25.0" prefWidth="330.0" text="WELCOME TO THE RETIREMENT PLANNER" GridPane.columnSpan="4">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label text="Please fill out the following information:" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </GridPane>
-                  <VBox GridPane.rowIndex="1">
+                  <VBox prefHeight="175.0" prefWidth="437.0" GridPane.rowIndex="1">
                      <children>
-                        <GridPane>
+                        <GridPane prefHeight="191.0" prefWidth="437.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -181,16 +224,29 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ComboBox fx:id="answerEquity1" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="My knowledge of investments is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                              <ComboBox fx:id="answerEquity3" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="If the market dropped 20% you would most likely ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                              <ComboBox fx:id="answerEquity2" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="My objective is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                              <ComboBox fx:id="answerEquity4" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                              <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                              <ComboBox fx:id="answerEquity1" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="My knowledge of investments is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                              <ComboBox fx:id="answerEquity3" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="If the market dropped 20% you would most likely ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="answerEquity2" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="My objective is ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="answerEquity4" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="350.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                              <ButtonBar prefHeight="50.0" prefWidth="437.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                                 <buttons>
-                                    <Button fx:id="wizardBtn" alignment="CENTER" mnemonicParsing="false" onAction="#updateEquity" text="Equity Wizard" />
-                                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#clearAnswers" text="Clear Answers" />
+                                    <Button fx:id="wizardBtn" alignment="CENTER" mnemonicParsing="false" onAction="#updateEquity" text="Equity Wizard">
+                                       <tooltip>
+                                          <Tooltip text="This will assign a percentage of equity in your portfolio based on your answers">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Tooltip>
+                                       </tooltip>
+                                    </Button>
+                                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#clearAnswers" text="Reset Questions" />
                                 </buttons>
                               </ButtonBar>
+                              <Label prefHeight="20.0" prefWidth="388.0" text="             Please answer the following questions:" GridPane.columnSpan="2">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <padding>
                               <Insets top="10.0" />
@@ -200,6 +256,30 @@
                   </VBox>
                </children>
             </GridPane>
+            <Label fx:id="questionProbL" prefHeight="27.0" prefWidth="40.0" text="       ?" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <tooltip>
+                  <Tooltip fx:id="probchartTT" text="This chart shows us is the probability that you will run out of money at any given age." wrapText="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+            </Label>
+            <Label prefHeight="23.0" prefWidth="58.0" text="   ?" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <tooltip>
+                  <Tooltip prefWidth="400.0" text="This chart shows us the expected, best-case and worst case scenarios. The higher the percentage of equity, the higher the expected value, but because of the increased volatility, the potential best and worst-case scenarios can deviate significantly from the mean." wrapText="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+            </Label>
          </children>
       </GridPane>
    </children>

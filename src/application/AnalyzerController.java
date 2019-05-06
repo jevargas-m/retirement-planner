@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import modelPlanner.*;
@@ -79,6 +80,14 @@ public class AnalyzerController implements Initializable {
 		answerEquity2.setItems(list2);
 		answerEquity3.setItems(list3);
 		answerEquity4.setItems(list4);
+		
+		final Tooltip tooltipBrokeChart = new Tooltip();
+		
+		tooltipBrokeChart.setText("This will be the text for the box of broke chart");
+		
+		
+		
+		
 	}
 	
 	@FXML
