@@ -21,7 +21,7 @@
 
 <Pane fx:id="analyzerPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
    <children>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="-Infinity">
+      <GridPane>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.6666768391927" minWidth="10.0" prefWidth="436.6666768391927" />
             <ColumnConstraints hgrow="ALWAYS" maxWidth="522.0" minWidth="10.0" prefWidth="462.99998982747394" />
@@ -74,6 +74,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="96.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="132.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="60.0" />
+                        <ColumnConstraints />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
