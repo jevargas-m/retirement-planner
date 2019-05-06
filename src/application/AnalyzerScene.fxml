@@ -42,10 +42,10 @@
                 <NumberAxis autoRanging="false" label="Cum Probability" side="LEFT" tickUnit="0.1" upperBound="1.0" />
               </yAxis>
                <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="10.0" right="20.0" />
                </GridPane.margin>
                <padding>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets left="5.0" right="10.0" />
                </padding>
             </LineChart>
             <ButtonBar GridPane.columnIndex="1">
@@ -85,10 +85,10 @@
                <children>
                   <GridPane prefHeight="219.0" prefWidth="437.0" GridPane.valignment="CENTER">
                      <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="133.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="173.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="96.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="132.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="58.0" />
                         <ColumnConstraints />
                      </columnConstraints>
                      <rowConstraints>
@@ -100,7 +100,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="323.0" text="Initial Principal : " GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="323.0" text="Initial Principal ($): " GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                            <tooltip>
                               <Tooltip text="This is the amount that you can contribute right now to your retirement fund">
                                  <font>
@@ -115,7 +115,7 @@
                         <TextField id="withdrawals" fx:id="fieldRetAge" promptText="e.g.60" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="147.0" text="Max Age : " GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
                         <TextField id="withdrawals" fx:id="fieldMaxAge" promptText="e.g. 105" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="329.0" text="Yearly Deposits : " GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="329.0" text="Yearly Deposits ($): " GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                            <tooltip>
                               <Tooltip text="This is how much you expect to contribute every year">
                                  <font>
@@ -124,7 +124,7 @@
                               </Tooltip>
                            </tooltip></Label>
                         <TextField id="withdrawals" fx:id="fieldDeposits" promptText="e.g. 10000" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="329.0" text="Yearly Withdrawals : " GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="329.0" text="Yearly Withdrawals ($): " GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                            <tooltip>
                               <Tooltip text="This is how much you expect to withdraw upon retirement">
                                  <font>
@@ -304,8 +304,8 @@
             </GridPane>
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="339.0" minWidth="10.0" prefWidth="339.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="122.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="351.0" minWidth="10.0" prefWidth="342.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="133.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -325,7 +325,7 @@
                      </font>
                   </Label>
                   <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="411.0" text="Probability of having enough money at Max. Age : " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="330.0" text="Safe yearly withdraws if retirement happened Today : " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="352.0" text="Safe yearly withdraws if retirement happened Today : " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                   <Label fx:id="labelIterations" GridPane.columnSpan="2" GridPane.halignment="RIGHT" />
                </children>
                <padding>
