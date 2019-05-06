@@ -19,12 +19,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="analyzerPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
+<Pane fx:id="analyzerPane" prefWidth="950.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
    <children>
-      <GridPane>
+      <GridPane alignment="CENTER" prefHeight="580.0" prefWidth="950.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="436.6666768391927" minWidth="10.0" prefWidth="436.6666768391927" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="522.0" minWidth="10.0" prefWidth="462.99998982747394" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.6666768391927" minWidth="10.0" prefWidth="469.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="522.0" minWidth="10.0" prefWidth="481.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
@@ -289,8 +289,8 @@
             </GridPane>
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="119.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="332.0" minWidth="10.0" prefWidth="327.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="134.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
