@@ -311,7 +311,7 @@
                   </Label>
                   <Label text="Probability of having enough money at Max. Age : " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                   <Label text="Safe yearly withdraws if retirement happened Today : " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                  <Label fx:id="labelIterations" text="Iterations" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                  <Label fx:id="labelIterations" GridPane.columnSpan="2" GridPane.halignment="RIGHT" />
                </children>
                <padding>
                   <Insets right="20.0" />
