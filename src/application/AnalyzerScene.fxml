@@ -19,12 +19,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="analyzerPane" prefWidth="950.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
+<Pane fx:id="analyzerPane" prefWidth="980.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AnalyzerController">
    <children>
-      <GridPane alignment="CENTER" prefHeight="580.0" prefWidth="950.0">
+      <GridPane alignment="CENTER">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="482.0" minWidth="10.0" percentWidth="50.0" prefWidth="455.0" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="683.0" minWidth="10.0" percentWidth="50.0" prefWidth="495.0" />
+            <ColumnConstraints maxWidth="482.0" minWidth="10.0" percentWidth="50.0" prefWidth="455.0" />
+            <ColumnConstraints maxWidth="683.0" minWidth="10.0" percentWidth="50.0" prefWidth="495.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
@@ -34,7 +34,7 @@
             <RowConstraints maxHeight="355.00000000000006" minHeight="10.0" prefHeight="266.66666666666674" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <LineChart fx:id="brokeChart" createSymbols="false" legendVisible="false" prefHeight="276.0" prefWidth="437.0" title="Probability of having enough money at a given age" GridPane.rowIndex="4">
+            <LineChart fx:id="brokeChart" createSymbols="false" legendVisible="false" title="Probability of having enough money at a given age" GridPane.rowIndex="4">
               <xAxis>
                 <NumberAxis autoRanging="false" label="Age" side="BOTTOM" />
               </xAxis>
@@ -44,8 +44,11 @@
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
             </LineChart>
-            <ButtonBar GridPane.columnSpan="2">
+            <ButtonBar GridPane.columnIndex="1">
                <buttons>
                   <Button mnemonicParsing="false" onAction="#loadDefaults" text="Load Example" />
                   <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#doAnalyze" text="Analyze" />
@@ -53,6 +56,9 @@
                <padding>
                   <Insets right="10.0" />
                </padding>
+               <GridPane.margin>
+                  <Insets right="10.0" top="5.0" />
+               </GridPane.margin>
             </ButtonBar>
             <LineChart fx:id="principalChart" createSymbols="false" legendVisible="false" title="Expected, Minimum and Maximum Principal" GridPane.columnIndex="1" GridPane.rowIndex="4">
               <xAxis>
@@ -62,8 +68,11 @@
                 <NumberAxis label="Balance" side="LEFT" tickUnit="100000.0" />
               </yAxis>
                <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="10.0" right="20.0" />
                </GridPane.margin>
+               <padding>
+                  <Insets left="5.0" right="10.0" />
+               </padding>
             </LineChart>
             <VBox fx:id="outputInsights" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <GridPane prefHeight="201.0" prefWidth="437.0" GridPane.rowSpan="2" GridPane.valignment="CENTER">
@@ -230,10 +239,10 @@
                   </Label>
                </children>
             </GridPane>
-            <Separator GridPane.columnSpan="2" GridPane.rowIndex="2">
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
+            <Separator prefHeight="2.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="20.0" right="20.0" />
+               </GridPane.margin>
             </Separator>
             <GridPane prefHeight="188.0" prefWidth="463.0" GridPane.rowIndex="3">
                <columnConstraints>

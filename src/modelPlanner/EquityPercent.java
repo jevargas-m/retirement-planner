@@ -25,6 +25,9 @@ public class EquityPercent {
 	
 	public double getEquityPercent(String[] userAnswers) {
 		int riskScore = getRiskScore(userAnswers);
+		
+//		return (riskScore - 4) / 16 * 0.8;
+		
 		if (riskScore <= 4 && riskScore >= 1) {
 			return 0.2; 
 		} else if  (riskScore <= 8 && riskScore >= 5) {
