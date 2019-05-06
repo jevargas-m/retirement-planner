@@ -183,10 +183,10 @@
                   <RowConstraints maxHeight="34.66667366027832" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <ComboBox fx:id="answerEquity1" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="380.0" promptText="My knowledge of investments is ..." GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                  <ComboBox fx:id="answerEquity3" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="380.0" promptText="If the market dropped 20% you would most likely ..." GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                  <ComboBox fx:id="answerEquity2" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="380.0" promptText="My objective is ..." GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                  <ComboBox fx:id="answerEquity4" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="380.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="answerEquity1" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="421.0" promptText="My knowledge of investments is ..." GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="answerEquity3" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="421.0" promptText="If the market dropped 20% you would most likely ..." GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                  <ComboBox fx:id="answerEquity2" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="421.0" promptText="My objective is ..." GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="answerEquity4" onAction="#enableWizardBtn" prefHeight="25.0" prefWidth="421.0" promptText="I am willing to accept more volatility for higher returns ..." GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                   <HBox alignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets />
@@ -289,8 +289,8 @@
             </GridPane>
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="332.0" minWidth="10.0" prefWidth="327.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="134.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="339.0" minWidth="10.0" prefWidth="339.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="122.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
