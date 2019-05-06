@@ -104,7 +104,7 @@ public class AnalyzerController implements Initializable {
 					inputs.getTargetRetirementAge(), inputs.getInflation(),	portfolio, inputs.isRealMoney());
 			SummaryMonteCarlo smc = ra.getMonteCarloSummary();
 			ra.buildMonteCarlo(DEFAULT_MONTECARLO_ITERATIONS);
-			labelIterations.setText(DEFAULT_MONTECARLO_ITERATIONS + " iterations");
+			labelIterations.setText("Performed " + DEFAULT_MONTECARLO_ITERATIONS + " iterations");
 			
 		// Principals 
 			minPrincipalRetAge.setText(moneyToLabel(ra.getPrincipalInterval(inputs.getTargetRetirementAge()).getMinConfInterval()));
