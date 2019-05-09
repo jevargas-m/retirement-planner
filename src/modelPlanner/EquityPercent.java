@@ -7,7 +7,7 @@ package modelPlanner;
  */
 public class EquityPercent {	
 
-	private final String[][] riskSurveyAnswers = {
+	private final String[][] RISK_SURVEY_ANSWERS = {
 			{"Nonexistent", "I sometimes watch CNBC.", "I read the WSJ.", "I'm the Wolf of Wall St."}, 
 			{"Save my money! I don't like the volatility.", "Get some income, with low volatility.",
 				"Some income, some growth; Some volatility is ok.", "I want to make it rain $$$; I can handle the risk."}, 
@@ -20,7 +20,7 @@ public class EquityPercent {
 	private int numQuestions;
 	
 	public EquityPercent() {
-		numQuestions = riskSurveyAnswers.length;
+		numQuestions = RISK_SURVEY_ANSWERS.length;
 	}
 	
 	public double getEquityPercent(String[] userAnswers) {
@@ -42,8 +42,8 @@ public class EquityPercent {
 	private int getRiskScore(String[] userAnswers) {
 		int riskScore = 0;
 		for (int i = 0; i < numQuestions; i++) {
-			for (int j = 0; j < numQuestions; j++) {
-				if (userAnswers[i].equals(riskSurveyAnswers[i][j])) {
+			for (int j = 0; j < RISK_SURVEY_ANSWERS[i].length; j++) {
+				if (userAnswers[i].equals(RISK_SURVEY_ANSWERS[i][j])) {
 					riskScore += j + 1;
 				}
 			}
@@ -52,6 +52,6 @@ public class EquityPercent {
 	}
 	
 	public String[] getAnswers(int question) {
-		return riskSurveyAnswers[question - 1];
+		return RISK_SURVEY_ANSWERS[question - 1];
 	}
 }
