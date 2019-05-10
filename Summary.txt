@@ -1,0 +1,39 @@
+Retirement Planner. Team 11: Arley Sasson, Enrique Vargas, Xunjing Wu
+
+Summary
+
+Our project is a retirement-planning tool to be used by the average person (ie. not investment professionals) that wants to start
+planning for retirement. The user interacts with the program through a GUI designed in JavaFX. 
+
+The program has two main elements: user inputs and outputs. 
+
+Inputs - The user enters information including his/her age, when they would like to retire, initial balance, what he can contribute to 
+the investment account, how much he is planning on withdrawing upon retirement. The user will also enter a "Max Age" which will be the
+age the program will use as the last year the user expects to receive retirement payments. In addition to this the program will also
+ask the userfor information to determine their risk appetite, assessing how much he knows about investments and how tolerant he is 
+to moves in the market. 
+
+The program will use the risk-appetite questions to determine a percentage of equities and a percentage of bonds that the portfolio will 
+have. The higher the risk-tolerance, the higher the percentage equities will be of the total portfolio. It will then build a portfolio 
+and run Monte Carlo simulations to get an idea of what the performance can be in the future from now until after retirement. 
+
+Outputs - The program will give the user calculations of what the expected balance of his portfolio will be at retirement and at Max
+Age. It will also provide the range with a best-case and worst-case scenarios for these outcomes based on the simulations. In addition, 
+the program will provide an amount on how much the user could withdraw every year from the account if he were to retire today. The 
+program produces two charts. The first one will show the probability over time that the user will have enough money in his account to
+receive the payment on any given year. The second chart will show the expected, best-case, and worst-case scenario values of the 
+retirement portfoilio over time. 
+
+Once all of the results have been returned. The user can then change any of the inputs as well as the percentage equity in the 
+portfolio using a slider bar, and run the simulations again with the new parameters. 
+
+
+How to run the program:
+Step 1: Find the Main.java file and run it. Wait for a pop-up window.
+Step 2: Provide all the inputs in the pop-up window, including Initial Principal, Yearly Deposits, Yearly Withdrawls, 
+Current Age, Retirement Age, and Max Age.
+Step 3: Answer the four questions by selecting answers in the dropdown menus, and click the "Equity Wizard" button. OR manually move 
+the percentage equity slider to pick your desired percent of equity in your investment portfolio.
+Step 4: Click the "Analyze" button. You should then see the investment recommendations displayed on the same window.
+Step 5: Feel free to change any inputs and click "Equity Wizard and "Analyze" buttons again (in this order) to see how they impact
+your portfolio recommendation.
