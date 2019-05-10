@@ -13,7 +13,7 @@ The program will ask the user for their age and their retirement goals, and how 
 
 ## How to run the program
 * Step 1: Find the Main.java file and run it. Wait for a pop-up window. 
-* Step 2: Provide all the inputs in the pop-up window, including Initial Principal, Yearly Deposits, Yearly Withdrawls, Current Age, Retirement Age, and Max Age. 
+* Step 2: Provide all the inputs in the pop-up window, including Initial Principal, Yearly Deposits, Yearly Withdrawals, Current Age, Retirement Age, and Max Age. 
 * Step 3: Answer the four questions by selecting answers in the dropdown menus, and click the "Equity Wizard" button. OR manually move the percentage equity slider to pick your desired percent of equity in your investment portfolio. 
 * Step 4: Click the "Analyze" button. You should then see the investment recommendations displayed on the same window. 
 * Step 5: Feel free to change any inputs and click "Equity Wizard and "Analyze" buttons again (in this order) to see how they impact your portfolio recommendation. 
@@ -53,7 +53,6 @@ The program will ask the user for their age and their retirement goals, and how 
 
 ## Key Outputs
 * If I retire today, how much money can I get on a yearly basis?
-  * Provide Money and Probability, maybe as a cummulative prob graphgraph of money vs time
 * When would I be able to retire? given I want to be X% sure (probability) that I will get at least X amount of money every year.
 * What is my forecasted retirement? (e.g. how confident of retirement with a predefined amount of money at retirement age)
 
