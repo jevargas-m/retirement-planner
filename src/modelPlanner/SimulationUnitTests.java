@@ -143,7 +143,11 @@ class SimulationUnitTests {
 			
 			fp.buildMonteCarlo(100000);
 			
+<<<<<<< HEAD
 			assertEquals(89700.0, ci.getMaxConfInterval(), 89700.0 * 0.05);  // Needs high tolerance due to variability
+=======
+			assertEquals(89700.0, ci.getMaxConfInterval(), 1145000.0 * 0.05);  // Needs high tolerance due to variability
+>>>>>>> 499ed3dc83030f067397e8e3032755a705fd67e4
 			
 			
 		} catch (Exception e) {
@@ -161,7 +165,11 @@ class SimulationUnitTests {
 			ConfidenceInterval ci = fp.getPrincipalInterval(80);
 			fp.buildMonteCarlo(100000);
 			
+<<<<<<< HEAD
 			assertEquals(40280.0, ci.getMinConfInterval(), 40280.0 * 0.05); // Needs high tolerance due to variability
+=======
+			assertEquals(40280.0, ci.getMinConfInterval(), 58000.0 * 0.05); // Needs high tolerance due to variability
+>>>>>>> 499ed3dc83030f067397e8e3032755a705fd67e4
 			
 			
 		} catch (Exception e) {
