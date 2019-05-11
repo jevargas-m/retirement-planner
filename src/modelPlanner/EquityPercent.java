@@ -23,6 +23,11 @@ public class EquityPercent {
 		numQuestions = RISK_SURVEY_ANSWERS.length;
 	}
 	
+	/**
+	 * Recommended equity based on answers to each one of the questions
+	 * @param userAnswers Array with answers for each question
+	 * @return Recommended equity percent [0,1]
+	 */
 	public double getEquityPercent(String[] userAnswers) {
 		int riskScore = getRiskScore(userAnswers);
 		
@@ -51,6 +56,11 @@ public class EquityPercent {
 		return riskScore;
 	}
 	
+	/**
+	 * Array with all answers to a particular question
+	 * @param question number between 1 and 4
+	 * @return
+	 */
 	public String[] getAnswers(int question) {
 		return RISK_SURVEY_ANSWERS[question - 1];
 	}
