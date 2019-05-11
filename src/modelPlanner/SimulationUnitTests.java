@@ -16,7 +16,7 @@ class SimulationUnitTests {
 		RetirementAnalyzer fp = new RetirementAnalyzer(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
-		assertEquals(79, fp.getAgeBroke());
+		assertEquals(91, fp.getAgeBroke());
 	}
 	
 	@Test
@@ -61,7 +61,7 @@ class SimulationUnitTests {
 		RetirementAnalyzer fp = new RetirementAnalyzer(ui.getPrincipal(), ui.getYearlyDeposits(), ui.getTargetRetirement(),
 				ui.getCurrentAge(), ui.getMaxAge(),ui.getTargetRetirementAge(), ui.getInflation(), ip, ui.isRealMoney());
 		
-		assertEquals(214230.00, fp.getProjectedData(70).getPrincipal(), 1.0);
+		assertEquals(430045.00, fp.getProjectedData(70).getPrincipal(), 1.0);
 		assertEquals(-25000.00, fp.getProjectedData(70).getPmt(), 1.0);
 			
 		assertThrows(IllegalArgumentException.class, () -> {
@@ -84,7 +84,7 @@ class SimulationUnitTests {
 			
 			fp.buildMonteCarlo(100000);
 
-			assertEquals(0.68, fp.getProbBrokeAtAge(90), 0.05);
+			assertEquals(0.23, fp.getProbBrokeAtAge(100), 0.05);
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

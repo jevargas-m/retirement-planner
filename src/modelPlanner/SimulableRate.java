@@ -5,25 +5,18 @@ package modelPlanner;
  *
  */
 public interface SimulableRate {
+	
 	/**
 	 * Return a randomized annualized nominal return according to the defined probability
 	 * distribution
-	 * 
-	 * Standard procedure for random sample according to probability distribution is
-	 * 
-	 * 	private NormalDistribution nd;
-	 * 	private Random r;
-	 *  double nextReturn() {
-		  	return nd.inverseCumulativeProbability(r.nextDouble());
-	 *  }
-	 *  
+	 * @return  Randomized rate
 	 */
 	double nextRate();
 	
 	/**
 	 * 
 	 * Default expected value (mean)
-	 * @return
+	 * @return Expected rate
 	 */
 	double getDefaultRate();
 	

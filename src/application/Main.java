@@ -6,9 +6,11 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-//test comment test
-
-
+/**
+ * Main program runner
+ * @author Team 11
+ *
+ */
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
