@@ -27,6 +27,7 @@ retirement portfolio over time.
 Once all of the results have been returned. The user can then change any of the inputs as well as the percentage equity in the 
 portfolio using a slider bar, and run the simulations again with the new parameters. 
 
+**IMPORTANT** The program uses Math Commons library, it is important to include the jar file (in the jar folder) to the Build Path in order for the program to compile
 
 How to run the program:
 Step 1: Find the Main.java file and run it. Wait for a pop-up window.
