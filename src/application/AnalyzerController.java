@@ -19,22 +19,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import modelPlanner.*;
 
 
-
+/**
+ * Controller class for main window in the GUI
+ * @author Team 11
+ *
+ */
 public class AnalyzerController implements Initializable {
 	
 	// Parameters
-	private final double DEFAULT_INFLATION = 0.03;
+	private final double DEFAULT_INFLATION = 0.03; 
 	private final int DEFAULT_MONTECARLO_ITERATIONS = 100000;
 	private final double DEFAULT_SAFETY_MARGIN_RETIREMENT_TODAY = 0.1;
-	
-	
-	
+		
 	private UserInputs inputs = new UserInputs();
 	private EquityPercent equityPercent = new EquityPercent(); 
 	
@@ -62,6 +63,7 @@ public class AnalyzerController implements Initializable {
 	@FXML private VBox outputInsights;
 	@FXML private Button wizardBtn;
 	
+	// Cannot have an array for Scene Builder to work properly
 	@FXML private ComboBox<String> answerEquity1;
 	@FXML private ComboBox<String> answerEquity2;
 	@FXML private ComboBox<String> answerEquity3;
@@ -80,16 +82,12 @@ public class AnalyzerController implements Initializable {
 		answerEquity2.setItems(list2);
 		answerEquity3.setItems(list3);
 		answerEquity4.setItems(list4);
-		
-		final Tooltip tooltipBrokeChart = new Tooltip();
-		
-		tooltipBrokeChart.setText("This will be the text for the box of broke chart");
-		
-		
-		
-		
 	}
 	
+	/**
+	 * Main event for analyze user click, triggers simulation and results output 
+	 * @param e Button click
+	 */
 	@FXML
 	public void doAnalyze(ActionEvent e) {
 		
@@ -154,6 +152,11 @@ public class AnalyzerController implements Initializable {
 		
 	}
 	
+	/**
+	 * Convert a double number to a string displaying money without cents
+	 * @param money
+	 * @return
+	 */
 	private String moneyToLabel(double money) {
 		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
 		nf.setMaximumFractionDigits(0);
@@ -170,6 +173,7 @@ public class AnalyzerController implements Initializable {
 			series.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), 1 - smc.getProbBroke().get(i)));
 		}
 		
+		// Displayed from retirement to max age
 		NumberAxis xAxis = (NumberAxis)brokeChart.getXAxis();
 		xAxis.setLowerBound(inputs.getTargetRetirementAge());
 		xAxis.setUpperBound(inputs.getMaxAge());
@@ -186,6 +190,7 @@ public class AnalyzerController implements Initializable {
 			seriesAvg.getData().add(new XYChart.Data<Number, Number>(smc.getAge().get(i), smc.getMeanPrincipal().get(i)));
 		}
 		
+		// Dsplayed from current age to MaxAge
 		NumberAxis xAxis = (NumberAxis)principalChart.getXAxis();
 		xAxis.setLowerBound(inputs.getCurrentAge());
 		xAxis.setUpperBound(inputs.getMaxAge());
@@ -194,8 +199,7 @@ public class AnalyzerController implements Initializable {
 		principalChart.getData().add(seriesMax);
 		principalChart.getData().add(seriesMin);
 	}
-	
-	
+		
 	private void getInputs() throws NumberFormatException {
 		int age = Integer.parseInt(fieldCurrentAge.getText());
 		double deposits = Double.parseDouble(fieldDeposits.getText());
@@ -209,6 +213,10 @@ public class AnalyzerController implements Initializable {
 				retirementage, equity, principal);;
 	}
 	
+	/**
+	 * Load predefined example in UserInputs class 
+	 * @param e Event for Btn click
+	 */
 	@FXML
 	public void loadDefaults(ActionEvent e) {
 		UserInputs ui = UserInputs.getDefaultInputs();
@@ -229,7 +237,10 @@ public class AnalyzerController implements Initializable {
 	}
 
 
-	
+	/**
+	 * Wizard Btn event, moves equity as per recommendation
+	 * @param e Btn click
+	 */
 	@FXML
 	public void updateEquity(ActionEvent e) {
 		String[] userAnswers = new String[4];
@@ -240,6 +251,10 @@ public class AnalyzerController implements Initializable {
 		equitySlider.setValue(equityPercent.getEquityPercent(userAnswers));
 	}
 	
+	/**
+	 * Enable wizard btn, used when all the answers have been provided
+	 * @param e
+	 */
 	@FXML 
 	public void enableWizardBtn(ActionEvent e) {
 		if (!answerEquity1.getSelectionModel().isEmpty() && 
@@ -250,6 +265,10 @@ public class AnalyzerController implements Initializable {
 		};
 	}
 	
+	/**
+	 * Reset answers and disable wizard button
+	 * @param e
+	 */
 	@FXML
 	public void clearAnswers(ActionEvent e) {
 		clearAnswers();
