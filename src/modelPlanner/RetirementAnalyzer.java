@@ -269,6 +269,10 @@ public class RetirementAnalyzer {
 		pw.close();
 	}
 	
+	/**
+	 * Summary of results table
+	 * @return
+	 */
 	public SummaryMonteCarlo getMonteCarloSummary() {
 		if (!isMonteCarloBuilt) buildMonteCarlo(); 
 		SummaryMonteCarlo output = new SummaryMonteCarlo(retirementAge);
@@ -367,6 +371,13 @@ public class RetirementAnalyzer {
 		}
 	}
 	
+	/**
+	 * 2 sigma interval of principals at a given age, builds a default monte carlo
+	 * if has not been previously built
+	 * @param age
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	public ConfidenceInterval getPrincipalInterval(int age) throws IllegalArgumentException {
 		validateAgeBounds(age, true);
 		if (!isMonteCarloBuilt) buildMonteCarlo();
