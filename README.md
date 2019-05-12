@@ -17,6 +17,8 @@ The program will ask the user for their age and their retirement goals, and how 
 in order for the program to compile
 
 * Step 1: Find the Main.java file and run it. Wait for a pop-up window. 
+![step 1](https://user-images.githubusercontent.com/49407610/57587455-00b08280-74d3-11e9-9e30-49471ca55163.png)
+
 * Step 2: Provide all the inputs in the pop-up window, including Initial Principal, Yearly Deposits, Yearly Withdrawals, Current Age, Retirement Age, and Max Age. 
 * Step 3: Answer the four questions by selecting answers in the dropdown menus, and click the "Equity Wizard" button. OR manually move the percentage equity slider to pick your desired percent of equity in your investment portfolio. 
 * Step 4: Click the "Analyze" button. You should then see the investment recommendations displayed on the same window. 
