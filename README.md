@@ -26,7 +26,6 @@ in order for the program to compile
 
 * Step 3: Answer the four questions by selecting answers in the dropdown menus, and click the "Equity Wizard" button. OR manually move the percentage equity slider to pick your desired percent of equity in your investment portfolio. 
 
-![step 3-1](https://user-images.githubusercontent.com/49407610/57587474-40776a00-74d3-11e9-879b-8a965d495259.png)
 ![step 3-2](https://user-images.githubusercontent.com/49407610/57587475-42d9c400-74d3-11e9-8ed4-012beaaf8f52.png)
 
 * Step 4: Click the "Analyze" button. You should then see the investment recommendations displayed on the same window. 
